@@ -1,5 +1,8 @@
 package com.netsensia.twentyfortyeight;
 
+import java.util.Random;
+import java.util.Arrays;
+
 public class Board {
 	
 	public static final int ROWS = 4;
@@ -10,12 +13,94 @@ public class Board {
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	
+	private int score = 0;
+	
 	private int board[] = new int[ROWS*COLS];
 	
 	public Board() {
 		for (int i=0; i<ROWS*COLS; i++) {
 			board[i] = 0;
 		}
+	}
+	
+	public void setRandomStartPosition() {
+		int numSquares = ROWS * COLS;
+		Random r = new Random();
+		
+		int square1 = r.nextInt() % numSquares;
+		int square2;
+		do {
+			square2 = r.nextInt() % numSquares;
+		} while (square1 == square2);
+		
+		board[square1] = r.nextInt() % 2 == 0 ? 2 : 4;
+		board[square2] = r.nextInt() % 2 == 0 ? 2 : 4;
+	}
+	
+	public boolean placeRandomPiece() {
+		
+		boolean isBoardFull = true;
+		
+		for (int i=0; i<ROWS*COLS; i++) {
+			if (board[i] > 0) {
+				isBoardFull = false;
+				break;
+			}
+		}
+		
+		if (isBoardFull) {
+			return false;
+		}
+		
+		Random r = new Random();
+		int numSquares = ROWS * COLS;
+		int square;
+		do {
+			square = r.nextInt() % numSquares;
+			if (board[square] == 0) {
+				board[square] = r.nextInt() % 2 == 0 ? 2 : 4;
+				break;
+			}
+		} while (true);
+		
+		return true;
+	}
+	
+	public boolean isGameOver() {
+		
+		boolean isGameOver = true;
+		
+		int[] backupBoard = new int[ROWS*COLS];
+		
+		System.arraycopy( board, 0, backupBoard, 0, board.length );
+		
+		for (int i=Board.UP; i<=Board.RIGHT; i++) {
+			this.slide(i);
+			if (!Arrays.equals(board, backupBoard)) {
+				isGameOver = false;
+				break;
+			}
+		}
+		
+		System.arraycopy( backupBoard, 0, board, 0, backupBoard.length );
+		
+		return isGameOver;
+	}
+	
+	public boolean isValidMove(int direction) {
+		
+		int[] backupBoard = new int[ROWS*COLS];
+		
+		System.arraycopy( board, 0, backupBoard, 0, board.length );
+		
+		this.slide(direction);
+		if (Arrays.equals(board, backupBoard)) {
+			return false;
+		}
+		
+		System.arraycopy( backupBoard, 0, board, 0, backupBoard.length );
+		
+		return true;
 	}
 	
 	public void place(int x, int y, int number) {
@@ -73,6 +158,7 @@ public class Board {
 			if (column[i] == column[i+1]) {
 				column[i] *= 2;
 				column[i+1] = 0;
+				score += column[i];
 			}
 		}
 		
@@ -157,6 +243,9 @@ public class Board {
 			}
 			s += System.getProperty("line.separator");
 		}
+		
+		s += "Score: " + score + ", Game over: " + isGameOver();
+		s += System.getProperty("line.separator");
 		
 		return s;
 	}

@@ -5,28 +5,19 @@ public class TwentyFortyEight {
 	public static Board getTestBoard() {
 		Board board = new Board();
 		
-		board.place(0,0,2);
-		board.place(0,2,2);
+		int[] testBoard = {
+				2,4,4,8,
+				0,2,8,8,
+				2,2,2,8,
+				0,8,8,4,
+		};
 		
-		board.place(1,0,4);
-		board.place(1,1,2);
-		board.place(1,2,2);
-		board.place(1,3,8);
-		
-		board.place(2,0,4);
-		board.place(2,1,8);
-		board.place(2,2,2);
-		board.place(2,3,8);
-		
-		board.place(3,0,8);
-		board.place(3,1,8);
-		board.place(3,2,8);
-		board.place(3,3,4);
+		board.setBoard(testBoard);
 		
 		return board;
 	}
 	
-	public static void main(String args[]) {
+	public static void test() {
 		
 		Board board = getTestBoard();
 		System.out.println("Start");
@@ -36,20 +27,37 @@ public class TwentyFortyEight {
 		System.out.println("Slid down");
 		System.out.println(board);
 		
-		board = getTestBoard();
 		board.slide(Board.LEFT);
 		System.out.println("Slid left");
 		System.out.println(board);
 		
-		board = getTestBoard();
 		board.slide(Board.RIGHT);
 		System.out.println("Slid right");
 		System.out.println(board);
 		
-		board = getTestBoard();
 		board.slide(Board.UP);
 		System.out.println("Slid up");
 		System.out.println(board);
+		
+		System.out.println("Valid moves:");
+		if (board.isValidMove(Board.UP)) System.out.println("Up");
+		if (board.isValidMove(Board.DOWN)) System.out.println("Down");
+		if (board.isValidMove(Board.LEFT)) System.out.println("Left");
+		if (board.isValidMove(Board.RIGHT)) System.out.println("Right");
+		
+		System.exit(0);
+	}
+	
+	public static void main(String args[]) {
+		
+		test();
+		
+		Board board = new Board();
+		board.setRandomStartPosition();
+		
+		while (!board.isGameOver()) {
+			
+		}
 		
 	}
 }
