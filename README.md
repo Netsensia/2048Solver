@@ -1,4 +1,4 @@
-# 2048Solver
+# 2048 Solver
 
 Java code that plays the infuriating and addictive game 2048 at a high level. 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
 
@@ -8,7 +8,7 @@ Numbers at the far end of the direction of swipe are merged first, so, for examp
 
 Two constants ROWS and COLS define the size of the grid.
 
-Currently has code to set up and manipulate the board for making moves.
+Currently just has code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play with itself.
 
 	Board board = new Board();
 			
