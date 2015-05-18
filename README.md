@@ -65,8 +65,8 @@ Currently has code to set up and manipulate the board for making moves.
     |      |     4|    16|     4|
     ----------------------------	
   
-  board.slide(Board.UP);
-  System.out.println(board);
+	board.slide(Board.UP);
+	System.out.println(board);
     ----------------------------
     |      |     8|     4|     4|
     ----------------------------
