@@ -23,19 +23,19 @@ public class TwentyFortyEight {
 		System.out.println("Start");
 		System.out.println(board);
 		
-		board.slide(Board.DOWN);
+		board.makeMove(Board.DOWN);
 		System.out.println("Slid down");
 		System.out.println(board);
 		
-		board.slide(Board.LEFT);
+		board.makeMove(Board.LEFT);
 		System.out.println("Slid left");
 		System.out.println(board);
 		
-		board.slide(Board.RIGHT);
+		board.makeMove(Board.RIGHT);
 		System.out.println("Slid right");
 		System.out.println(board);
 		
-		board.slide(Board.UP);
+		board.makeMove(Board.UP);
 		System.out.println("Slid up");
 		System.out.println(board);
 		

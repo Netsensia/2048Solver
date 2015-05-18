@@ -137,7 +137,7 @@ public class BoardTest {
     	Board board = new Board();
     	board.setBoard(start);
     	
-    	board.slide(Board.LEFT);
+    	board.makeMove(Board.LEFT);
     	
     	assertArrayEquals(
     		slideLeft,
@@ -146,7 +146,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.slide(Board.RIGHT);
+    	board.makeMove(Board.RIGHT);
     	
     	assertArrayEquals(
     		slideRight,
@@ -155,7 +155,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.slide(Board.UP);
+    	board.makeMove(Board.UP);
     	
     	assertArrayEquals(
     		slideUp,
@@ -164,7 +164,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.slide(Board.DOWN);
+    	board.makeMove(Board.DOWN);
     	
     	assertArrayEquals(
     		slideDown,

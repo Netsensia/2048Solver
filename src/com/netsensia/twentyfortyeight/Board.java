@@ -75,7 +75,7 @@ public class Board {
 		System.arraycopy( board, 0, backupBoard, 0, board.length );
 		
 		for (int i=Board.UP; i<=Board.RIGHT; i++) {
-			this.slide(i);
+			this.makeMove(i);
 			if (!Arrays.equals(board, backupBoard)) {
 				isGameOver = false;
 				break;
@@ -93,7 +93,7 @@ public class Board {
 		
 		System.arraycopy( board, 0, backupBoard, 0, board.length );
 		
-		this.slide(direction);
+		this.makeMove(direction);
 		if (Arrays.equals(board, backupBoard)) {
 			return false;
 		}
@@ -184,7 +184,7 @@ public class Board {
 			
 	}
 	
-	public void slide(int direction) {
+	public void makeMove(int direction) {
 		
 		switch (direction) {
 			case UP:

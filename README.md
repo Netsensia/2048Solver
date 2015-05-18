@@ -12,6 +12,14 @@ Two constants ROWS and COLS define the size of the grid.
 
 Currently just has code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play with itself.
 
+The key interface methods are:
+
+	boolean isValidMove(Board.DOWN)
+	void makeMove(Board.DOWN)
+	boolean isGameOver()
+	void placeRandomPiece()
+	void setRandomStartPosition()
+
 	Board board = new Board();
 			
 	int[] testBoard = {
@@ -32,18 +40,18 @@ Currently just has code to set up and manipulate the board for making moves. I a
     ----------------------------
     |      |     8|     8|     4|
     ----------------------------
-		
+    
 	board.slide(Board.DOWN);
 	System.out.println(board);
-  	----------------------------
-    |      |      |     4|      |
-    ----------------------------
-    |      |     4|     8|     8|
-    ----------------------------
-    |      |     4|     2|    16|
-    ----------------------------
-    |     4|     8|     8|     4|
-    ----------------------------
+	----------------------------
+	|      |      |     4|      |
+	----------------------------
+	|      |     4|     8|     8|
+	----------------------------
+	|      |     4|     2|    16|
+	----------------------------
+	|     4|     8|     8|     4|
+	----------------------------
 		
 	board.slide(Board.LEFT);
 	System.out.println(board);
@@ -80,3 +88,9 @@ Currently just has code to set up and manipulate the board for making moves. I a
     ----------------------------
     |      |      |      |      |
     ----------------------------
+
+
+	
+	
+	
+	
