@@ -14,11 +14,11 @@ Currently just has code to set up and manipulate the board for making moves. I a
 
 The key interface methods are:
 
-	boolean isValidMove(Board.DOWN)
-	void makeMove(Board.DOWN)
-	boolean isGameOver()
-	void placeRandomPiece()
-	void setRandomStartPosition()
+* boolean isValidMove(Board.DOWN)
+* void makeMove(Board.DOWN)
+* boolean isGameOver()
+* void placeRandomPiece()
+* void setRandomStartPosition()
 
 	Board board = new Board();
 			
