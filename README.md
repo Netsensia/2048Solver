@@ -12,6 +12,8 @@ Two constants ROWS and COLS define the size of the grid.
 
 There is code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play out and solve the game in as fast a time as possible using an alpha-beta search, such as that used in my [Rival Chess Engine](https://github.com/Netsensia/rival-chess-android-engine).
 
+Currently the main method of TwentyFortyEight.java plays randomly, resulting in positions such as:
+
 	----------------------------
 	|     4|     2|     4|    16|
 	----------------------------
