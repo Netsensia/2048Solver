@@ -18,7 +18,9 @@ The key interface methods are:
 * void makeMove(Board.DOWN)
 * boolean isGameOver()
 * void placeRandomPiece()
-* void setRandomStartPosition()
+* void setRandomStartPosition() 
+
+Example code:
 
 	Board board = new Board();
 			
