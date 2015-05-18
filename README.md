@@ -10,7 +10,7 @@ The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, ea
 
 Two constants ROWS and COLS define the size of the grid.
 
-Currently just has code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play with itself.
+There is code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play out and solve the game in as fast a time as possible using an alpha-beta search, such as that used in my [Rival Chess Engine](https://github.com/Netsensia/rival-chess-android-engine).
 
 The key interface methods are:
 
