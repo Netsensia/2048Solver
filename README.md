@@ -1,6 +1,6 @@
 # 2048 Solver
 
-Java code that plays the infuriating and addictive game 2048 at a high level. 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
+Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
 
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
