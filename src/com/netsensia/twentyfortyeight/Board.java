@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 import java.util.Random;
 import java.util.Arrays;
 
-public class Board {
+public class Board implements Cloneable {
 	
 	public static final int ROWS = 4;
 	public static final int COLS = 4;
@@ -218,6 +218,10 @@ public class Board {
 		this.board = board;
 	}
 	
+	public int getScore() {
+		return score;
+	}
+	
 	public String toString() {
 		String s = "";
 		
@@ -251,4 +255,8 @@ public class Board {
 		
 		return s;
 	}
+	
+	protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
