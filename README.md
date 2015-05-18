@@ -1,6 +1,6 @@
 # 2048 Solver
 
-Java code that plays the infuriating and addictive game 2048 at a high level. 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
+Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
 
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
@@ -10,7 +10,7 @@ The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, ea
 
 Two constants ROWS and COLS define the size of the grid.
 
-Currently just has code to set up and manipulate the board for making moves. The main method of com.netsensia.twentyfortyeight.TwentyFortyEight plays a game with no AI, just making random moves, ending up with positions such as:
+There is code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play out and solve the game in as fast a time as possible using an alpha-beta search, such as that used in my [Rival Chess Engine](https://github.com/Netsensia/rival-chess-android-engine).
 
 	----------------------------
 	|     4|     2|     4|    16|
