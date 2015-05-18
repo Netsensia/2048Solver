@@ -10,7 +10,18 @@ The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, ea
 
 Two constants ROWS and COLS define the size of the grid.
 
-Currently just has code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play with itself.
+Currently just has code to set up and manipulate the board for making moves. The main method of com.netsensia.twentyfortyeight.TwentyFortyEight plays a game with no AI, just making random moves, ending up with positions such as:
+
+	----------------------------
+	|     4|     2|     4|    16|
+	----------------------------
+	|    16|     8|     2|     4|
+	----------------------------
+	|     4|    64|    32|     8|
+	----------------------------
+	|     2|     8|     2|     4|
+	----------------------------
+	Score: 492, Game over: true
 
 The key interface methods are:
 

@@ -27,14 +27,14 @@ public class Board {
 		int numSquares = ROWS * COLS;
 		Random r = new Random();
 		
-		int square1 = r.nextInt() % numSquares;
+		int square1 = r.nextInt(numSquares);
 		int square2;
 		do {
-			square2 = r.nextInt() % numSquares;
+			square2 = r.nextInt(numSquares);
 		} while (square1 == square2);
 		
-		board[square1] = r.nextInt() % 2 == 0 ? 2 : 4;
-		board[square2] = r.nextInt() % 2 == 0 ? 2 : 4;
+		board[square1] = r.nextInt(2) == 0 ? 2 : 4;
+		board[square2] = r.nextInt(2) == 0 ? 2 : 4;
 	}
 	
 	public boolean placeRandomPiece() {
@@ -56,9 +56,9 @@ public class Board {
 		int numSquares = ROWS * COLS;
 		int square;
 		do {
-			square = r.nextInt() % numSquares;
+			square = r.nextInt(numSquares);
 			if (board[square] == 0) {
-				board[square] = r.nextInt() % 2 == 0 ? 2 : 4;
+				board[square] = r.nextInt(2) == 0 ? 2 : 4;
 				break;
 			}
 		} while (true);
@@ -75,7 +75,7 @@ public class Board {
 		System.arraycopy( board, 0, backupBoard, 0, board.length );
 		
 		for (int i=Board.UP; i<=Board.RIGHT; i++) {
-			this.makeMove(i);
+			this.makeMove(i, false);
 			if (!Arrays.equals(board, backupBoard)) {
 				isGameOver = false;
 				break;
@@ -93,7 +93,7 @@ public class Board {
 		
 		System.arraycopy( board, 0, backupBoard, 0, board.length );
 		
-		this.makeMove(direction);
+		this.makeMove(direction, false);
 		if (Arrays.equals(board, backupBoard)) {
 			return false;
 		}
@@ -150,7 +150,7 @@ public class Board {
 		
 	}
 	
-	public int[] slideColumn(int[] column) {
+	public int[] slideColumn(int[] column, boolean calcScore) {
 		
 		column = compactColumn(column);
 		
@@ -158,7 +158,9 @@ public class Board {
 			if (column[i] == column[i+1]) {
 				column[i] *= 2;
 				column[i+1] = 0;
-				score += column[i];
+				if (calcScore) {
+					score += column[i];
+				}
 			}
 		}
 		
@@ -167,7 +169,7 @@ public class Board {
 		return column;
 	}
 	
-	public void slide() {
+	public void slide(boolean calcScore) {
 
 		for (int x=0; x<COLS; x++) {
 			int column[] = new int[ROWS];
@@ -175,7 +177,7 @@ public class Board {
 				column[y] = board[y*COLS+x];
 			}
 			
-			int[] newColumn = slideColumn(column);
+			int[] newColumn = slideColumn(column, calcScore);
 			
 			for (int y=0; y<ROWS; y++) {
 				this.place(x, y, newColumn[y]);
@@ -184,25 +186,25 @@ public class Board {
 			
 	}
 	
-	public void makeMove(int direction) {
+	public void makeMove(int direction, boolean calcScore) {
 		
 		switch (direction) {
 			case UP:
-				slide();
+				slide(calcScore);
 				break;
 			case DOWN:
 				rotateClockwise(2);
-				slide();
+				slide(calcScore);
 				rotateClockwise(2);
 				break;
 			case LEFT: 
 				rotateClockwise(1);
-				slide();
+				slide(calcScore);
 				rotateClockwise(3);
 				break;
 			case RIGHT:
 				rotateClockwise(3);
-				slide();
+				slide(calcScore);
 				rotateClockwise(1);
 				break;
 		}

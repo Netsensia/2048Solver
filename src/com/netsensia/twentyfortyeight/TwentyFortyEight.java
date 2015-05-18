@@ -1,6 +1,47 @@
 package com.netsensia.twentyfortyeight;
 
+import java.util.Random;
+
 public class TwentyFortyEight {
+
+	public static void main(String args[]) {
+		
+		Board board = new Board();
+		board.setRandomStartPosition();
+		
+		Random r = new Random();
+		
+		System.out.println("Starting position:");
+		System.out.println(board);
+		int moveCount = 0;
+		
+		while (!board.isGameOver()) {
+			boolean legalMove = false;
+			do {
+				int direction = r.nextInt() % 4;
+				String dirText = "";
+				
+				switch (direction) {
+				case 0: legalMove = board.isValidMove(Board.UP); dirText = "Up"; break;
+				case 1: legalMove = board.isValidMove(Board.DOWN); dirText = "Down"; break;
+				case 2: legalMove = board.isValidMove(Board.LEFT); dirText = "Left"; break;
+				case 3: legalMove = board.isValidMove(Board.RIGHT);dirText = "Right";  break;
+				}
+				
+				if (legalMove) {
+					System.out.println("Move " + ++moveCount);
+					System.out.println("Solver's move: " + dirText);
+					board.makeMove(direction, true);
+					System.out.println(board);
+					System.out.println("Blocker's move:");
+					board.placeRandomPiece();
+					System.out.println(board);
+				}
+				
+			} while (!legalMove);
+		}
+		
+	}
 	
 	public static Board getTestBoard() {
 		Board board = new Board();
@@ -23,19 +64,19 @@ public class TwentyFortyEight {
 		System.out.println("Start");
 		System.out.println(board);
 		
-		board.makeMove(Board.DOWN);
+		board.makeMove(Board.DOWN, true);
 		System.out.println("Slid down");
 		System.out.println(board);
 		
-		board.makeMove(Board.LEFT);
+		board.makeMove(Board.LEFT, true);
 		System.out.println("Slid left");
 		System.out.println(board);
 		
-		board.makeMove(Board.RIGHT);
+		board.makeMove(Board.RIGHT, true);
 		System.out.println("Slid right");
 		System.out.println(board);
 		
-		board.makeMove(Board.UP);
+		board.makeMove(Board.UP, true);
 		System.out.println("Slid up");
 		System.out.println(board);
 		
@@ -48,16 +89,4 @@ public class TwentyFortyEight {
 		System.exit(0);
 	}
 	
-	public static void main(String args[]) {
-		
-		test();
-		
-		Board board = new Board();
-		board.setRandomStartPosition();
-		
-		while (!board.isGameOver()) {
-			
-		}
-		
-	}
 }

@@ -91,7 +91,7 @@ public class BoardTest {
     	int[] expected = {4,5,12,4,2,8,0,0,0,0,0,0,0,0};
     	
     	Board board = new Board();
-    	int[] result = board.slideColumn(col);
+    	int[] result = board.slideColumn(col, false);
     	assertArrayEquals(expected, result);
     	
     }
@@ -137,7 +137,7 @@ public class BoardTest {
     	Board board = new Board();
     	board.setBoard(start);
     	
-    	board.makeMove(Board.LEFT);
+    	board.makeMove(Board.LEFT, false);
     	
     	assertArrayEquals(
     		slideLeft,
@@ -146,7 +146,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.RIGHT);
+    	board.makeMove(Board.RIGHT, false);
     	
     	assertArrayEquals(
     		slideRight,
@@ -155,7 +155,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.UP);
+    	board.makeMove(Board.UP, false);
     	
     	assertArrayEquals(
     		slideUp,
@@ -164,7 +164,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.DOWN);
+    	board.makeMove(Board.DOWN, false);
     	
     	assertArrayEquals(
     		slideDown,
