@@ -6,6 +6,8 @@ The examples below will allow you to figure out exactly what happens, but, in a 
 
 Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act.
 
+Two constants ROWS and COLS define the size of the grid.
+
 Currently has code to set up and manipulate the board for making moves.
 
 	Board board = new Board();
