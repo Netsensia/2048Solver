@@ -1,46 +1,66 @@
 package com.netsensia.twentyfortyeight;
 
-import java.util.Random;
-
 public class TwentyFortyEight {
 
+	/**
+	 * Average score for random moves = 834
+	 * Average score for selecting best score each time = 2857
+	 */
+	
+	public static final int RUNS = 10;
+	
 	public static void main(String args[]) {
 		
+		Board board = null;
+		int totalScore = 0;
+		int highestTileValue = 0;
+		
+		for (int i=0; i<RUNS; i++) {
+			System.out.println("Game " + (i+1));
+			try {
+				board = playGame();
+				System.out.println(board);
+				totalScore += board.getScore();
+				int t = board.getHighestTileValue();
+				if (t > highestTileValue) {
+					highestTileValue = t;
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+				System.exit(1);
+			}
+		}
+		
+		System.out.println("Average score = " + (totalScore / RUNS) + ", Highest tile value: " + highestTileValue);
+	}
+	
+	public static Board playGame() throws Exception {
 		Board board = new Board();
 		board.setRandomStartPosition();
 		
-		Random r = new Random();
-		
 		System.out.println("Starting position:");
 		System.out.println(board);
-		int moveCount = 0;
+		
+		Search search = new Search();
 		
 		while (!board.isGameOver()) {
-			boolean legalMove = false;
-			do {
-				int direction = r.nextInt() % 4;
-				String dirText = "";
-				
-				switch (direction) {
-				case 0: legalMove = board.isValidMove(Board.UP); dirText = "Up"; break;
-				case 1: legalMove = board.isValidMove(Board.DOWN); dirText = "Down"; break;
-				case 2: legalMove = board.isValidMove(Board.LEFT); dirText = "Left"; break;
-				case 3: legalMove = board.isValidMove(Board.RIGHT);dirText = "Right";  break;
-				}
-				
-				if (legalMove) {
-					System.out.println("Move " + ++moveCount);
-					System.out.println("Solver's move: " + dirText);
-					board.makeMove(direction, true);
-					System.out.println(board);
-					System.out.println("Blocker's move:");
-					board.placeRandomPiece();
-					System.out.println(board);
-				}
-				
-			} while (!legalMove);
+			int direction;
+			
+			search.setMode(Search.SEARCH);
+			search.setDepth(4);
+			direction = search.getBestMove(board);
+			
+			if (board.isValidMove(direction)) {
+				board.makeMove(direction, true);
+				board.placeRandomPiece();
+			} else {
+				System.out.println("Illegal move: " + direction);
+				System.out.println(board);
+				System.exit(1);
+			}
 		}
 		
+		return (Board)board.clone();
 	}
 	
 	public static Board getTestBoard() {

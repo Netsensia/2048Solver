@@ -37,6 +37,16 @@ public class Board implements Cloneable {
 		board[square2] = r.nextInt(2) == 0 ? 2 : 4;
 	}
 	
+	public int getHighestTileValue() {
+		int highest = 0;
+		for (int i=0; i<ROWS*COLS; i++) {
+			if (board[i] > highest) {
+				highest = board[i];
+			}
+		}
+		return highest;
+	}
+	
 	public boolean placeRandomPiece() {
 		
 		boolean isBoardFull = true;
@@ -66,6 +76,16 @@ public class Board implements Cloneable {
 		return true;
 	}
 	
+	public int getBlankSpaces() {
+		int blankSpaces = 0;
+		for (int i=0; i<ROWS*COLS; i++) {
+			if (board[i] == 0) {
+				blankSpaces++;
+			}
+		}
+		return blankSpaces;
+	}
+	
 	public boolean isGameOver() {
 		
 		boolean isGameOver = true;
@@ -92,14 +112,14 @@ public class Board implements Cloneable {
 		int[] backupBoard = new int[ROWS*COLS];
 		
 		System.arraycopy( board, 0, backupBoard, 0, board.length );
-		
+
 		this.makeMove(direction, false);
+		
 		if (Arrays.equals(board, backupBoard)) {
 			return false;
 		}
 		
 		System.arraycopy( backupBoard, 0, board, 0, backupBoard.length );
-		
 		return true;
 	}
 	
@@ -107,7 +127,11 @@ public class Board implements Cloneable {
 		this.board[y*ROWS+x] = number;
 	}
 	
-	public void rotateClockwise() {
+	public int getSquare(int x, int y) {
+		return board[y*COLS+x];
+	}
+	
+	private void rotateClockwise() {
 		int[] newBoard = new int[ROWS*COLS];
 		
 		for (int x=0; x<ROWS; x++) {
@@ -169,7 +193,7 @@ public class Board implements Cloneable {
 		return column;
 	}
 	
-	public void slide(boolean calcScore) {
+	private void slide(boolean calcScore) {
 
 		for (int x=0; x<COLS; x++) {
 			int column[] = new int[ROWS];
@@ -183,7 +207,6 @@ public class Board implements Cloneable {
 				this.place(x, y, newColumn[y]);
 			}
 		}
-			
 	}
 	
 	public void makeMove(int direction, boolean calcScore) {
@@ -222,6 +245,10 @@ public class Board implements Cloneable {
 		return score;
 	}
 	
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
 	public String toString() {
 		String s = "";
 		
@@ -257,6 +284,14 @@ public class Board implements Cloneable {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+		Board clone = new Board();
+		int[] cloneBoard = new int[ROWS*COLS];
+		
+		System.arraycopy( board, 0, cloneBoard, 0, board.length );
+		
+		clone.setBoard(cloneBoard);
+		clone.setScore(score);
+		
+        return clone;
     }
 }
