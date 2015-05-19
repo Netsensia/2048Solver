@@ -8,10 +8,14 @@ public class Board implements Cloneable {
 	public static final int ROWS = 4;
 	public static final int COLS = 4;
 	
+	public static final int TOTAL_SQUARES = ROWS * COLS;
+	
 	public static final int UP = 0;
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
+	
+	public static final int MAX_TILE_POWER = 16; // 64k
 	
 	private int score = 0;
 	

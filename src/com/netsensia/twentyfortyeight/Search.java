@@ -9,12 +9,33 @@ public class Search {
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
+	public static final int HASH_TABLE_POWER = 16; // 64k positions
+	
+	public int[][] pieceSquareZorbrist = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
+	public int[][] pieceSquareZorbristLock = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
 	
 	private Hashtable<Integer, HashtableItem> hashtable = new Hashtable<Integer, HashtableItem>();
+	
+	public int hashClashes = 0;
+	public int hashHits = 0;
 	
 	int depth = 1;
 
 	int mode = RANDOM;
+	
+	public Search() {
+		int numPositions = (int)Math.pow(2, HASH_TABLE_POWER);
+		
+		Random r = new Random();
+		
+		for (int i=0; i<Board.TOTAL_SQUARES; i++) {
+			for (int j=0; j<Board.MAX_TILE_POWER; j++) {
+				pieceSquareZorbrist[i][j] = r.nextInt(numPositions);
+				pieceSquareZorbristLock[i][j] = r.nextInt(Integer.MAX_VALUE);
+			}
+		}
+		
+	}
 	
 	public int getMode() {
 		return mode;
@@ -30,6 +51,38 @@ public class Search {
 	
 	public void setDepth(int depth) {
 		this.depth = depth;
+	}
+	
+	public int generateHashKey(Board board) {
+		int hashKey = 0;
+		
+		for (int x=0; x<Board.COLS; x++) {
+			for (int y=0; y<Board.ROWS; y++) {
+				int piece = board.getSquare(x, y);
+				if (piece != 0) {
+					int power = (int)(Math.log(piece) / Math.log(2));
+					hashKey ^= pieceSquareZorbrist[y*Board.COLS+x][power];
+				}
+			}
+		}
+		
+		return hashKey;
+	}
+	
+	public int generateHashLockValue(Board board) {
+		int hashKey = 0;
+		
+		for (int x=0; x<Board.COLS; x++) {
+			for (int y=0; y<Board.ROWS; y++) {
+				int piece = board.getSquare(x, y);
+				if (piece != 0) {
+					int power = (int)(Math.log(piece) / Math.log(2));
+					hashKey ^= pieceSquareZorbristLock[y*Board.COLS+x][power];
+				}
+			}
+		}
+		
+		return hashKey;
 	}
 	
 	public int score(Board board, int move) {
@@ -94,6 +147,17 @@ public class Search {
 	
 	public int getSearchScore(Board board, int depth) throws Exception {
 		
+		int hashkey = generateHashKey(board);
+		HashtableItem find = hashtable.get(hashkey);
+		
+		if (find != null) {
+			if (find.lock == generateHashLockValue(board)) {
+				hashHits ++;
+			} else {
+				hashClashes ++;
+			}
+		}
+		
 		int bestScore = -1;
 		
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
@@ -137,6 +201,13 @@ public class Search {
 			}
 			
 		}
+		
+		HashtableItem hti = new HashtableItem();
+		hti.height = depth;
+		hti.score = bestScore;
+		hti.lock = generateHashLockValue(board);
+		
+		hashtable.put(hashkey, hti);
 		
 		return bestScore;
 	}

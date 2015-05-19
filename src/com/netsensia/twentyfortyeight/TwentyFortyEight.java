@@ -2,11 +2,6 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	/**
-	 * Average score for random moves = 834
-	 * Average score for selecting best score each time = 2857
-	 */
-	
 	public static final int RUNS = 10;
 	public static final int DEPTH = 2;
 	
@@ -73,6 +68,8 @@ public class TwentyFortyEight {
 				System.exit(1);
 			}
 		}
+		
+		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes);
 		
 		return (Board)board.clone();
 	}
