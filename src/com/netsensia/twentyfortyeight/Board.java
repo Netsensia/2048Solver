@@ -131,15 +131,13 @@ public class Board implements Cloneable {
 		return board[y*COLS+x];
 	}
 	
-	private void rotateClockwise() {
+	public void rotateClockwise() {
 		int[] newBoard = new int[ROWS*COLS];
 		
 		for (int x=0; x<ROWS; x++) {
 			for (int y=0; y<COLS; y++) {
-				int newY = x;
-				int newX = COLS - y - 1;
-				
-				newBoard[newY*COLS+newX] = board[y*COLS+x];
+				// New Y is current x, new x is the inverse of Y: COLS-y-1
+				newBoard[x*COLS+(COLS-y-1)] = board[y*COLS+x];
 			}
 		}
 		
@@ -196,7 +194,6 @@ public class Board implements Cloneable {
 	private void slide(boolean calcScore) {
 
 		int column[] = new int[ROWS];
-		int newColumn[] = new int[ROWS];
 		
 		for (int x=0; x<COLS; x++) {
 			
@@ -204,10 +201,10 @@ public class Board implements Cloneable {
 				column[y] = board[y*COLS+x];
 			}
 			
-			newColumn = slideColumn(column, calcScore);
+			column = slideColumn(column, calcScore);
 			
 			for (int y=0; y<ROWS; y++) {
-				this.place(x, y, newColumn[y]);
+				board[y*COLS+x] = column[y];
 			}
 		}
 	}

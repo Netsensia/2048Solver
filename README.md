@@ -104,7 +104,7 @@ The key Board interface methods are:
 The key Search interface methods are: 
 
 * void setDepth(int)
-* void setMode(int
+* void setMode(int)
 * getBestMove(Board);
 
 ## Example code:

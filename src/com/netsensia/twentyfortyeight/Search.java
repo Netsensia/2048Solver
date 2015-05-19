@@ -2,12 +2,15 @@ package com.netsensia.twentyfortyeight;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Hashtable;
 
 public class Search {
 	
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
+	
+	private Hashtable<Integer, HashtableItem> hashtable = new Hashtable<Integer, HashtableItem>();
 	
 	int depth = 1;
 

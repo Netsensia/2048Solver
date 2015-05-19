@@ -7,8 +7,8 @@ public class TwentyFortyEight {
 	 * Average score for selecting best score each time = 2857
 	 */
 	
-	public static final int RUNS = 1;
-	public static final int DEPTH = 3;
+	public static final int RUNS = 10;
+	public static final int DEPTH = 2;
 	
 	public static void main(String args[]) {
 		
@@ -43,7 +43,7 @@ public class TwentyFortyEight {
 			
 			long time = (System.currentTimeMillis() - start);
 			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("==================================================================================================");
+			System.out.println("=====================================================================================================");
 		}
 		
 	}
