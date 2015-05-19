@@ -9,7 +9,7 @@ public class Search {
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
-	public static final int HASH_TABLE_POWER = 18; // 256k positions
+	public static final int HASH_TABLE_POWER = 16; // Math.pow(2,HASH_TABLE_POWER) positions
 	
 	public int[][] pieceSquareZorbrist = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
 	public int[][] pieceSquareZorbristLock = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
@@ -153,6 +153,7 @@ public class Search {
 		if (find != null) {
 			if (find.lock == generateHashLockValue(board) && find.height >= depth) {
 				hashHits ++;
+				return find.score;
 			} else {
 				hashClashes ++;
 			}
@@ -184,9 +185,9 @@ public class Search {
 							totalScore += getSearchScore(newBoard, depth-1);
 							
 							totalSearches += 2;
-							
 						}
 					}
+
 				}
 				
 				int averageScore = totalScore / totalSearches;

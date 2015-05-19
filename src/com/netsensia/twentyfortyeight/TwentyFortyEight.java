@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 1;
-	public static final int DEPTH = 2;
+	public static final int RUNS = 10;
+	public static final int DEPTH = 1;
 	
 	public static void main(String args[]) {
 		
@@ -38,7 +38,7 @@ public class TwentyFortyEight {
 			
 			long time = (System.currentTimeMillis() - start);
 			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("=====================================================================================================");
+			System.out.println("===========================================================================================================");
 		}
 		
 	}
