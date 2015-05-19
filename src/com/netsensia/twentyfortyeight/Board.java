@@ -195,13 +195,16 @@ public class Board implements Cloneable {
 	
 	private void slide(boolean calcScore) {
 
+		int column[] = new int[ROWS];
+		int newColumn[] = new int[ROWS];
+		
 		for (int x=0; x<COLS; x++) {
-			int column[] = new int[ROWS];
+			
 			for (int y=0; y<ROWS; y++) {
 				column[y] = board[y*COLS+x];
 			}
 			
-			int[] newColumn = slideColumn(column, calcScore);
+			newColumn = slideColumn(column, calcScore);
 			
 			for (int y=0; y<ROWS; y++) {
 				this.place(x, y, newColumn[y]);

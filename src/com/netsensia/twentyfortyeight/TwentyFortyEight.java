@@ -7,7 +7,8 @@ public class TwentyFortyEight {
 	 * Average score for selecting best score each time = 2857
 	 */
 	
-	public static final int RUNS = 100;
+	public static final int RUNS = 1;
+	public static final int DEPTH = 3;
 	
 	public static void main(String args[]) {
 		
@@ -18,10 +19,9 @@ public class TwentyFortyEight {
 		
 		long start = System.currentTimeMillis();
 		
-		for (int i=0; i<RUNS; i++) {
+		for (int i=1; i<=RUNS; i++) {
 			
-			System.out.println("======================================================");
-			System.out.println("Game: " + (i+1));
+			System.out.println("Game: " + i);
 			
 			try {
 				board = playGame();
@@ -41,7 +41,9 @@ public class TwentyFortyEight {
 				System.exit(1);
 			}
 			
-			System.out.println("Time: " + (System.currentTimeMillis() - start) + ", Average score = " + (totalScore / RUNS) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			long time = (System.currentTimeMillis() - start);
+			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			System.out.println("==================================================================================================");
 		}
 		
 	}
@@ -59,7 +61,7 @@ public class TwentyFortyEight {
 			int direction;
 			
 			search.setMode(Search.SEARCH);
-			search.setDepth(2);
+			search.setDepth(DEPTH);
 			direction = search.getBestMove(board);
 			
 			if (board.isValidMove(direction)) {

@@ -76,12 +76,13 @@ The search routine considers each of the four possible moves (up, down, left, ri
 
 The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things will speed up the search enormously. 
 
-	------------------------------------------------------------------------------
-	|Search Depth | Runs | Seconds | Average Score | Highest Score | Highest Tile |
-	------------------------------------------------------------------------------
-	       1        100        3.5        5,375          11,216          1024
-	       2        100      238.1       11,288          15,048          1024
-	       3
+	---------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |
+	---------------------------------------------------------
+	       1   1000        30      5,452    14,784     1024  
+	       2    100      1303      7,052    15,064     1024
+	       3    100
 	       4
 	       5
 	       6
