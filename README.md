@@ -74,7 +74,7 @@ This is getting us somewhere! Now, we introduce the random placement of the piec
 
 The search routine considers each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  All placements are considered (all 2s, all 4s, in all available spaces) and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
 
-The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things will speed up the search enormously. 
+The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things should speed up the search significantly. 
 
 	---------------------------------------------------------
 	| Search | Total | Average  | Average | Highest | Highest |
