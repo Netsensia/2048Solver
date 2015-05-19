@@ -70,7 +70,27 @@ The last position is better than anything I have managed with my own wits, altho
 
 It turns out that allowing two moves in a row is just as effective as allowing any number of moves higher than two. So three, four or five moves, for example, make no difference to the average score. This may allow us to add a sneaky extra ply to the search for minimal cost during a full search.
 
-So clearly this is getting somewhere. Now, we introduce the random placement of the piece into the search. We will consider each random placement and then take the average of the obtainable scores from the search to be the score for the current move.
+This is getting us somewhere! Now, we introduce the random placement of the piece into the search. 
+
+The search routine considers each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  All placements are considered (all 2s, all 4s, in all available spaces) and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
+
+The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things will speed up the search enormously. 
+
+	------------------------------------------------------------------------------
+	|Search Depth | Runs | Seconds | Average Score | Highest Score | Highest Tile |
+	------------------------------------------------------------------------------
+	       1        100        3.5        5,375          11,216          1024
+	       2        100      238.1       11,288          15,048          1024
+	       3
+	       4
+	       5
+	       6
+	       7
+	       8
+	       9
+	------------------------------------------------------------------------------
+	
+## Class Interfaces
 
 The key Board interface methods are:
 
@@ -86,7 +106,7 @@ The key Search interface methods are:
 * void setMode(int
 * getBestMove(Board);
 
-Example code:
+## Example code:
 
 	Board board = new Board();
 			

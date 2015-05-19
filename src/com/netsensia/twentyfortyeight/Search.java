@@ -104,26 +104,30 @@ public class Search {
 				Board newBoard = (Board)board.clone();
 				newBoard.makeMove(move, true);
 				
-				int spaces = newBoard.getBlankSpaces();
+				int totalScore = 0;
+				int totalSearches = 0;
 				
-				if (spaces > 0) {
-					
-					int totalScore = 0;
-					
-					for (int i=0; i<spaces; i++) {
-						Board anotherNewBoard = (Board)newBoard.clone();
-						
-						anotherNewBoard.placeRandomPiece();
-						
-						totalScore += getSearchScore(newBoard, depth-1);
-					}
-					
-					int averageScore = totalScore / spaces;
-					
-					if (averageScore > bestScore) {
-						bestScore = averageScore;
+				for (int x=0; x<Board.COLS; x++) {
+					for (int y=0; y<Board.ROWS; y++) {
+						if (newBoard.getSquare(x, y) == 0) {
+							newBoard.place(x, y, 2);
+							totalScore += getSearchScore(newBoard, depth-1);
+							
+							newBoard.place(x, y, 4);
+							totalScore += getSearchScore(newBoard, depth-1);
+							
+							totalSearches += 2;
+							
+						}
 					}
 				}
+				
+				int averageScore = totalScore / totalSearches;
+				
+				if (averageScore > bestScore) {
+					bestScore = averageScore;
+				}
+				
 				
 			} catch (CloneNotSupportedException e) {
 				

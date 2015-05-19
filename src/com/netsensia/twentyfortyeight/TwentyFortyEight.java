@@ -7,20 +7,31 @@ public class TwentyFortyEight {
 	 * Average score for selecting best score each time = 2857
 	 */
 	
-	public static final int RUNS = 10;
+	public static final int RUNS = 100;
 	
 	public static void main(String args[]) {
 		
 		Board board = null;
 		int totalScore = 0;
+		int highScore = 0;
 		int highestTileValue = 0;
 		
+		long start = System.currentTimeMillis();
+		
 		for (int i=0; i<RUNS; i++) {
-			System.out.println("Game " + (i+1));
+			
+			System.out.println("======================================================");
+			System.out.println("Game: " + (i+1));
+			
 			try {
 				board = playGame();
 				System.out.println(board);
-				totalScore += board.getScore();
+				int score = board.getScore();
+				if (score > highScore) {
+					highScore = score;
+				}
+				
+				totalScore += score;
 				int t = board.getHighestTileValue();
 				if (t > highestTileValue) {
 					highestTileValue = t;
@@ -29,9 +40,10 @@ public class TwentyFortyEight {
 				System.out.println(e);
 				System.exit(1);
 			}
+			
+			System.out.println("Time: " + (System.currentTimeMillis() - start) + ", Average score = " + (totalScore / RUNS) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
 		}
 		
-		System.out.println("Average score = " + (totalScore / RUNS) + ", Highest tile value: " + highestTileValue);
 	}
 	
 	public static Board playGame() throws Exception {
@@ -47,7 +59,7 @@ public class TwentyFortyEight {
 			int direction;
 			
 			search.setMode(Search.SEARCH);
-			search.setDepth(4);
+			search.setDepth(2);
 			direction = search.getBestMove(board);
 			
 			if (board.isValidMove(direction)) {
