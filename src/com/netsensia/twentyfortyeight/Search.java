@@ -9,12 +9,12 @@ public class Search {
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
-	public static final int HASH_TABLE_POWER = 16; // 64k positions
+	public static final int HASH_TABLE_POWER = 18; // 256k positions
 	
 	public int[][] pieceSquareZorbrist = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
 	public int[][] pieceSquareZorbristLock = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
 	
-	private Hashtable<Integer, HashtableItem> hashtable = new Hashtable<Integer, HashtableItem>();
+	public Hashtable<Integer, HashtableItem> hashtable = new Hashtable<Integer, HashtableItem>();
 	
 	public int hashClashes = 0;
 	public int hashHits = 0;
@@ -151,7 +151,7 @@ public class Search {
 		HashtableItem find = hashtable.get(hashkey);
 		
 		if (find != null) {
-			if (find.lock == generateHashLockValue(board)) {
+			if (find.lock == generateHashLockValue(board) && find.height >= depth) {
 				hashHits ++;
 			} else {
 				hashClashes ++;

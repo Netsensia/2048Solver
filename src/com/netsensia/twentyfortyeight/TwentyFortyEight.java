@@ -2,7 +2,7 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 10;
+	public static final int RUNS = 1;
 	public static final int DEPTH = 2;
 	
 	public static void main(String args[]) {
@@ -69,7 +69,8 @@ public class TwentyFortyEight {
 			}
 		}
 		
-		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes);
+		int hashTableSize = (search.hashtable.size() * 16) / 1024;
+		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes + ", Hash table size: " + search.hashtable.size() + " (" + hashTableSize + " Megabytes)");
 		
 		return (Board)board.clone();
 	}
