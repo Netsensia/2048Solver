@@ -205,11 +205,17 @@ public class Search {
 		}
 		
 		if (USE_HASH_TABLE) {
-			HashtableItem hti = new HashtableItem();
-			hti.height = depth;
-			hti.score = bestScore;
-			hti.lock = generateHashLockValue(board);
-			hashtable.put(hashkey, hti);
+			HashtableItem find = hashtable.get(hashkey);
+			
+			if (find == null || find.height >= depth) {
+				if (find == null) {
+					find = new HashtableItem();
+				}
+				find.height = depth;
+				find.score = bestScore;
+				find.lock = generateHashLockValue(board);
+				hashtable.put(hashkey, find);
+			}
 		}
 		
 		return bestScore;

@@ -84,9 +84,11 @@ In order to speed things up without, hopefully, impacting the results too much, 
 	--------------------------------------------------------------------------
 	       1   1000        27      6,633    15,500     1024       0      216
 	       2   1000       272      7,690    25,052     2048       4      315
-	       3    100
+	       3   1000      2638      8,007    24,128     2048       3      369
 	--------------------------------------------------------------------------
 	
+At this point, it appears that we are not gaining much from a deeper search, but the number of 1024s is going up so we'll try one level deeper, but I need to find a way to speed it up if we're going to go much deeper.
+
 ## Class Interfaces
 
 The key Board interface methods are:
