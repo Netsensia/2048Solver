@@ -221,40 +221,6 @@ public class Search {
 		return bestScore;
 	}
 	
-	public int getMoveFromSearch(Board board) throws Exception {
-		int bestScore = -1;
-		int bestMove = -1;
-		
-		ArrayList<Integer> legalMoves = getLegalMoves(board);
-		
-		if (legalMoves.size() == 0) {
-			throw new Exception("No legal moves for position\n " + board);
-		}
-		
-		for (Integer move : legalMoves) {
-			try {
-				Board newBoard = (Board)board.clone();
-			
-				newBoard.makeMove(move, true);
-				
-				int score = getSearchScore(newBoard);
-				
-				if (score > bestScore) {
-					bestScore = score;
-					bestMove = move;
-				}
-			} catch (CloneNotSupportedException e) {
-				
-			}
-		}
-		
-		if (bestMove == -1) {
-			throw new Exception("No move resulted in a postive score for position\n " + board + "\nLegal moves: " + legalMoves);
-		}
-		
-		return bestMove;
-	}
-	
 	public int evaluate(Board board, ArrayList<Integer>legalMoves) {
 
 		int bestScore = 0;
@@ -291,6 +257,117 @@ public class Search {
 			default:
 				return getRandomMove(board);
 		}
+	}
+	
+	public int negamax(Board board, final int depth, int low, int high) throws Exception {
+		
+		ArrayList<Integer> legalMoves = getLegalMoves(board);
+		
+		if (depth == 0) {
+			return evaluate(board, legalMoves);
+		}
+
+		int bestScore = Integer.MIN_VALUE;
+		
+		if (board.getMover() == Board.SOLVER) {
+			
+			if (legalMoves.size() == 0) {
+				return evaluate(board, legalMoves);
+			}
+			
+			for (Integer move : legalMoves) {
+				Board newBoard;
+				try {
+					newBoard = (Board)board.clone();
+					newBoard.makeMove(move, true);
+					
+					int score = -negamax(newBoard, depth-1, -high, -low);
+					bestScore = Math.max(bestScore, score);
+					low = Math.max(low, score);
+					
+					if (low >= high) {
+						return bestScore;
+					}
+					
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} else {
+			
+			if (board.countBlankSpaces() == 0) {
+				return board.getScore();
+			}
+			
+			for (int x=0; x<Board.COLS; x++) {
+				for (int y=0; y<Board.ROWS; y++) {
+					if (board.getSquare(x, y) == 0) {
+						Board newBoard;
+						try {
+							for (int piece=2; piece<=4; piece+=2) {
+								newBoard = (Board)board.clone();
+								newBoard.place(x, y, piece);
+								
+								int score = -negamax(newBoard, depth-1, -high, -low);
+								bestScore = Math.max(bestScore, score);
+								low = Math.max(low, score);
+								
+								if (low >= high) {
+									return bestScore;
+								}
+							}
+							
+						} catch (CloneNotSupportedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+		
+		if (bestScore == Integer.MIN_VALUE) {
+			throw new Exception("Best score is not set for " + (board.getMover() == Board.SOLVER ? "Solver" : "Blocker") + "\n" + board);
+		}
+		
+		return bestScore;
+		
+	}
+	
+	public int getMoveFromSearch(Board board) throws Exception {
+		int bestScore = -1;
+		int bestMove = -1;
+		
+		ArrayList<Integer> legalMoves = getLegalMoves(board);
+		
+		if (legalMoves.size() == 0) {
+			throw new Exception("No legal moves for position\n " + board);
+		}
+		
+		for (Integer move : legalMoves) {
+			try {
+				Board newBoard = (Board)board.clone();
+			
+				newBoard.makeMove(move, true);
+				
+				//int score = negamax(newBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+				int score = getSearchScore(newBoard, depth);
+				
+				if (score > bestScore) {
+					bestScore = score;
+					bestMove = move;
+				}
+			} catch (CloneNotSupportedException e) {
+				
+			}
+		}
+		
+		if (bestMove == -1) {
+			throw new Exception("No move resulted in a postive score for position\n " + board + "\nLegal moves: " + legalMoves);
+		}
+		
+		return bestMove;
 	}
 	
 }

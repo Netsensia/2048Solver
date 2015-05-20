@@ -73,9 +73,9 @@ public class TwentyFortyEight {
 			
 			int blankSpaces = board.countBlankSpaces();
 			int searchDepth = DEPTH;
-			if (blankSpaces > (Board.ROWS * Board.COLS) / 2) {
-				searchDepth = 1;
-			}
+//			if (blankSpaces > (Board.ROWS * Board.COLS) / 2) {
+//				searchDepth = 1;
+//			}
 			
 			search.setDepth(searchDepth);
 			direction = search.getBestMove(board);

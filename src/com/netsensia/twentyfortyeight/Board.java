@@ -17,7 +17,12 @@ public class Board implements Cloneable {
 	
 	public static final int MAX_TILE_POWER = 16; // 64k
 	
+	public static final int SOLVER = 0;
+	public static final int BLOCKER = 1;
+	
 	private int score = 0;
+	private int mover = SOLVER;
+	
 	private int board[] = new int[ROWS*COLS];
 	
 	Random r = new Random();
@@ -65,6 +70,8 @@ public class Board implements Cloneable {
 				break;
 			}
 		} while (true);
+		
+		mover = SOLVER;
 		
 		return true;
 	}
@@ -216,6 +223,8 @@ public class Board implements Cloneable {
 				rotateClockwise(1);
 				break;
 		}
+		
+		mover = BLOCKER;
 	}
 	
 	public int[] getBoard() {
@@ -232,6 +241,14 @@ public class Board implements Cloneable {
 	
 	public void setScore(int score) {
 		this.score = score;
+	}
+	
+	public int getMover() {
+		return mover;
+	}
+
+	public void setMover(int mover) {
+		this.mover = mover;
 	}
 	
 	public String toString() {
