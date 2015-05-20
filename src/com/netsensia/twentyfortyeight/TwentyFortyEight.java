@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 3;
+	public static final int DEPTH = 4;
 	
 	public static void main(String args[]) {
 		
@@ -64,6 +64,8 @@ public class TwentyFortyEight {
 		
 		Search search = new Search();
 		
+		int movesMade = 0;
+		
 		while (!board.isGameOver()) {
 			int direction;
 			
@@ -79,6 +81,10 @@ public class TwentyFortyEight {
 			direction = search.getBestMove(board);
 			
 			if (board.isValidMove(direction)) {
+				movesMade ++;
+				if (movesMade % 10 == 0) {
+					System.out.print(".");
+				}
 				board.makeMove(direction, true);
 				board.placeRandomPiece();
 				
@@ -90,9 +96,11 @@ public class TwentyFortyEight {
 				System.out.println(board);
 				System.exit(1);
 			}
+			
 		}
 		
 		int hashTableSize = (search.hashtable.size() * 16) / 1024;
+		System.out.println();
 		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes + ", Hash table size: " + search.hashtable.size() + " (" + hashTableSize + " Megabytes)");
 		
 		return (Board)board.clone();
