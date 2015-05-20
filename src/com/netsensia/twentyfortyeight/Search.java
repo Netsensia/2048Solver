@@ -6,10 +6,14 @@ import java.util.Hashtable;
 
 public class Search {
 	
+	public static final int RANDOM_MOVES_TO_PLAY = 3;
+	
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
 	public static final int HASH_TABLE_POWER = 16; // Math.pow(2,HASH_TABLE_POWER) positions
+	
+	public static final boolean USE_HASH_TABLE = true;
 	
 	public int[][] pieceSquareZorbrist = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
 	public int[][] pieceSquareZorbristLock = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
@@ -19,14 +23,14 @@ public class Search {
 	public int hashClashes = 0;
 	public int hashHits = 0;
 	
+	Random r = new Random();
+	
 	int depth = 1;
 
 	int mode = RANDOM;
 	
 	public Search() {
 		int numPositions = (int)Math.pow(2, HASH_TABLE_POWER);
-		
-		Random r = new Random();
 		
 		for (int i=0; i<Board.TOTAL_SQUARES; i++) {
 			for (int j=0; j<Board.MAX_TILE_POWER; j++) {
@@ -119,7 +123,6 @@ public class Search {
 	public int getRandomMove(Board board) {
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
 		
-		Random r = new Random();
 		return legalMoves.get(r.nextInt(legalMoves.size()));
 	}
 	
@@ -147,15 +150,20 @@ public class Search {
 	
 	public int getSearchScore(Board board, int depth) throws Exception {
 		
-		int hashkey = generateHashKey(board);
-		HashtableItem find = hashtable.get(hashkey);
+		int hashkey;
 		
-		if (find != null) {
-			if (find.lock == generateHashLockValue(board) && find.height >= depth) {
-				hashHits ++;
-				return find.score;
-			} else {
-				hashClashes ++;
+		if (USE_HASH_TABLE) {
+			hashkey = generateHashKey(board);
+	
+			HashtableItem find = hashtable.get(hashkey);
+			
+			if (find != null) {
+				if (find.lock == generateHashLockValue(board) && find.height >= depth) {
+					hashHits ++;
+					return find.score;
+				} else {
+					hashClashes ++;
+				}
 			}
 		}
 		
@@ -164,38 +172,31 @@ public class Search {
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
 		
 		if (depth == 0 || legalMoves.size() == 0) {
-			return board.getScore();
+			return evaluate(board, legalMoves);
 		}
 		
 		for (Integer move : legalMoves) {
 			try {
 				Board newBoard = (Board)board.clone();
+				
 				newBoard.makeMove(move, true);
 				
+				Board anotherBoard;
+				
 				int totalScore = 0;
-				int totalSearches = 0;
-				
-				for (int x=0; x<Board.COLS; x++) {
-					for (int y=0; y<Board.ROWS; y++) {
-						if (newBoard.getSquare(x, y) == 0) {
-							newBoard.place(x, y, 2);
-							totalScore += getSearchScore(newBoard, depth-1);
-							
-							newBoard.place(x, y, 4);
-							totalScore += getSearchScore(newBoard, depth-1);
-							
-							totalSearches += 2;
-						}
-					}
-
+				int totalTries = 0;
+				int availableMoves = newBoard.countBlankSpaces() * 2;
+				for (int i=0; i<RANDOM_MOVES_TO_PLAY && i<availableMoves; i++) {
+					 anotherBoard = (Board)newBoard.clone();
+					 anotherBoard.placeRandomPiece();
+					 totalScore += getSearchScore(anotherBoard, depth-1);
+					 totalTries ++;
 				}
-				
-				int averageScore = totalScore / totalSearches;
+				int averageScore = totalScore / totalTries;
 				
 				if (averageScore > bestScore) {
 					bestScore = averageScore;
 				}
-				
 				
 			} catch (CloneNotSupportedException e) {
 				
@@ -203,12 +204,13 @@ public class Search {
 			
 		}
 		
-		HashtableItem hti = new HashtableItem();
-		hti.height = depth;
-		hti.score = bestScore;
-		hti.lock = generateHashLockValue(board);
-		
-		hashtable.put(hashkey, hti);
+		if (USE_HASH_TABLE) {
+			HashtableItem hti = new HashtableItem();
+			hti.height = depth;
+			hti.score = bestScore;
+			hti.lock = generateHashLockValue(board);
+			hashtable.put(hashkey, hti);
+		}
 		
 		return bestScore;
 	}
@@ -245,6 +247,33 @@ public class Search {
 		}
 		
 		return bestMove;
+	}
+	
+	public int evaluate(Board board, ArrayList<Integer>legalMoves) {
+
+		int bestScore = 0;
+		
+		if (legalMoves.size() == 0) {
+			return board.getScore();
+		}
+		
+		for (Integer move : legalMoves) {
+			try {
+				Board newBoard = (Board)board.clone();
+			
+				newBoard.makeMove(move, true);
+				
+				int score = newBoard.getScore();
+				
+				if (score > bestScore) {
+					bestScore = score;
+				}
+			} catch (CloneNotSupportedException e) {
+				
+			}
+		}
+		
+		return bestScore;
 	}
 	
 	public int getBestMove(Board board) throws Exception {

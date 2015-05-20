@@ -18,8 +18,9 @@ public class Board implements Cloneable {
 	public static final int MAX_TILE_POWER = 16; // 64k
 	
 	private int score = 0;
-	
 	private int board[] = new int[ROWS*COLS];
+	
+	Random r = new Random();
 	
 	public Board() {
 		for (int i=0; i<ROWS*COLS; i++) {
@@ -29,7 +30,6 @@ public class Board implements Cloneable {
 	
 	public void setRandomStartPosition() {
 		int numSquares = ROWS * COLS;
-		Random r = new Random();
 		
 		int square1 = r.nextInt(numSquares);
 		int square2;
@@ -53,24 +53,13 @@ public class Board implements Cloneable {
 	
 	public boolean placeRandomPiece() {
 		
-		boolean isBoardFull = true;
-		
-		for (int i=0; i<ROWS*COLS; i++) {
-			if (board[i] > 0) {
-				isBoardFull = false;
-				break;
-			}
-		}
-		
-		if (isBoardFull) {
+		if (countBlankSpaces() == 0) {
 			return false;
 		}
 		
-		Random r = new Random();
-		int numSquares = ROWS * COLS;
 		int square;
 		do {
-			square = r.nextInt(numSquares);
+			square = r.nextInt(ROWS*COLS);
 			if (board[square] == 0) {
 				board[square] = r.nextInt(2) == 0 ? 2 : 4;
 				break;
@@ -80,7 +69,7 @@ public class Board implements Cloneable {
 		return true;
 	}
 	
-	public int getBlankSpaces() {
+	public int countBlankSpaces() {
 		int blankSpaces = 0;
 		for (int i=0; i<ROWS*COLS; i++) {
 			if (board[i] == 0) {
@@ -156,16 +145,11 @@ public class Board implements Cloneable {
 	
 	public int[] compactColumn(int[] column) {
 		
-		int len = column.length;
-		int newColumn[] = new int[len];
-		
-		for (int i=0; i<len; i++) {
-			newColumn[i] = 0;
-		}
+		int newColumn[] = new int[column.length];
 		
 		int pieces = 0;
 		
-		for (int i=0; i<len; i++) {
+		for (int i=0; i<column.length; i++) {
 			int piece = column[i];
 			if (piece > 0) {
 				newColumn[pieces++] = piece;
@@ -173,7 +157,6 @@ public class Board implements Cloneable {
 		}
 		
 		return newColumn;
-		
 	}
 	
 	public int[] slideColumn(int[] column, boolean calcScore) {
@@ -190,12 +173,10 @@ public class Board implements Cloneable {
 			}
 		}
 		
-		column = compactColumn(column);
-		
-		return column;
+		return compactColumn(column);
 	}
 	
-	private void slide(boolean calcScore) {
+	private void slideUp(boolean calcScore) {
 
 		int column[] = new int[ROWS];
 		
@@ -217,21 +198,21 @@ public class Board implements Cloneable {
 		
 		switch (direction) {
 			case UP:
-				slide(calcScore);
+				slideUp(calcScore);
 				break;
 			case DOWN:
 				rotateClockwise(2);
-				slide(calcScore);
+				slideUp(calcScore);
 				rotateClockwise(2);
 				break;
 			case LEFT: 
 				rotateClockwise(1);
-				slide(calcScore);
+				slideUp(calcScore);
 				rotateClockwise(3);
 				break;
 			case RIGHT:
 				rotateClockwise(3);
-				slide(calcScore);
+				slideUp(calcScore);
 				rotateClockwise(1);
 				break;
 		}

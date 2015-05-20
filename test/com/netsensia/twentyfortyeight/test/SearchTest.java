@@ -29,11 +29,10 @@ public class SearchTest {
 			
 			Search search = new Search();
 			int hashkey = search.generateHashKey(board);
-			int lock = search.generateHashLockValue(board);
+			search.generateHashLockValue(board);
 
 		    assertTrue(hashkey >= 0 && hashkey < numHashPositions);
 		}
-		
 	}
-
+    
 }

@@ -1,6 +1,6 @@
 package com.netsensia.twentyfortyeight.test;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.*;
 import com.netsensia.twentyfortyeight.Board;
 
 import org.junit.Test;
@@ -82,7 +82,6 @@ public class BoardTest {
     	Board board = new Board();
     	int[] result = board.compactColumn(col);
     	assertArrayEquals(expected, result);
-    	
     }
     
     @Test
@@ -94,6 +93,65 @@ public class BoardTest {
     	int[] result = board.slideColumn(col, false);
     	assertArrayEquals(expected, result);
     	
+    }
+    
+    @Test
+    public void testPlaceRandomPieceReturnsFalseWhenBoardIsFull() {
+    	
+    	int[] notFull = {
+    	    	0,2,0,2,
+    	    	2,2,4,4,
+    	    	2,8,2,0,
+    	    	0,8,4,4,
+    	    	};
+    	
+    	int[] full = {
+    	    	2,2,2,2,
+    	    	2,2,4,4,
+    	    	2,8,2,2,
+    	    	2,8,4,4,
+    	    	};
+    	
+    	Board board = new Board();
+    	board.setBoard(notFull);
+    	
+    	assertTrue(board.placeRandomPiece());
+    	
+    	board.setBoard(full);
+    	
+    	assertFalse(board.placeRandomPiece());
+    	
+    }
+    
+    @Test
+    public void testCountBlankSpaces() {
+    	int[] position = {
+    	    	0,2,0,2,
+    	    	2,2,4,4,
+    	    	2,8,2,0,
+    	    	0,8,4,4,
+    	    	};
+    	
+    	Board board = new Board();
+    	board.setBoard(position);
+    	
+    	assertEquals(4, board.countBlankSpaces());
+    	
+    }
+    
+    @Test
+    public void testGetHighestTileValue() {
+    	int[] position = {
+    	    	0,2,0,2,
+    	    	2,2,4,4,
+    	    	2,8,2,0,
+    	    	0,8,4,4,
+    	    	};
+    	
+    	Board board = new Board();
+    	board.setBoard(position);
+    	
+    	assertEquals(8, board.getHighestTileValue());
     }
     
     @Test

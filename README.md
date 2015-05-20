@@ -12,7 +12,7 @@ Two constants ROWS and COLS define the size of the grid.
 
 There is code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play out and solve the game in as fast a time as possible using an alpha-beta search, such as that used in my [Rival Chess Engine](https://github.com/Netsensia/rival-chess-android-engine).
 
-There are two current methods of play. First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
+There are several methods of play. First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
 
 	----------------------------
 	|     4|     2|     4|    16|
@@ -72,24 +72,20 @@ It turns out that allowing two moves in a row is just as effective as allowing a
 
 This is getting us somewhere! Now, we introduce the random placement of the piece into the search. 
 
-The search routine considers each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  All placements are considered (all 2s, all 4s, in all available spaces) and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
+The search routine considers each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  Three  random placements are considered and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
 
 The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things will speed up the search enormously. 
 
-	---------------------------------------------------------
-	| Search | Total | Average  | Average | Highest | Highest |
-	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |
-	---------------------------------------------------------
-	       1   1000        30      5,452    14,784     1024  
-	       2    100      1303      7,052    15,064     1024
+In order to speed things up without, hopefully, impacting the results too much, the search routine always uses a depth of one unless the board is more than half full, in which case it uses the depth specified in the table.
+
+	--------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |
+	--------------------------------------------------------------------------
+	       1   1000        27      6,633    15,500     1024       0      216
+	       2   1000       272      7,690    25,052     2048       4      315
 	       3    100
-	       4
-	       5
-	       6
-	       7
-	       8
-	       9
-	------------------------------------------------------------------------------
+	--------------------------------------------------------------------------
 	
 ## Class Interfaces
 

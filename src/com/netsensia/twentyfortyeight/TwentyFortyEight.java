@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 10;
-	public static final int DEPTH = 1;
+	public static final int RUNS = 1000;
+	public static final int DEPTH = 3;
 	
 	public static void main(String args[]) {
 		
@@ -11,6 +11,8 @@ public class TwentyFortyEight {
 		int totalScore = 0;
 		int highScore = 0;
 		int highestTileValue = 0;
+		int wins = 0;
+		int halfWins = 0;
 		
 		long start = System.currentTimeMillis();
 		
@@ -31,6 +33,15 @@ public class TwentyFortyEight {
 				if (t > highestTileValue) {
 					highestTileValue = t;
 				}
+				
+				if (t >= 2048) {
+					wins ++;
+				}
+				
+				if (t >= 1024) {
+					halfWins ++;
+				}
+				
 			} catch (Exception e) {
 				System.out.println(e);
 				System.exit(1);
@@ -38,6 +49,7 @@ public class TwentyFortyEight {
 			
 			long time = (System.currentTimeMillis() - start);
 			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			System.out.println("2048s: " + wins + ", 1024s: " + halfWins);
 			System.out.println("===========================================================================================================");
 		}
 		
@@ -56,12 +68,23 @@ public class TwentyFortyEight {
 			int direction;
 			
 			search.setMode(Search.SEARCH);
-			search.setDepth(DEPTH);
+			
+			int blankSpaces = board.countBlankSpaces();
+			int searchDepth = DEPTH;
+			if (blankSpaces > (Board.ROWS * Board.COLS) / 2) {
+				searchDepth = 1;
+			}
+			
+			search.setDepth(searchDepth);
 			direction = search.getBestMove(board);
 			
 			if (board.isValidMove(direction)) {
 				board.makeMove(direction, true);
 				board.placeRandomPiece();
+				
+				if (RUNS == 1) {
+					System.out.println(board);
+				}
 			} else {
 				System.out.println("Illegal move: " + direction);
 				System.out.println(board);
