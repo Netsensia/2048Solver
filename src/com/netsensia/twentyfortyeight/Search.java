@@ -145,7 +145,7 @@ public class Search {
 	}
 	
 	public int evaluate(Board board, ArrayList<Integer>legalMoves, int mover) {
-		return board.getScore();		
+		return board.getScore() * board.countBlankSpaces();		
 	}
 	
 	public int getBestMove(Board board) throws Exception {
