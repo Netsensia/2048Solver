@@ -21,7 +21,6 @@ public class Board implements Cloneable {
 	public static final int BLOCKER = 1;
 	
 	private int score = 0;
-	private int mover = SOLVER;
 	
 	private int board[] = new int[ROWS*COLS];
 	
@@ -71,8 +70,6 @@ public class Board implements Cloneable {
 			}
 		} while (true);
 		
-		mover = SOLVER;
-		
 		return true;
 	}
 	
@@ -90,20 +87,22 @@ public class Board implements Cloneable {
 		
 		boolean isGameOver = true;
 		
-		int[] backupBoard = new int[ROWS*COLS];
+		Board newBoard;
+		try {
+			newBoard = (Board)this.clone();
 		
-		System.arraycopy( board, 0, backupBoard, 0, board.length );
-		
-		for (int i=Board.UP; i<=Board.RIGHT; i++) {
-			this.makeMove(i, false);
-			if (!Arrays.equals(board, backupBoard)) {
-				isGameOver = false;
-				break;
+			for (int i=Board.UP; i<=Board.RIGHT; i++) {
+				newBoard.makeMove(i, false);
+				if (!Arrays.equals(newBoard.getBoard(), board)) {
+					isGameOver = false;
+					break;
+				}
 			}
+		
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		System.arraycopy( backupBoard, 0, board, 0, backupBoard.length );
-		
 		return isGameOver;
 	}
 	
@@ -224,7 +223,6 @@ public class Board implements Cloneable {
 				break;
 		}
 		
-		mover = BLOCKER;
 	}
 	
 	public int[] getBoard() {
@@ -241,14 +239,6 @@ public class Board implements Cloneable {
 	
 	public void setScore(int score) {
 		this.score = score;
-	}
-	
-	public int getMover() {
-		return mover;
-	}
-
-	public void setMover(int mover) {
-		this.mover = mover;
 	}
 	
 	public String toString() {

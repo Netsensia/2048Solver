@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 4;
+	public static final int DEPTH = 8;
 	
 	public static void main(String args[]) {
 		
@@ -61,23 +61,20 @@ public class TwentyFortyEight {
 		
 		System.out.println("Starting position:");
 		System.out.println(board);
-		
+
 		Search search = new Search();
 		
 		int movesMade = 0;
-		
+				
 		while (!board.isGameOver()) {
 			int direction;
 			
 			search.setMode(Search.SEARCH);
 			
-			int blankSpaces = board.countBlankSpaces();
 			int searchDepth = DEPTH;
-//			if (blankSpaces > (Board.ROWS * Board.COLS) / 2) {
-//				searchDepth = 1;
-//			}
 			
 			search.setDepth(searchDepth);
+			
 			direction = search.getBestMove(board);
 			
 			if (board.isValidMove(direction)) {
@@ -86,11 +83,9 @@ public class TwentyFortyEight {
 					System.out.print(".");
 				}
 				board.makeMove(direction, true);
+				
 				board.placeRandomPiece();
 				
-				if (RUNS == 1) {
-					System.out.println(board);
-				}
 			} else {
 				System.out.println("Illegal move: " + direction);
 				System.out.println(board);
