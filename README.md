@@ -72,9 +72,9 @@ It turns out that allowing two moves in a row is just as effective as allowing a
 
 This is getting us somewhere! Now, we introduce the random placement of the piece into the search. 
 
-The search routine considers each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  Three  random placements are considered and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
+Initially the search routine considered each of the four possible moves (up, down, left, right) at each ply of the search tree as well as all possible responses by the tile-placing player.  Three  random placements are considered and the average of the scores available by searching the new position is taken to be the value of the initial move (up, down, left or right).
 
-The following table shows the results for various searches. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things should speed up the search significantly. Each ply in the search tree represents a move for the solver plus a move for the blocker.
+The following table shows the results for various searches using this method. The number of runs is rather low at the moment because the search is brute force with no optimisations such as hash tables or pruning. Such things should speed up the search significantly. Each ply in the search tree represents a move for the solver plus a move for the blocker.
 
 In order to speed things up without, hopefully, impacting the results too much, the search routine always uses a depth of one unless the board is more than half full, in which case it uses the depth specified in the table.
 
@@ -87,15 +87,15 @@ In order to speed things up without, hopefully, impacting the results too much, 
 	       3   1000      2638      8,007    24,128     2048       3      369
 	--------------------------------------------------------------------------
 	
-At this point, it appears that we are not gaining much from a deeper search, but the number of 1024s is going up so we'll try one level deeper, but I need to find a way to speed it up if we're going to go much deeper.
+At this point, I could see the need to use to change to a negamax algorithm to allow easy coding of some tree reduction using alpha-beta pruning. Using this method, each ply in the following table represents either a  move by the solver or one move by the blocker. A search depth of 4, therefore is the equivalent of a depth of 2 in the previous table.
 
-I changed to a negamax algorithm to allow easy coding of some tree reduction using alpha-beta pruning. Now, each ply represents either a  move by the solver or one move by the blocker.
+You can see that the alpha beta pruning has allowed us to search deeper in a faster time than was possible with the previous search routine.
 
 	--------------------------------------------------------------------------
 	| Search | Total | Average  | Average | Highest | Highest | 2048s | 1024s |
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |
 	--------------------------------------------------------------------------
-	       9   1000        
+	       9   1000     10770      8614      25676     2048       8      426
 	--------------------------------------------------------------------------
 
 ## Class Interfaces
