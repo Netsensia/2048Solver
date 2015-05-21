@@ -3,9 +3,6 @@ package com.netsensia.twentyfortyeight.test;
 import static org.junit.Assert.*;
 
 import java.util.Random;
-
-import junit.framework.Assert;
-
 import com.netsensia.twentyfortyeight.*;
 
 import org.junit.Test;
@@ -145,10 +142,67 @@ public class SearchTest {
     	    	};
 		
 		Board board = new Board();
+		board.setScore(10);
 		board.setBoard(position);
 		
 		Search search = new Search();
+		search.setEvaluateBlankSpaces(false);
 		
-		assertEquals(1, search.evaluate(board));
+		assertEquals(10, search.evaluate(board));
+	}
+	
+	@Test
+	public void testNegamax() throws Exception {
+		int[] position = {
+    	    	2,0,0,0,
+    	    	2,0,0,0,
+    	    	0,0,0,0,
+    	    	0,4,0,0,
+    	    	};
+		
+		Board board = new Board();
+		board.setScore(10);
+		board.setBoard(position);
+		
+		Search search = new Search();
+		search.setEvaluateBlankSpaces(false);
+		
+		StringBuilder moves = new StringBuilder();
+		
+		assertEquals(14, search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(1);
+		assertEquals(Board.UP, search.getMoveFromSearch(board));
+		
+		assertEquals(14, search.negamax(board, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(2);
+		assertEquals(Board.UP, search.getMoveFromSearch(board));
+		
+		assertEquals(22, search.negamax(board, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(3);
+		assertEquals(Board.UP, search.getMoveFromSearch(board));
+
+		assertEquals(22, search.negamax(board, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(4);
+		assertEquals(Board.UP, search.getMoveFromSearch(board));
+		
+		board.place(3, 3, 4);
+		board.place(2, 0, 8);
+		/*
+		 *      2,0,8,0,
+    	 *   	2,0,0,0,
+    	 *  	0,0,0,0,
+    	 *  	0,4,0,4,
+		 */
+		assertEquals(18, search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(1);
+		assertEquals(Board.LEFT, search.getMoveFromSearch(board));
+		
+		assertEquals(18, search.negamax(board, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(2);
+		assertEquals(Board.LEFT, search.getMoveFromSearch(board));
+
+		assertEquals(38, search.negamax(board, 8, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.setDepth(8);
+		assertEquals(Board.UP, search.getMoveFromSearch(board));
 	}
 }

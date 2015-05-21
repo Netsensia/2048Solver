@@ -23,6 +23,8 @@ public class Search {
 	public int hashClashes = 0;
 	public int hashHits = 0;
 	
+	private boolean evaluateBlankSpaces = true;
+	
 	Random r = new Random();
 	
 	int depth = 1;
@@ -55,6 +57,14 @@ public class Search {
 	
 	public void setDepth(int depth) {
 		this.depth = depth;
+	}
+	
+	public boolean isEvaluateBlankSpaces() {
+		return evaluateBlankSpaces;
+	}
+
+	public void setEvaluateBlankSpaces(boolean evaluateBlankSpaces) {
+		this.evaluateBlankSpaces = evaluateBlankSpaces;
 	}
 	
 	public int generateHashKey(Board board) {
@@ -222,7 +232,7 @@ public class Search {
 		
 		int score = board.getScore();
 		
-		if (score > 0) {
+		if (score > 0 && evaluateBlankSpaces) {
 			score += Math.log(score) * board.countBlankSpaces();
 		}
 
@@ -230,7 +240,9 @@ public class Search {
 	   		
 	}
 	
-	public int negamax(Board board, final int depth, int low, int high, int mover) throws Exception {
+	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder moveString) throws Exception {
+		
+		StringBuilder underPath = new StringBuilder();
 		
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
 		
@@ -252,8 +264,28 @@ public class Search {
 					newBoard = (Board)board.clone();
 					newBoard.makeMove(move, true);
 					
-					int score = -negamax(newBoard, depth-1, -high, -low, -1);
-					bestScore = Math.max(bestScore, score);
+					int score = -negamax(newBoard, depth-1, -high, -low, -1, underPath);
+					
+					if (score > bestScore) {
+						bestScore = score;
+						moveString.replace(0,  moveString.length(), "");
+						String englishMove;
+						switch (move) {
+						case Board.UP: englishMove = "Up"; break;
+						case Board.DOWN: englishMove = "Down"; break;
+						case Board.LEFT: englishMove = "Left"; break;
+						case Board.RIGHT: englishMove = "Right"; break;
+						default: englishMove = "ERROR!";
+						}
+						moveString.append("Slide " + englishMove + " for a score of " + score);
+						moveString.append(System.getProperty("line.separator"));
+						moveString.append(newBoard);
+						moveString.append("=================================================");
+						moveString.append(System.getProperty("line.separator"));
+						moveString.append(underPath);
+
+					}
+					
 					low = Math.max(low, score);
 					
 					if (low >= high) {
@@ -266,10 +298,6 @@ public class Search {
 			}
 		} else {
 			
-			if (board.countBlankSpaces() == 0) {
-				return mover * evaluate(board);
-			}
-			
 			int count = 0;
 			for (int x=0; x<Board.COLS; x++) {
 				for (int y=0; y<Board.ROWS; y++) {
@@ -279,19 +307,29 @@ public class Search {
 							for (int piece=2; piece<=4; piece+=2) {
 								newBoard = (Board)board.clone();
 								newBoard.place(x, y, piece);
+								count ++;
 								
-								int score = -negamax(newBoard, depth-1, -high, -low, 1);
-								bestScore = Math.max(bestScore, score);
+								int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
+								
+								if (score > bestScore) {
+									bestScore = score;
+									moveString.replace(0,  moveString.length(), "");
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append(newBoard);
+									moveString.append("=================================================");
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append(underPath);
+
+								}
+								
 								low = Math.max(low, score);
 								
 								if (low >= high) {
 									return bestScore;
 								}
-								
-								count ++;
-								if (count > 3) {
-									return bestScore;
-								}
+
 							}
 							
 						} catch (CloneNotSupportedException e) {
@@ -299,6 +337,10 @@ public class Search {
 						}
 					}
 				}
+			}
+			
+			if (count == 0) {
+				return mover * evaluate(board);
 			}
 		}
 		
@@ -311,37 +353,26 @@ public class Search {
 	}
 	
 	public int getMoveFromSearch(Board board) throws Exception {
-		int bestScore = -1;
-		int bestMove = -1;
-		
+
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
 		
 		if (legalMoves.size() == 0) {
 			throw new Exception("No legal moves for position\n " + board);
 		}
 		
-		for (Integer move : legalMoves) {
-			try {
-				Board newBoard = (Board)board.clone();
-			
-				newBoard.makeMove(move, true);
-				
-				int score = negamax(newBoard, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
-				
-				if (score > bestScore) {
-					bestScore = score;
-					bestMove = move;
-				}
-			} catch (CloneNotSupportedException e) {
-				
-			}
+		StringBuilder moves = new StringBuilder();
+		
+		negamax(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
+		
+		switch (moves.charAt(6)) {
+		case 'U' : return Board.UP;
+		case 'D' : return Board.DOWN;
+		case 'L' : return Board.LEFT;
+		case 'R' : return Board.RIGHT;
+		default:
+			throw new Exception("Unknown move in " + moves);
 		}
 		
-		if (bestMove == -1) {
-			throw new Exception("No move resulted in a postive score for position\n " + board + "\nLegal moves: " + legalMoves + " Best score " + bestScore);
-		}
-		
-		return bestMove;
 	}
 	
 }
