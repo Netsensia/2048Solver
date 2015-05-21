@@ -89,6 +89,8 @@ In order to speed things up without, hopefully, impacting the results too much, 
 	
 At this point, it appears that we are not gaining much from a deeper search, but the number of 1024s is going up so we'll try one level deeper, but I need to find a way to speed it up if we're going to go much deeper.
 
+I changed to a negamax algorithm to allow easy coding of some tree reduction using alpha-beta pruning.
+
 ## Class Interfaces
 
 The key Board interface methods are:

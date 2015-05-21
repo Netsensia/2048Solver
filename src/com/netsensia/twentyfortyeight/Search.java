@@ -225,12 +225,6 @@ public class Search {
 		if (score > 0) {
 			score += Math.log(score) * board.countBlankSpaces();
 		}
-		
-		score -= trappedPenalty(board);
-		
-		if (score < 0) {
-			score = 0;
-		}
 
 		return score;
 	   		
