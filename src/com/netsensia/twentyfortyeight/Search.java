@@ -144,10 +144,6 @@ public class Search {
 		
 	}
 	
-	public int evaluate(Board board, ArrayList<Integer>legalMoves, int mover) {
-		return board.getScore() * board.countBlankSpaces();		
-	}
-	
 	public int getBestMove(Board board) throws Exception {
 		
 		switch (getMode()) {
@@ -159,12 +155,93 @@ public class Search {
 		}
 	}
 	
+	/**
+	 * Absolute difference between value "me" and the value of square x,y
+	 * or zero if square x,y is zero.
+	 * 
+	 * @param board
+	 * @param me
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public int neighbourScore(Board board, int me, int x, int y) {
+		
+		if (x > -1 && y > -1 && x < Board.COLS && y < Board.ROWS) {
+			int them = board.getSquare(x, y);
+			if (them > 0) {
+				return Math.abs(them - me);
+			}
+		}
+
+		return 0;
+	}
+	
+	public int neighbourAverageScore(Board board, int x, int y) {
+		int total = 0;
+		int count = 0;
+		int score;
+		
+		int me = board.getSquare(x, y);
+		if (me > 0) {
+			for (int nx=-1; nx<=1; nx++) {
+				for (int ny=-1; ny<=1; ny++) {
+					if (nx == 0 && ny == 0) {
+						continue;
+					}
+					score = neighbourScore(board, me, x+nx, y+ny);
+					if (score > 0) {
+						total += score;
+						count ++;
+					}
+				}
+			}
+			
+		}
+		
+		if (count > 0) {
+			return total / count;
+		}
+		
+		return 0;
+	}
+	
+	public int trappedPenalty(Board board) {
+		int trappedPenalty = 0;
+		
+		for (int x=0; x<Board.ROWS; x++) {
+			for (int y=0; y<Board.COLS; y++) {
+				trappedPenalty += neighbourAverageScore(board, x, y);
+			}
+		}
+		
+		return trappedPenalty;
+	}
+	
+	public int evaluate(Board board) {
+		
+		int score = board.getScore();
+		
+		if (score > 0) {
+			score += Math.log(score) * board.countBlankSpaces();
+		}
+		
+		score -= trappedPenalty(board);
+		
+		if (score < 0) {
+			score = 0;
+		}
+
+		return score;
+	   		
+	}
+	
 	public int negamax(Board board, final int depth, int low, int high, int mover) throws Exception {
 		
 		ArrayList<Integer> legalMoves = getLegalMoves(board);
 		
 		if (depth == 0) {
-			return mover * evaluate(board, legalMoves, mover);
+			return mover * evaluate(board);
 		}
 
 		int bestScore = Integer.MIN_VALUE;
@@ -172,7 +249,7 @@ public class Search {
 		if (mover == 1) {
 			
 			if (legalMoves.size() == 0) {
-				return evaluate(board, legalMoves, 1);
+				return mover * evaluate(board);
 			}
 			
 			for (Integer move : legalMoves) {
@@ -196,9 +273,10 @@ public class Search {
 		} else {
 			
 			if (board.countBlankSpaces() == 0) {
-				return board.getScore();
+				return mover * evaluate(board);
 			}
 			
+			int count = 0;
 			for (int x=0; x<Board.COLS; x++) {
 				for (int y=0; y<Board.ROWS; y++) {
 					if (board.getSquare(x, y) == 0) {
@@ -213,6 +291,11 @@ public class Search {
 								low = Math.max(low, score);
 								
 								if (low >= high) {
+									return bestScore;
+								}
+								
+								count ++;
+								if (count > 3) {
 									return bestScore;
 								}
 							}

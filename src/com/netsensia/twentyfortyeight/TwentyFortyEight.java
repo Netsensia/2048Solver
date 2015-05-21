@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 8;
+	public static final int DEPTH = 4;
 	
 	public static void main(String args[]) {
 		

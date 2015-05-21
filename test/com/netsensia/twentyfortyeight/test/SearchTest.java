@@ -35,4 +35,120 @@ public class SearchTest {
 		}
 	}
     
+	@Test
+	public void testNeighbourScore() {
+		
+		int[] position = {
+    	    	0,0,4,0,
+    	    	0,0,2,0,
+    	    	0,0,8,0,
+    	    	0,0,2,0,
+    	    	};
+		
+		Board board = new Board();
+		board.setBoard(position);
+		
+		Search search = new Search();
+
+		assertEquals(6, search.neighbourScore(board, 2, 2, 2));
+		assertEquals(6, search.neighbourScore(board, 8, 2, 1));
+		assertEquals(0, search.neighbourScore(board, 8, 3, 2));
+		assertEquals(2, search.neighbourScore(board, 2, 2, 0));
+	}
+	
+	@Test
+	public void testNeighbourAverageScore() {
+		
+		int[] position = {
+    	    	0,0,0,0,
+    	    	0,0,2,0,
+    	    	0,0,0,0,
+    	    	0,0,2,0,
+    	    	};
+		
+		Board board = new Board();
+		board.setBoard(position);
+		
+		Search search = new Search();
+
+		assertEquals(0, search.neighbourAverageScore(board, 2, 1));
+		
+		board.place(2, 0, 4);
+		/* 0,0,4,0,
+    	 * 0,0,2,0,
+    	 * 0,0,0,0,
+    	 * 0,0,2,0 */
+		
+		assertEquals(2, search.neighbourAverageScore(board, 2, 1));
+		
+		board.place(2, 2, 8);
+		/* 0,0,4,0,     2/1 = 2
+    	 * 0,0,2,0,     2+6/2 = 4
+    	 * 0,0,8,0,     6+6/2 = 6
+    	 * 0,0,2,0      6/1 = 6 */
+				
+		assertEquals(4, search.neighbourAverageScore(board, 2, 1));
+		assertEquals(6, search.neighbourAverageScore(board, 2, 2));
+		
+	}
+	
+	@Test
+	public void testTrappedPenalty() {
+		
+		int[] position = {
+    	    	0,0,0,0,
+    	    	0,0,2,0,
+    	    	0,0,0,0,
+    	    	0,0,2,0,
+    	    	};
+		
+		Board board = new Board();
+		board.setBoard(position);
+		
+		Search search = new Search();
+
+		assertEquals(0, search.trappedPenalty(board));
+		
+		board.place(2, 0, 4);
+		/* 0,0,4,0,
+    	 * 0,0,2,0,
+    	 * 0,0,0,0,
+    	 * 0,0,2,0 */
+				
+		assertEquals(4, search.trappedPenalty(board));
+		
+		board.place(2, 2, 8);
+		/* 0,0,4,0,     2/1 = 2
+    	 * 0,0,2,0,     2+6/2 = 4
+    	 * 0,0,8,0,     6+6/2 = 6
+    	 * 0,0,2,0      6/1 = 6 */
+		
+		assertEquals(18, search.trappedPenalty(board));
+		
+		board.place(2, 2, 8);
+		/* 0,0,4,0,     2/1 = 2
+    	 * 0,0,2,0,     2+6/2 = 4
+    	 * 0,0,8,32,    6+6+16/3 = 8
+    	 * 0,0,2,0      6/1 = 6 */
+		
+		assertEquals(18, search.trappedPenalty(board));
+		
+	}
+	
+	@Test
+	public void testEvaluate() {
+		int[] position = {
+    	    	2,0,0,0,
+    	    	2,0,0,0,
+    	    	4,0,0,0,
+    	    	2,4,0,0,
+    	    	};
+		
+		Board board = new Board();
+		board.setBoard(position);
+		
+		Search search = new Search();
+		
+		assertEquals(1, search.evaluate(board));
+	}
 }
