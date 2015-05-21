@@ -1,6 +1,7 @@
 package com.netsensia.twentyfortyeight;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Hashtable;
 
@@ -126,7 +127,7 @@ public class Search {
 				legalMoves.add(i);
 			}
 		}
-		
+
 		return legalMoves;
 	}
 	
@@ -231,10 +232,6 @@ public class Search {
 	public int evaluate(Board board) {
 		
 		int score = board.getScore();
-		
-		if (score > 0 && evaluateBlankSpaces) {
-			score += Math.log(score) * board.countBlankSpaces();
-		}
 
 		return score;
 	   		
@@ -305,29 +302,33 @@ public class Search {
 						Board newBoard;
 						try {
 							for (int piece=2; piece<=4; piece+=2) {
-								newBoard = (Board)board.clone();
-								newBoard.place(x, y, piece);
+								
 								count ++;
 								
-								int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
-								
-								if (score > bestScore) {
-									bestScore = score;
-									moveString.replace(0,  moveString.length(), "");
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append(newBoard);
-									moveString.append("=================================================");
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append(underPath);
-
-								}
-								
-								low = Math.max(low, score);
-								
-								if (low >= high) {
-									return bestScore;
+								if (count == 1 || Math.random() < 0.25) {
+									newBoard = (Board)board.clone();
+									newBoard.place(x, y, piece);
+									
+									int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
+									
+									if (score > bestScore) {
+										bestScore = score;
+										moveString.replace(0,  moveString.length(), "");
+										moveString.append(System.getProperty("line.separator"));
+										moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
+										moveString.append(System.getProperty("line.separator"));
+										moveString.append(newBoard);
+										moveString.append("=================================================");
+										moveString.append(System.getProperty("line.separator"));
+										moveString.append(underPath);
+	
+									}
+									
+									low = Math.max(low, score);
+									
+									if (low >= high) {
+										return bestScore;
+									}
 								}
 
 							}
