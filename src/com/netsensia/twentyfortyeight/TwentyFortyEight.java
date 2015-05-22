@@ -73,7 +73,6 @@ public class TwentyFortyEight {
 		int movesMade = 0;
 				
 		while (!board.isGameOver()) {
-			int direction;
 			
 			search.setMode(Search.SEARCH);
 			
@@ -81,19 +80,19 @@ public class TwentyFortyEight {
 			
 			search.setDepth(searchDepth);
 			
-			direction = search.getBestMove(board);
+			SolverMove solverMove = search.getBestMove(board);
 			
-			if (board.isValidMove(direction)) {
+			if (board.isValidMove(solverMove.getDirection())) {
 				movesMade ++;
 				if (movesMade % 10 == 0) {
 					System.out.print(".");
 				}
-				board.makeMove(direction, true);
+				board.makeMove(solverMove.getDirection(), true);
 				
 				board.placeRandomPiece();
 				
 			} else {
-				System.out.println("Illegal move: " + direction);
+				System.out.println("Illegal move: " + solverMove.getDirection());
 				System.out.println(board);
 				System.exit(1);
 			}

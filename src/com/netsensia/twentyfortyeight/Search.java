@@ -118,32 +118,33 @@ public class Search {
 		return bestScore;
 	}
 	
-	public ArrayList<Integer> getLegalMoves(Board board) {
-		ArrayList<Integer> legalMoves = new ArrayList<Integer>();
+	public ArrayList<SolverMove> getLegalMoves(Board board) {
+		ArrayList<SolverMove> legalMoves = new ArrayList<SolverMove>();
 		
 		for (int i=Board.UP; i<=Board.RIGHT; i++) {
 			if (board.isValidMove(i)) {
-				legalMoves.add(i);
+				SolverMove solverMove = new SolverMove(i);
+				legalMoves.add(solverMove);
 			}
 		}
 
 		return legalMoves;
 	}
 	
-	public int getRandomMove(Board board) {
-		ArrayList<Integer> legalMoves = getLegalMoves(board);
+	public SolverMove getRandomMove(Board board) {
+		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
 		
 		return legalMoves.get(r.nextInt(legalMoves.size()));
 	}
 	
-	public int getMoveBasedOnImmediateScore(Board board) {
-		int bestMove = -1;
+	public SolverMove getMoveBasedOnImmediateScore(Board board) {
+		SolverMove bestMove = new SolverMove(-1);
 		int bestScore = -1;
 		
-		ArrayList<Integer> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
 		
-		for (Integer move : legalMoves) {
-			int score = score(board, move);
+		for (SolverMove move : legalMoves) {
+			int score = score(board, move.getDirection());
 			if (score > bestScore) {
 				bestScore = score;
 				bestMove = move;
@@ -154,7 +155,7 @@ public class Search {
 		
 	}
 	
-	public int getBestMove(Board board) throws Exception {
+	public SolverMove getBestMove(Board board) throws Exception {
 		
 		switch (getMode()) {
 			case Search.RANDOM: return getRandomMove(board);
@@ -179,11 +180,11 @@ public class Search {
 				int piece = board.getSquare(x, y);
 
 				if (y > 0 && board.getSquare(x, y-1) > piece) {
-					thisWeight -= 0.1;
+					thisWeight *= 0.9;
 				}
 				
 				if (x > 0 && board.getSquare(x-1, y) > piece) {
-					thisWeight -= 0.1;
+					thisWeight *= 0.9;
 				}
 
 				score += (int)(piece * thisWeight);
@@ -199,7 +200,7 @@ public class Search {
 		
 		StringBuilder underPath = new StringBuilder();
 		
-		ArrayList<Integer> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
 		
 		if (depth == 0) {
 			return mover * evaluate(board);
@@ -213,11 +214,11 @@ public class Search {
 				return mover * evaluate(board);
 			}
 			
-			for (Integer move : legalMoves) {
+			for (SolverMove move : legalMoves) {
 				Board newBoard;
 				try {
 					newBoard = (Board)board.clone();
-					newBoard.makeMove(move, true);
+					newBoard.makeMove(move.getDirection(), true);
 					
 					int score = -negamax(newBoard, depth-1, -high, -low, -1, underPath);
 					
@@ -225,12 +226,12 @@ public class Search {
 						bestScore = score;
 						moveString.replace(0,  moveString.length(), "");
 						String englishMove;
-						switch (move) {
-						case Board.UP: englishMove = "Up"; break;
-						case Board.DOWN: englishMove = "Down"; break;
-						case Board.LEFT: englishMove = "Left"; break;
-						case Board.RIGHT: englishMove = "Right"; break;
-						default: englishMove = "ERROR!";
+						switch (move.getDirection()) {
+							case Board.UP: englishMove = "Up"; break;
+							case Board.DOWN: englishMove = "Down"; break;
+							case Board.LEFT: englishMove = "Left"; break;
+							case Board.RIGHT: englishMove = "Right"; break;
+							default: englishMove = "ERROR!";
 						}
 						moveString.append("Slide " + englishMove + " for a score of " + score);
 						moveString.append(System.getProperty("line.separator"));
@@ -309,9 +310,9 @@ public class Search {
 		
 	}
 	
-	public int getMoveFromSearch(Board board) throws Exception {
+	public SolverMove getMoveFromSearch(Board board) throws Exception {
 
-		ArrayList<Integer> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
 		
 		if (legalMoves.size() == 0) {
 			throw new Exception("No legal moves for position\n " + board);
@@ -322,10 +323,10 @@ public class Search {
 		negamax(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
 		
 		switch (moves.charAt(6)) {
-		case 'U' : return Board.UP;
-		case 'D' : return Board.DOWN;
-		case 'L' : return Board.LEFT;
-		case 'R' : return Board.RIGHT;
+		case 'U' : return new SolverMove(Board.UP);
+		case 'D' : return new SolverMove(Board.DOWN);
+		case 'L' : return new SolverMove(Board.LEFT);
+		case 'R' : return new SolverMove(Board.RIGHT);
 		default:
 			throw new Exception("Unknown move in " + moves);
 		}
