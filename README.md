@@ -134,8 +134,32 @@ The evaluation function then just multiples the square value by its weight.
 	
 A decent improvement. I now tried considering all Blocker's moves instead of just randomly selecting 25% of them. This made no noticeable difference.
 
-I think tried tweaking the evaluation function to penalise numbers that are lower than numbers sitting on lower-weighted squares. This did make a difference. The large time increase per game is almost all due to considering all Blocker moves.
+I think tried tweaking the evaluation function to penalise numbers that are lower than numbers sitting on lower-weighted squares. This made a small difference.
 
+A ridiculously large difference, however, occurred when I finally decided to order the moves in the search tree, assuming that the additional time required to estimate their effectiveness before searching them would be offset by the pruning that would occur in the tree as a result.
+
+I don't know what happened during this change, ordering the moves should have made very little difference to anything other than the number of nodes searched in the tree, but the outcome was indeed hugely improved.  The program even managed its first one of these:
+
+	----------------------------
+	|     2|     8|    16|     4|
+	----------------------------
+	|    16|    32|    64|     8|
+	----------------------------
+	|     2|     8|   128|     2|
+	----------------------------
+	|     4|    16|   512|  4096|
+	----------------------------
+	Score: 47312, Game over: true
+	
+And at depth 5, it started winning the game more than 25% of the time.
+
+	----------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |
+	----------------------------------------------------------------------------------
+	     5     1000                         47,312     4096
+	----------------------------------------------------------------------------------
+	
 ## Example code:
 
 	Board board = new Board();

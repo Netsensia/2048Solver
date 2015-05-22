@@ -15,6 +15,7 @@ public class TwentyFortyEight {
 		int highestTileValue = 0;
 		int wins = 0;
 		int halfWins = 0;
+		int doubleWins = 0;
 		
 		long start = System.currentTimeMillis();
 		
@@ -36,6 +37,10 @@ public class TwentyFortyEight {
 					highestTileValue = t;
 				}
 				
+				if (t >= 4096) {
+					doubleWins ++;
+				}
+				
 				if (t >= 2048) {
 					wins ++;
 				}
@@ -55,7 +60,8 @@ public class TwentyFortyEight {
 			nf.setMaximumFractionDigits(2);
 			double winPercent = ((double)wins / i) * 100.0;
 			double halfWinPercent = ((double)halfWins / i) * 100.0;
-			System.out.println("2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			double doubleWinPercent = ((double)doubleWins / i) * 100.0;
+			System.out.println("4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
 			System.out.println("===========================================================================================================");
 		}
 		
