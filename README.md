@@ -151,7 +151,7 @@ I don't know what happened during this change, ordering the moves should have ma
 	----------------------------
 	Score: 47312, Game over: true
 	
-And at depth 5, it started winning the game more than 25% of the time.
+And at depth 5, it started winning the game more than 25% of the time. The increase in time taken is due to now considering all the possible blocker moves.
 
 	----------------------------------------------------------------------------------
 	| Search | Total | Average  | Average | Highest | Highest | 4096s | 2048s | 1024s |
