@@ -1,8 +1,12 @@
 package com.netsensia.twentyfortyeight;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.Hashtable;
+
+import static java.util.Comparator.comparing;
 
 public class Search {
 	
@@ -121,12 +125,28 @@ public class Search {
 	public ArrayList<SolverMove> getLegalMoves(Board board) {
 		ArrayList<SolverMove> legalMoves = new ArrayList<SolverMove>();
 		
+		Board newBoard;
+		
 		for (int i=Board.UP; i<=Board.RIGHT; i++) {
 			if (board.isValidMove(i)) {
-				SolverMove solverMove = new SolverMove(i);
-				legalMoves.add(solverMove);
+				
+				try {
+					newBoard = (Board)board.clone();
+					newBoard.makeMove(i, false);
+					
+					SolverMove solverMove = new SolverMove(i);
+					solverMove.setScore(evaluate(newBoard));
+					legalMoves.add(solverMove);
+					
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
+				
 			}
 		}
+
+		Comparator<SolverMove> moveComp = (SolverMove m1, SolverMove m2) -> (int)(m1.getScore() > m2.getScore() ? -1 : 1);
+		Collections.sort(legalMoves, moveComp);
 
 		return legalMoves;
 	}

@@ -111,7 +111,7 @@ This made impressive improvements even at low depths. The number of games where 
 	     5     1000      698       7,742     30,136     2048      17      308
 	--------------------------------------------------------------------------
 	
-I think tweaked this to give each square on the board its own weighting, always favouring squares in columns further to the right, and within each column favouring squares towards the bottom, e.g.:
+I tweaked this to give each square on the board its own weighting, always favouring squares in columns further to the right, and within each column favouring squares towards the bottom, e.g.:
 
      ----------------------------
     |     1|     5|     9|    13|
@@ -132,7 +132,9 @@ The evaluation function then just multiples the square value by its weight.
 	     5     1000      769       8,074     34,528     2048     32      354
 	--------------------------------------------------------------------------
 	
-A decent improvement although not conclusive.
+A decent improvement. I now tried considering all Blocker's moves instead of just randomly selecting 25% of them. This made no noticeable difference.
+
+I think tried tweaking the evaluation function to penalise numbers that are lower than numbers sitting on lower-weighted squares. This did make a difference. The large time increase per game is almost all due to considering all Blocker moves.
 
 ## Example code:
 
