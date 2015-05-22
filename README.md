@@ -157,7 +157,7 @@ And at depth 5, it started winning the game more than 25% of the time.
 	| Search | Total | Average  | Average | Highest | Highest | 4096s | 2048s | 1024s |
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |
 	----------------------------------------------------------------------------------
-	     5     1000                         47,312     4096
+	     5     1000      1475      14,992    49,576     4096       3     248     770
 	----------------------------------------------------------------------------------
 	
 ## Example code:
