@@ -66,7 +66,7 @@ and even some positions like this:
 	----------------------------
 	Score: 9672, Game over: true
 
-The last position is better than anything I have managed with my own wits, although to be fair, I've not got the luxury of being able to play 50,000 games in a few seconds.
+The last position is better than anything I have managed with my own wits, although to be fair, I've not got the luxury of being able to play 50,000 games in a few seconds. This is no longer true, my current record is around 14,000 :)
 
 It turns out that allowing two moves in a row is just as effective as allowing any number of moves higher than two. So three, four or five moves, for example, make no difference to the average score. This may allow us to add a sneaky extra ply to the search for minimal cost during a full search.
 
@@ -95,24 +95,44 @@ You can see that the alpha beta pruning has allowed us to search deeper in a fas
 	| Search | Total | Average  | Average | Highest | Highest | 2048s | 1024s |
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |
 	--------------------------------------------------------------------------
-	       9   1000     10770      8614      25676     2048       8      426
+	     9     1000     10770      8614      25676     2048       8      426
 	--------------------------------------------------------------------------
 
-## Class Interfaces
+Up until this point, the evaluation function had just been using the board score.
 
-The key Board interface methods are:
+I then changed to an evaluation function that simply adds up the values of all the tiles, but each tile is multiplied by its row, so, for example, a 256 on the bottom row will count as 1024. This causes the search to follow the strategy I use to solve the game, which is to get all the high numbers on one side of the square, avoiding making any swipes in the opposite direction if at all possible. It ignores the game score completely.
 
-* boolean isValidMove(Board.DOWN)
-* void makeMove(Board.DOWN)
-* boolean isGameOver()
-* void placeRandomPiece()
-* void setRandomStartPosition()
+This made impressive improvements even at low depths. The number of games where a 2048 tile is achieved is a new record, and it's taking less than a second to play each game.
 
-The key Search interface methods are: 
+	--------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |
+	--------------------------------------------------------------------------
+	     5     1000      698       7,742     30,136     2048      17      308
+	--------------------------------------------------------------------------
+	
+I think tweaked this to give each square on the board its own weighting, always favouring squares in columns further to the right, and within each column favouring squares towards the bottom, e.g.:
 
-* void setDepth(int)
-* void setMode(int)
-* getBestMove(Board);
+     ----------------------------
+    |     1|     5|     9|    13|
+    ----------------------------
+    |     2|     6|    10|    14|
+    ----------------------------
+    |     3|     7|    11|    15|
+    ----------------------------
+    |     4|     8|    12|    16|
+    ----------------------------
+    
+The evaluation function then just multiples the square value by its weight.
+
+	--------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |
+	--------------------------------------------------------------------------
+	     5     1000      769       8,074     34,528     2048     32      354
+	--------------------------------------------------------------------------
+	
+A decent improvement although not conclusive.
 
 ## Example code:
 

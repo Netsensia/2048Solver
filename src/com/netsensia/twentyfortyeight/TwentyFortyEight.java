@@ -1,9 +1,11 @@
 package com.netsensia.twentyfortyeight;
 
+import java.text.NumberFormat;
+
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 9;
+	public static final int DEPTH = 5;
 	
 	public static void main(String args[]) {
 		
@@ -49,7 +51,11 @@ public class TwentyFortyEight {
 			
 			long time = (System.currentTimeMillis() - start);
 			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("2048s: " + wins + ", 1024s: " + halfWins);
+			NumberFormat nf = NumberFormat.getInstance();
+			nf.setMaximumFractionDigits(2);
+			double winPercent = ((double)wins / i) * 100.0;
+			double halfWinPercent = ((double)halfWins / i) * 100.0;
+			System.out.println("2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
 			System.out.println("===========================================================================================================");
 		}
 		

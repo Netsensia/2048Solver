@@ -1,7 +1,6 @@
 package com.netsensia.twentyfortyeight;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Hashtable;
 
@@ -166,74 +165,33 @@ public class Search {
 		}
 	}
 	
-	/**
-	 * Absolute difference between value "me" and the value of square x,y
-	 * or zero if square x,y is zero.
-	 * 
-	 * @param board
-	 * @param me
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public int neighbourScore(Board board, int me, int x, int y) {
-		
-		if (x > -1 && y > -1 && x < Board.COLS && y < Board.ROWS) {
-			int them = board.getSquare(x, y);
-			if (them > 0) {
-				return Math.abs(them - me);
-			}
-		}
-
-		return 0;
-	}
-	
-	public int neighbourAverageScore(Board board, int x, int y) {
-		int total = 0;
-		int count = 0;
-		int score;
-		
-		int me = board.getSquare(x, y);
-		if (me > 0) {
-			for (int nx=-1; nx<=1; nx++) {
-				for (int ny=-1; ny<=1; ny++) {
-					if (nx == 0 && ny == 0) {
-						continue;
-					}
-					score = neighbourScore(board, me, x+nx, y+ny);
-					if (score > 0) {
-						total += score;
-						count ++;
-					}
-				}
-			}
-			
-		}
-		
-		if (count > 0) {
-			return total / count;
-		}
-		
-		return 0;
-	}
-	
-	public int trappedPenalty(Board board) {
-		int trappedPenalty = 0;
-		
-		for (int x=0; x<Board.ROWS; x++) {
-			for (int y=0; y<Board.COLS; y++) {
-				trappedPenalty += neighbourAverageScore(board, x, y);
-			}
-		}
-		
-		return trappedPenalty;
-	}
-	
 	public int evaluate(Board board) {
-		
 		int score = board.getScore();
+		double weight = 1.0;
 
-		return score;
+		for (int x=0; x<Board.COLS; x++) {
+			
+			for (int y=0; y<Board.ROWS; y++) {
+				
+				weight += 0.1;
+				double thisWeight = weight;
+				
+				int piece = board.getSquare(x, y);
+
+				if (y > 0 && board.getSquare(x, y-1) > piece) {
+					thisWeight -= 0.1;
+				}
+				
+				if (x > 0 && board.getSquare(x-1, y) > piece) {
+					thisWeight -= 0.1;
+				}
+
+				score += (int)(piece * thisWeight);
+
+			}
+		}
+		
+		return score; 
 	   		
 	}
 	
@@ -305,30 +263,28 @@ public class Search {
 								
 								count ++;
 								
-								if (count == 1 || Math.random() < 0.25) {
-									newBoard = (Board)board.clone();
-									newBoard.place(x, y, piece);
-									
-									int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
-									
-									if (score > bestScore) {
-										bestScore = score;
-										moveString.replace(0,  moveString.length(), "");
-										moveString.append(System.getProperty("line.separator"));
-										moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
-										moveString.append(System.getProperty("line.separator"));
-										moveString.append(newBoard);
-										moveString.append("=================================================");
-										moveString.append(System.getProperty("line.separator"));
-										moveString.append(underPath);
-	
-									}
-									
-									low = Math.max(low, score);
-									
-									if (low >= high) {
-										return bestScore;
-									}
+								newBoard = (Board)board.clone();
+								newBoard.place(x, y, piece);
+								
+								int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
+								
+								if (score > bestScore) {
+									bestScore = score;
+									moveString.replace(0,  moveString.length(), "");
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append(newBoard);
+									moveString.append("=================================================");
+									moveString.append(System.getProperty("line.separator"));
+									moveString.append(underPath);
+
+								}
+								
+								low = Math.max(low, score);
+								
+								if (low >= high) {
+									return bestScore;
 								}
 
 							}
