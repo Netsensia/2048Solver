@@ -366,7 +366,7 @@ public class Search {
 						return bestScore;
 					}
 					
-					if (count > 5) {
+					if (count > 3) {
 						break;
 					}
 	
