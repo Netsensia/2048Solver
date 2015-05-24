@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Hashtable;
 
-import static java.util.Comparator.comparing;
-
 public class Search {
 	
 	public static final int RANDOM_MOVES_TO_PLAY = 3;
@@ -122,7 +120,22 @@ public class Search {
 		return bestScore;
 	}
 	
-	public ArrayList<SolverMove> getLegalMoves(Board board) {
+	public ArrayList<SolverMove> getSolverMoves(Board board) {
+		ArrayList<SolverMove> legalMoves = new ArrayList<SolverMove>();
+		
+		for (int i=Board.UP; i<=Board.RIGHT; i++) {
+			if (board.isValidMove(i)) {
+					
+				SolverMove solverMove = new SolverMove(i);
+				legalMoves.add(solverMove);
+				
+			}
+		}
+
+		return legalMoves;
+	}
+	
+	public ArrayList<SolverMove> getOrderedSolverMoves(Board board) {
 		ArrayList<SolverMove> legalMoves = new ArrayList<SolverMove>();
 		
 		Board newBoard;
@@ -151,8 +164,43 @@ public class Search {
 		return legalMoves;
 	}
 	
+	private void addBlockerMove(ArrayList<BlockerMove> blockerMoves, Board board, int x, int y, int piece) {
+		
+		BlockerMove blockerMove = new BlockerMove(x, y, piece);
+		
+		Board newBoard;
+		try {
+			newBoard = (Board)board.clone();
+			newBoard.place(x, y, piece);
+			
+			blockerMove.setScore(evaluate(newBoard));
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		
+		blockerMoves.add(blockerMove);	
+	}
+	
+	public ArrayList<BlockerMove> getOrderedBlockerMoves(Board board) {
+		ArrayList<BlockerMove> blockerMoves = new ArrayList<BlockerMove>();
+		
+		for (int x=0; x<Board.COLS; x++) {
+			for (int y=0; y<Board.ROWS; y++) {
+				if (board.getSquare(x, y) == 0) {
+					addBlockerMove(blockerMoves, board, x, y, 2);
+					addBlockerMove(blockerMoves, board, x, y, 4);
+				}
+			}
+		}
+		
+		Comparator<BlockerMove> moveComp = (BlockerMove m1, BlockerMove m2) -> (int)(m1.getScore() > m2.getScore() ? -1 : 1);
+		Collections.sort(blockerMoves, moveComp);
+
+		return blockerMoves;
+	}
+	
 	public SolverMove getRandomMove(Board board) {
-		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getOrderedSolverMoves(board);
 		
 		return legalMoves.get(r.nextInt(legalMoves.size()));
 	}
@@ -161,7 +209,7 @@ public class Search {
 		SolverMove bestMove = new SolverMove(-1);
 		int bestScore = -1;
 		
-		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getOrderedSolverMoves(board);
 		
 		for (SolverMove move : legalMoves) {
 			int score = score(board, move.getDirection());
@@ -212,6 +260,13 @@ public class Search {
 			}
 		}
 		
+		ArrayList<SolverMove> legalMoves = getSolverMoves(board);
+		if (legalMoves.size() == 1) {
+			score /= 4;
+		}
+		
+		score += Math.log(score) * board.countBlankSpaces();
+		
 		return score; 
 	   		
 	}
@@ -219,9 +274,7 @@ public class Search {
 	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder moveString) throws Exception {
 		
 		StringBuilder underPath = new StringBuilder();
-		
-		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
-		
+
 		if (depth == 0) {
 			return mover * evaluate(board);
 		}
@@ -229,6 +282,8 @@ public class Search {
 		int bestScore = Integer.MIN_VALUE;
 		
 		if (mover == 1) {
+			
+			ArrayList<SolverMove> legalMoves = getOrderedSolverMoves(board);
 			
 			if (legalMoves.size() == 0) {
 				return mover * evaluate(board);
@@ -274,51 +329,50 @@ public class Search {
 			}
 		} else {
 			
-			int count = 0;
-			for (int x=0; x<Board.COLS; x++) {
-				for (int y=0; y<Board.ROWS; y++) {
-					if (board.getSquare(x, y) == 0) {
-						Board newBoard;
-						try {
-							for (int piece=2; piece<=4; piece+=2) {
-								
-								count ++;
-								
-								newBoard = (Board)board.clone();
-								newBoard.place(x, y, piece);
-								
-								int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
-								
-								if (score > bestScore) {
-									bestScore = score;
-									moveString.replace(0,  moveString.length(), "");
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append("Place a " + piece + " at " + x + "," + y + " for a score of " + score);
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append(newBoard);
-									moveString.append("=================================================");
-									moveString.append(System.getProperty("line.separator"));
-									moveString.append(underPath);
-
-								}
-								
-								low = Math.max(low, score);
-								
-								if (low >= high) {
-									return bestScore;
-								}
-
-							}
-							
-						} catch (CloneNotSupportedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
+			ArrayList<BlockerMove> legalMoves = getOrderedBlockerMoves(board);
 			
-			if (count == 0) {
+			if (legalMoves.size() == 0) {
 				return mover * evaluate(board);
+			}
+
+			int count = 0;
+			
+			for (BlockerMove move : legalMoves) {
+				Board newBoard;
+			
+				try {
+					count ++;
+					newBoard = (Board)board.clone();
+					newBoard.place(move.getX(), move.getY(), move.getPiece());
+					
+					int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
+					
+					if (score > bestScore) {
+						bestScore = score;
+						moveString.replace(0,  moveString.length(), "");
+						moveString.append(System.getProperty("line.separator"));
+						moveString.append("Place a " + move.getPiece() + " at " + move.getX() + "," + move.getY() + " for a score of " + score);
+						moveString.append(System.getProperty("line.separator"));
+						moveString.append(newBoard);
+						moveString.append("=================================================");
+						moveString.append(System.getProperty("line.separator"));
+						moveString.append(underPath);
+	
+					}
+					
+					low = Math.max(low, score);
+					
+					if (low >= high) {
+						return bestScore;
+					}
+					
+					if (count > 5) {
+						break;
+					}
+	
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -332,7 +386,7 @@ public class Search {
 	
 	public SolverMove getMoveFromSearch(Board board) throws Exception {
 
-		ArrayList<SolverMove> legalMoves = getLegalMoves(board);
+		ArrayList<SolverMove> legalMoves = getOrderedSolverMoves(board);
 		
 		if (legalMoves.size() == 0) {
 			throw new Exception("No legal moves for position\n " + board);

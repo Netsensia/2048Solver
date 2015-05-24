@@ -47,4 +47,8 @@ public class BlockerMove {
 	public void setScore(double score) {
 		this.score = score;
 	}
+	
+	public String toString() {
+		return "{" + getX() + "," + getY() + "=" + getPiece() + ":" + getScore() + "}";
+	}
 }

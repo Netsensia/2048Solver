@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 7;
+	public static final int DEPTH = 9;
 	
 	public static void main(String args[]) {
 		
