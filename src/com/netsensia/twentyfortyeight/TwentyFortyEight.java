@@ -4,8 +4,8 @@ import java.text.NumberFormat;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 100;
-	public static final int DEPTH = 5;
+	public static final int RUNS = 1000;
+	public static final int DEPTH = 7;
 	
 	public static void main(String args[]) {
 		
@@ -16,6 +16,7 @@ public class TwentyFortyEight {
 		int wins = 0;
 		int halfWins = 0;
 		int doubleWins = 0;
+		int quadWins = 0;
 		
 		long start = System.currentTimeMillis();
 		
@@ -35,6 +36,10 @@ public class TwentyFortyEight {
 				int t = board.getHighestTileValue();
 				if (t > highestTileValue) {
 					highestTileValue = t;
+				}
+				
+				if (t >= 8192) {
+					quadWins ++;
 				}
 				
 				if (t >= 4096) {
@@ -61,7 +66,8 @@ public class TwentyFortyEight {
 			double winPercent = ((double)wins / i) * 100.0;
 			double halfWinPercent = ((double)halfWins / i) * 100.0;
 			double doubleWinPercent = ((double)doubleWins / i) * 100.0;
-			System.out.println("4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			double quadWinPercent = ((double)quadWins / i) * 100.0;
+			System.out.println("8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
 			System.out.println("===========================================================================================================");
 		}
 		

@@ -161,6 +161,18 @@ And at depth 5, it started winning the game more than 25% of the time. The incre
 	     7     1000     16448      15532     49,112     4096       6     273     771
 	----------------------------------------------------------------------------------
 	
+A few more tweaks, particularly to the evaluation function. In this test I am only considering four random moves for the blocker at each ply.
+
+I've had to add a new column to this one :) Trouble is, I didn't have the program recording how many 8192s were achieved as I didn't expect it to happen, so all I know is that there
+was at least one in this run.
+
+	------------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
+	------------------------------------------------------------------------------------------
+	     7     1000      3389     20,175    107,844    8192       1+      35      467    864
+	------------------------------------------------------------------------------------------
+	
 ## Example code:
 
 	Board board = new Board();
