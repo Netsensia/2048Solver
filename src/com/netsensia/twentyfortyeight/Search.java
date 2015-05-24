@@ -173,7 +173,7 @@ public class Search {
 			newBoard = (Board)board.clone();
 			newBoard.place(x, y, piece);
 			
-			blockerMove.setScore(-evaluate(newBoard));
+			blockerMove.setScore(Math.random());
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -236,36 +236,32 @@ public class Search {
 	
 	public int evaluate(Board board) {
 		int score = board.getScore();
-		double weight = 1.0;
+		double weight = 0.0;
 
 		for (int x=0; x<Board.COLS; x++) {
 			
 			for (int y=0; y<Board.ROWS; y++) {
 				
-				weight += 0.1;
+				weight += 0.5;
 				double thisWeight = weight;
 				
 				int piece = board.getSquare(x, y);
-
-				if (y > 0 && board.getSquare(x, y-1) > piece) {
-					thisWeight *= 0.9;
-				}
 				
-				if (x > 0 && board.getSquare(x-1, y) > piece) {
-					thisWeight *= 0.9;
-				}
-
-				score += (int)(piece * thisWeight);
+				if (piece > 0) {
+				
+					if (y > 0 && board.getSquare(x, y-1) > piece) {
+						thisWeight *= 0.9;
+					}
+					
+					if (x > 0 && board.getSquare(x-1, y) > piece) {
+						thisWeight *= 0.9;
+					}
+	
+					score += (int)(piece * thisWeight);
+				} 
 
 			}
 		}
-		
-		ArrayList<SolverMove> legalMoves = getSolverMoves(board);
-		if (legalMoves.size() == 1) {
-			score /= 4;
-		}
-		
-		score += Math.log(score) * board.countBlankSpaces();
 		
 		return score; 
 	   		
@@ -299,22 +295,7 @@ public class Search {
 					
 					if (score > bestScore) {
 						bestScore = score;
-						moveString.replace(0,  moveString.length(), "");
-						String englishMove;
-						switch (move.getDirection()) {
-							case Board.UP: englishMove = "Up"; break;
-							case Board.DOWN: englishMove = "Down"; break;
-							case Board.LEFT: englishMove = "Left"; break;
-							case Board.RIGHT: englishMove = "Right"; break;
-							default: englishMove = "ERROR!";
-						}
-						moveString.append("Slide " + englishMove + " for a score of " + score);
-						moveString.append(System.getProperty("line.separator"));
-						moveString.append(newBoard);
-						moveString.append("=================================================");
-						moveString.append(System.getProperty("line.separator"));
-						moveString.append(underPath);
-
+						appendMoveString(moveString, underPath, move, newBoard,	score);
 					}
 					
 					low = Math.max(low, score);
@@ -349,15 +330,7 @@ public class Search {
 					
 					if (score > bestScore) {
 						bestScore = score;
-						moveString.replace(0,  moveString.length(), "");
-						moveString.append(System.getProperty("line.separator"));
-						moveString.append("Place a " + move.getPiece() + " at " + move.getX() + "," + move.getY() + " for a score of " + score);
-						moveString.append(System.getProperty("line.separator"));
-						moveString.append(newBoard);
-						moveString.append("=================================================");
-						moveString.append(System.getProperty("line.separator"));
-						moveString.append(underPath);
-	
+						appendMoveString(moveString, underPath, move, newBoard,	score);
 					}
 					
 					low = Math.max(low, score);
@@ -382,6 +355,35 @@ public class Search {
 		
 		return bestScore;
 		
+	}
+
+	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, BlockerMove move, Board newBoard, int score) {
+		moveString.replace(0,  moveString.length(), "");
+		moveString.append(System.getProperty("line.separator"));
+		moveString.append("Place a " + move.getPiece() + " at " + move.getX() + "," + move.getY() + " for a score of " + score);
+		moveString.append(System.getProperty("line.separator"));
+		moveString.append(newBoard);
+		moveString.append("=================================================");
+		moveString.append(System.getProperty("line.separator"));
+		moveString.append(underPath);
+	}
+
+	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, SolverMove move, Board newBoard, int score) {
+		moveString.replace(0,  moveString.length(), "");
+		String englishMove;
+		switch (move.getDirection()) {
+			case Board.UP: englishMove = "Up"; break;
+			case Board.DOWN: englishMove = "Down"; break;
+			case Board.LEFT: englishMove = "Left"; break;
+			case Board.RIGHT: englishMove = "Right"; break;
+			default: englishMove = "ERROR!";
+		}
+		moveString.append("Slide " + englishMove + " for a score of " + score);
+		moveString.append(System.getProperty("line.separator"));
+		moveString.append(newBoard);
+		moveString.append("=================================================");
+		moveString.append(System.getProperty("line.separator"));
+		moveString.append(underPath);
 	}
 	
 	public SolverMove getMoveFromSearch(Board board) throws Exception {
