@@ -173,7 +173,7 @@ public class Search {
 			newBoard = (Board)board.clone();
 			newBoard.place(x, y, piece);
 			
-			blockerMove.setScore(evaluate(newBoard));
+			blockerMove.setScore(-evaluate(newBoard));
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
