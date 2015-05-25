@@ -10,9 +10,9 @@ The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, ea
 
 Two constants ROWS and COLS define the size of the grid.
 
-There is code to set up and manipulate the board for making moves. I am in the process of implementing the game search to allow the program to play out and solve the game in as fast a time as possible using an alpha-beta search, such as that used in my [Rival Chess Engine](https://github.com/Netsensia/rival-chess-android-engine).
+This README was written while building the program so roughly documents the process finding better ways to search for a solution. 
 
-There are several methods of play. First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
+First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
 
 	----------------------------
 	|     4|     2|     4|    16|
@@ -25,7 +25,7 @@ There are several methods of play. First, random moves, resulting in an average 
 	----------------------------
 	Score: 492, Game over: true
 
-The next method is to select the best-scoring move each time. This results in an average score of 2,721. An example end position of this strategy:
+Select the best-scoring move each time. This results in an average score of 2,721. An example end position of this strategy:
 
 	----------------------------
 	|    16|     8|     4|    16|
@@ -38,7 +38,8 @@ The next method is to select the best-scoring move each time. This results in an
 	----------------------------
 	Score: 2700, Game over: true
 
-The first variant of a search method is create a move tree but without the random placement of new tiles. In other words, to allow the player to make multiple moves in a row. So, you may find that UP scores worse than DOWN when looking at the immediate score, but that UP can lead to a much better score than DOWN if the player is allowed to make multiple moves.
+The first variant of a search method is create a move tree but without the random placement of new tiles. In other words, to allow the player to make multiple moves in a row. So, you may find that UP scores worse than DOWN when looking at the immediate score, but that UP can lead to a much better score than DOWN if the player is allowed to make multiple moves without the blocker
+having a say.
 
 This leads to an average score of 5,635, and positions such as:
 
@@ -53,7 +54,7 @@ This leads to an average score of 5,635, and positions such as:
 	----------------------------
 	Score: 4772, Game over: true
 
-and even some positions like this:
+and this:
 
 	----------------------------
 	|     4|     2|     8|     4|
@@ -158,22 +159,31 @@ And at depth 5, it started winning the game more than 25% of the time. The incre
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |
 	----------------------------------------------------------------------------------
 	     5     1000      1475      14,992    49,576     4096       3     248     770
-	     7     1000     16448      15532     49,112     4096       6     273     771
+	     7     1000     16448      15,532    49,112     4096       6     273     771
 	----------------------------------------------------------------------------------
 	
 A few more tweaks, particularly to the evaluation function. In this test I am only considering four random moves for the blocker at each ply.
 
-I've had to add a new column to this one :) Trouble is, I didn't have the program recording how many 8192s were achieved as I didn't expect it to happen, so all I know is that there
-was at least one in this run.
+I've had to add a new column to this one.
 
 	------------------------------------------------------------------------------------------
 	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
 	------------------------------------------------------------------------------------------
-	     7     1000      3389     20,175    107,844    8192       1+      35      467    864
+	     7     1000      3389     20,175    107,844    8192       1       35      467    864
 	------------------------------------------------------------------------------------------
 	
-## Example code:
+Some further tweaks to the evaluation function to consider tiles of the same value next to each other and to reduce the score if there are no moves left.
+
+	------------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
+	------------------------------------------------------------------------------------------
+	     5     1000       687     19,793     68,164    4096       0       34     437     847
+	     7     1000      3338     21,948     72,164    4096       0       58     505     902
+	------------------------------------------------------------------------------------------
+	
+## Example code to show how moves are made in the game of 2048
 
 	Board board = new Board();
 			

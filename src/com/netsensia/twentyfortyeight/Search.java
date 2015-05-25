@@ -263,6 +263,49 @@ public class Search {
 			}
 		}
 		
+		int lastPiece;
+		int rowTouchers = 0;
+		int columnTouchers = 0;
+		
+		for (int x=0; x<Board.COLS; x++) {
+			lastPiece = 0;
+			for (int y=0; y<Board.ROWS; y++) {
+				int piece = board.getSquare(x,y);
+				if (piece > 0) {
+					if (piece == lastPiece) {
+						columnTouchers += piece;
+						lastPiece = 0;
+					} else {
+						lastPiece = piece;
+					}
+				}
+			}
+		}
+		
+		for (int y=0; y<Board.ROWS; y++) {
+			lastPiece = 0;
+			for (int x=0; x<Board.COLS; x++) {
+				int piece = board.getSquare(x,y);
+				if (piece > 0) {
+					if (piece == lastPiece) {
+						rowTouchers += piece;
+						lastPiece = 0;
+					} else {
+						lastPiece = piece;
+					}
+				}
+			}
+		}
+		
+		// Bonus for having tiles of the same value next to each other
+		score += (Math.max(rowTouchers,  columnTouchers) / 2);
+		
+		if (rowTouchers + columnTouchers == 0 && board.countBlankSpaces() == 0) {
+			// Game over
+			score *= 0.8;
+		}
+		
+		
 		return score; 
 	   		
 	}
