@@ -100,12 +100,7 @@ public class TwentyFortyEight {
 			
 			if (board.isValidMove(solverMove.getDirection())) {
 				movesMade ++;
-//				if (movesMade % 50 == 0) {
-//					System.out.print(".");
-//				}
-				//System.out.println(board);
-				board.makeMove(solverMove.getDirection(), true);
-				
+				board.makeMove(solverMove.getDirection(), true);				
 				board.placeRandomPiece();
 				
 			} else {
@@ -118,6 +113,7 @@ public class TwentyFortyEight {
 		
 		int hashTableSize = (search.hashtable.size() * 16) / 1024;
 		System.out.println();
+		System.out.println("Number of moves: " + movesMade);
 		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes + ", Hash table size: " + search.hashtable.size() + " (" + hashTableSize + " Megabytes)");
 		
 		return (Board)board.clone();
