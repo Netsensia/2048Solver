@@ -5,6 +5,7 @@ Java code that plays the infuriating and addictive game [2048](http://gabrieleci
 Current best results: 58.9% win rate at an average of 4.3 milliseconds per move on a Macbook Pro.
 
 Highest score seen so far across all versions of the code: 107,844
+
 Highest tile seen so far across all versions of the code: 8192
 
 Details of latest run of current code:
