@@ -182,7 +182,15 @@ Some further tweaks to the evaluation function to consider tiles of the same val
 	     5     1000       687     19,793     68,164    4096       0       34     437     847
 	     7     1000      3338     21,948     72,164    4096       0       58     505     902
 	------------------------------------------------------------------------------------------
-	
+
+Yet more changes, making steady progress:
+
+	------------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
+	------------------------------------------------------------------------------------------
+	     7     1000      3806     24,874    78,008     4096       0      104     589     892
+
 ## Example code to show how moves are made in the game of 2048
 
 	Board board = new Board();

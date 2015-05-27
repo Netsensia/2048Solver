@@ -246,33 +246,36 @@ public class Search {
 				
 				if (piece > 0) {
 					
-					weight = ((x+1)*(x+1)) + (((y+1)*(y+1)) / 2);
+					// Get large numbers to the right-hand side
+					weight = (x+1) * (x+1);
 					
 					double thisWeight = weight;
 					
 					boolean good = true;
 					
-					for (int i=y-1; good && i>=0; i--) {
-						if (board.getSquare(x,i) > board.getSquare(x,i+1)) {
+					// Are all pieces below this one of a higher value?
+					for (int i=y+1; good && i<Board.ROWS; i++) {
+						if (piece > board.getSquare(x, i)) {
 							good = false;
 						}
 					}
 					
+					// If so, give this piece a nice bonus, it has no urgent need to move down 
 					if (good) {
-						thisWeight *= 1.1;
+						thisWeight *= 1.5;
 					}
 					
-					good = true;
-					
-					for (int i=x-1; good && i>=0; i--) {
-						if (board.getSquare(i,y) > board.getSquare(i+1,y)) {
-							good = false;
-						}
-					}
-					
-					if (good) {
-						thisWeight *= 1.01;
-					}
+//					good = true;
+//					
+//					for (int i=x-1; good && i>=0; i--) {
+//						if (board.getSquare(i,y) > board.getSquare(i+1,y)) {
+//							good = false;
+//						}
+//					}
+//					
+//					if (good) {
+//						thisWeight *= 1.01;
+//					}
 					
 					score += (int)(piece * thisWeight);
 				} 
