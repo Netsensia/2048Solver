@@ -9,15 +9,15 @@ Highest tile seen so far across all versions of the code: 8192
 
 Details of latest run of current code:
 
-	 ------------------------------------------------------------------------------------------------
-                                                                         | # games where tile seen   |
-	 ------------------------------------------------------------------------------------------------
-	| Search | Total | Average  | Average  | Average | Highest | Highest | 8192 | 4096 | 2048 | 1024 |
-	| Depth  | Runs  | Time     | time     | Score   | Score   | Tile    |      |      |      |      |
-	                   Per Move | Per Game |         |         |         |      |      |      |      |
-	-------------------------------------------------------------------------------------------------
-	     7     1000      4.3ms     3806m     24,874     78,008    4096   |   0     104    589    892
-	 ------------------------------------------------------------------------------------------------
+	 --------------------------------------------------------------------------------------------
+                                                                     | # games where tile seen   |
+	 --------------------------------------------------------------------------------------------
+	| Search | Total | Average | Average | Average | High  | Highest | 8192 | 4096 | 2048 | 1024 |
+	| Depth  | Runs  | Move    | Game    | Score   | Score | Tile    |      |      |      |      |
+	                   Time    | Time    |         |       |         |      |      |      |      |
+	---------------------------------------------------------------------------------------------
+	     7     1000     4.3ms    3806ms    24,874   78,008    4096   |   0     104    589    892
+	 --------------------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
