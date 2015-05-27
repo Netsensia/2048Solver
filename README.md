@@ -2,6 +2,14 @@
 
 Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
 
+Current best results:
+
+	------------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
+	------------------------------------------------------------------------------------------
+	     7     1000      3806     24,874    78,008     4096       0      104     589     892
+	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
 Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act.
