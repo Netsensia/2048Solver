@@ -4,11 +4,15 @@ Java code that plays the infuriating and addictive game [2048](http://gabrieleci
 
 Current best results:
 
-	------------------------------------------------------------------------------------------
-	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
-	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
-	------------------------------------------------------------------------------------------
-	     7     1000      3806     24,874    78,008     4096       0      104     589     892
+	 -------------------------------------------------------------------------------------
+                                                              | # games where tile seen   |
+	 -------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192 | 4096 | 2048 | 1024 |
+	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |      |      |      |      |
+	--------------------------------------------------------------------------------------
+	     7     1000      3806     24,874    78,008     4096   |   0    104     589    892
+	 -------------------------------------------------------------------------------------
+
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
