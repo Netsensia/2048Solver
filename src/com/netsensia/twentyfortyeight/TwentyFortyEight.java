@@ -54,6 +54,10 @@ public class TwentyFortyEight {
 					halfWins ++;
 				}
 				
+				if (t < 512) {
+				//	System.exit(0);
+				}
+				
 			} catch (Exception e) {
 				System.out.println(e);
 				System.exit(1);
@@ -96,9 +100,10 @@ public class TwentyFortyEight {
 			
 			if (board.isValidMove(solverMove.getDirection())) {
 				movesMade ++;
-				if (movesMade % 50 == 0) {
-					System.out.print(".");
-				}
+//				if (movesMade % 50 == 0) {
+//					System.out.print(".");
+//				}
+				//System.out.println(board);
 				board.makeMove(solverMove.getDirection(), true);
 				
 				board.placeRandomPiece();

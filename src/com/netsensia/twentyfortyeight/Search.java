@@ -242,21 +242,38 @@ public class Search {
 			
 			for (int y=0; y<Board.ROWS; y++) {
 				
-				weight += 0.5;
-				double thisWeight = weight;
-				
 				int piece = board.getSquare(x, y);
 				
 				if (piece > 0) {
-				
-					if (y > 0 && board.getSquare(x, y-1) > piece) {
-						thisWeight *= 0.9;
+					
+					weight = ((x+1)*(x+1)) + (((y+1)*(y+1)) / 2);
+					
+					double thisWeight = weight;
+					
+					boolean good = true;
+					
+					for (int i=y-1; good && i>=0; i--) {
+						if (board.getSquare(x,i) > board.getSquare(x,i+1)) {
+							good = false;
+						}
 					}
 					
-					if (x > 0 && board.getSquare(x-1, y) > piece) {
-						thisWeight *= 0.9;
+					if (good) {
+						thisWeight *= 1.1;
 					}
-	
+					
+					good = true;
+					
+					for (int i=x-1; good && i>=0; i--) {
+						if (board.getSquare(i,y) > board.getSquare(i+1,y)) {
+							good = false;
+						}
+					}
+					
+					if (good) {
+						thisWeight *= 1.01;
+					}
+					
 					score += (int)(piece * thisWeight);
 				} 
 
