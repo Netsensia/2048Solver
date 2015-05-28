@@ -21,7 +21,16 @@ public class Board implements Cloneable {
 	public static final int BLOCKER = 1;
 	
 	private int score = 0;
+	private int movesMade = 0;
 	
+	public int getMovesMade() {
+		return movesMade;
+	}
+
+	public void setMovesMade(int movesMade) {
+		this.movesMade = movesMade;
+	}
+
 	private int board[] = new int[ROWS*COLS];
 	
 	Random r = new Random();
@@ -107,17 +116,18 @@ public class Board implements Cloneable {
 	
 	public boolean isValidMove(int direction) {
 		
-		int[] backupBoard = new int[ROWS*COLS];
-		
-		System.arraycopy( board, 0, backupBoard, 0, board.length );
+		try {
+			Board newBoard = (Board)this.clone();
+			newBoard.makeMove(direction, false);
+			
+			if (Arrays.equals(board, newBoard.getBoard())) {
+				return false;
+			}
 
-		this.makeMove(direction, false);
-		
-		if (Arrays.equals(board, backupBoard)) {
-			return false;
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
 		}
 		
-		System.arraycopy( backupBoard, 0, board, 0, backupBoard.length );
 		return true;
 	}
 	
@@ -221,6 +231,8 @@ public class Board implements Cloneable {
 				rotateClockwise(1);
 				break;
 		}
+		
+		movesMade ++;
 		
 	}
 	

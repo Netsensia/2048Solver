@@ -18,14 +18,20 @@ public class TwentyFortyEight {
 		int doubleWins = 0;
 		int quadWins = 0;
 		
-		long start = System.currentTimeMillis();
+		long totalTime = 0;
+		long totalMoves = 0;
 		
 		for (int i=1; i<=RUNS; i++) {
 			
 			System.out.println("Game: " + i);
 			
+			long thisTimeStart = 0;
+			long thisTime = 0;
+			
 			try {
+				thisTimeStart = System.currentTimeMillis();
 				board = playGame();
+				thisTime = System.currentTimeMillis() - thisTimeStart;
 				System.out.println(board);
 				int score = board.getScore();
 				if (score > highScore) {
@@ -63,14 +69,20 @@ public class TwentyFortyEight {
 				System.exit(1);
 			}
 			
-			long time = (System.currentTimeMillis() - start);
-			System.out.println("Time: " + time  + ", Average time: " + (time / i) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setMaximumFractionDigits(2);
+			totalTime += thisTime;
+			totalMoves += board.getMovesMade();
+			double averageMoveTime = (double)thisTime / board.getMovesMade();
+			double totalAverageMoveTime = (double)totalTime / totalMoves;
+			
 			double winPercent = ((double)wins / i) * 100.0;
 			double halfWinPercent = ((double)halfWins / i) * 100.0;
 			double doubleWinPercent = ((double)doubleWins / i) * 100.0;
 			double quadWinPercent = ((double)quadWins / i) * 100.0;
+			
+			System.out.println("Time: " + thisTime + ", Number of moves: " + board.getMovesMade() + ", Average move time: " + nf.format(averageMoveTime));
+			System.out.println("Total Time: " + totalTime  + ", Average time: " + (totalTime / i) + ", Average move time: " + nf.format(totalAverageMoveTime) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
 			System.out.println("8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
 			System.out.println("===========================================================================================================");
 		}
@@ -86,8 +98,6 @@ public class TwentyFortyEight {
 
 		Search search = new Search();
 		
-		int movesMade = 0;
-				
 		while (!board.isGameOver()) {
 			
 			search.setMode(Search.SEARCH);
@@ -99,7 +109,6 @@ public class TwentyFortyEight {
 			SolverMove solverMove = search.getBestMove(board);
 			
 			if (board.isValidMove(solverMove.getDirection())) {
-				movesMade ++;
 				board.makeMove(solverMove.getDirection(), true);				
 				board.placeRandomPiece();
 				
@@ -113,10 +122,9 @@ public class TwentyFortyEight {
 		
 		int hashTableSize = (search.hashtable.size() * 16) / 1024;
 		System.out.println();
-		System.out.println("Number of moves: " + movesMade);
 		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes + ", Hash table size: " + search.hashtable.size() + " (" + hashTableSize + " Megabytes)");
 		
-		return (Board)board.clone();
+		return board;
 	}
 	
 	public static Board getTestBoard() {
