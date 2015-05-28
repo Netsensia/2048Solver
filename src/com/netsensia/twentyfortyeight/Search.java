@@ -13,17 +13,6 @@ public class Search {
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
 	public static final int SEARCH = 2;
-	public static final int HASH_TABLE_POWER = 16; // Math.pow(2,HASH_TABLE_POWER) positions
-	
-	public static final boolean USE_HASH_TABLE = true;
-	
-	public int[][] pieceSquareZorbrist = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
-	public int[][] pieceSquareZorbristLock = new int[Board.TOTAL_SQUARES][Board.MAX_TILE_POWER];
-	
-	public Hashtable<Integer, HashtableItem> hashtable = new Hashtable<Integer, HashtableItem>();
-	
-	public int hashClashes = 0;
-	public int hashHits = 0;
 	
 	private boolean evaluateBlankSpaces = true;
 	
@@ -34,15 +23,6 @@ public class Search {
 	int mode = RANDOM;
 	
 	public Search() {
-		int numPositions = (int)Math.pow(2, HASH_TABLE_POWER);
-		
-		for (int i=0; i<Board.TOTAL_SQUARES; i++) {
-			for (int j=0; j<Board.MAX_TILE_POWER; j++) {
-				pieceSquareZorbrist[i][j] = r.nextInt(numPositions);
-				pieceSquareZorbristLock[i][j] = r.nextInt(Integer.MAX_VALUE);
-			}
-		}
-		
 	}
 	
 	public int getMode() {
@@ -68,39 +48,7 @@ public class Search {
 	public void setEvaluateBlankSpaces(boolean evaluateBlankSpaces) {
 		this.evaluateBlankSpaces = evaluateBlankSpaces;
 	}
-	
-	public int generateHashKey(Board board) {
-		int hashKey = 0;
-		
-		for (int x=0; x<Board.COLS; x++) {
-			for (int y=0; y<Board.ROWS; y++) {
-				int piece = board.getSquare(x, y);
-				if (piece != 0) {
-					int power = (int)(Math.log(piece) / Math.log(2));
-					hashKey ^= pieceSquareZorbrist[y*Board.COLS+x][power];
-				}
-			}
-		}
-		
-		return hashKey;
-	}
-	
-	public int generateHashLockValue(Board board) {
-		int hashKey = 0;
-		
-		for (int x=0; x<Board.COLS; x++) {
-			for (int y=0; y<Board.ROWS; y++) {
-				int piece = board.getSquare(x, y);
-				if (piece != 0) {
-					int power = (int)(Math.log(piece) / Math.log(2));
-					hashKey ^= pieceSquareZorbristLock[y*Board.COLS+x][power];
-				}
-			}
-		}
-		
-		return hashKey;
-	}
-	
+
 	public int score(Board board, int move) {
 		int bestScore = 0;
 		
@@ -321,7 +269,7 @@ public class Search {
 	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder moveString) throws Exception {
 		
 		StringBuilder underPath = new StringBuilder();
-
+		
 		if (depth == 0) {
 			return mover * evaluate(board);
 		}

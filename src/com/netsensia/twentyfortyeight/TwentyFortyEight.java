@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 9;
+	public static final int DEPTH = 7;
 	
 	public static void main(String args[]) {
 		
@@ -44,25 +44,10 @@ public class TwentyFortyEight {
 					highestTileValue = t;
 				}
 				
-				if (t >= 8192) {
-					quadWins ++;
-				}
-				
-				if (t >= 4096) {
-					doubleWins ++;
-				}
-				
-				if (t >= 2048) {
-					wins ++;
-				}
-				
-				if (t >= 1024) {
-					halfWins ++;
-				}
-				
-				if (t < 512) {
-				//	System.exit(0);
-				}
+				if (t >= 8192) quadWins ++;
+				if (t >= 4096) doubleWins ++;
+				if (t >= 2048) wins ++;
+				if (t >= 1024) halfWins ++;
 				
 			} catch (Exception e) {
 				System.out.println(e);
@@ -119,11 +104,7 @@ public class TwentyFortyEight {
 			}
 			
 		}
-		
-		int hashTableSize = (search.hashtable.size() * 16) / 1024;
-		System.out.println();
-		System.out.println("Hash hits: " + search.hashHits + ", Hash clashes: " + search.hashClashes + ", Hash table size: " + search.hashtable.size() + " (" + hashTableSize + " Megabytes)");
-		
+
 		return board;
 	}
 	
