@@ -265,18 +265,6 @@ public class Search {
 						thisWeight *= 1.5;
 					}
 					
-//					good = true;
-//					
-//					for (int i=x-1; good && i>=0; i--) {
-//						if (board.getSquare(i,y) > board.getSquare(i+1,y)) {
-//							good = false;
-//						}
-//					}
-//					
-//					if (good) {
-//						thisWeight *= 1.01;
-//					}
-					
 					score += (int)(piece * thisWeight);
 				} 
 

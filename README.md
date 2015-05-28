@@ -1,14 +1,8 @@
 # 2048 Solver
 
-Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board, after which it is the player's turn to move. They are able to move left, down, up or right. 
+Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
 
-Current best results: 58.9% win rate at an average of 4.3 milliseconds per move on a Macbook Pro.
-
-Highest score seen so far across all versions of the code: 107,844
-
-Highest tile seen so far across all versions of the code: 8192
-
-Details of latest run of current code:
+Current stats:
 
 	 --------------------------------------------------------------------------------------------
                                                                      | # games where tile seen   |
@@ -16,8 +10,15 @@ Details of latest run of current code:
 	| Search | Total | Average | Average | Average | High  | Highest | 8192 | 4096 | 2048 | 1024 |
 	| Depth  | Runs  | Move    | Game    | Score   | Score | Tile    |      |      |      |      |
 	                   Time    | Time    |         |       |         |      |      |      |      |
-	---------------------------------------------------------------------------------------------
-	     7     1000     4.3ms    3806ms    24,874   78,008    4096   |   0     104    589    892
+	 --------------------------------------------------------------------------------------------
+	     3     1000
+	     5     1000
+	     7     1000     4.3ms     3806ms   24,874    78,008   4096   |   0     104    589    892
+	     9     1000    
+	    11     1000
+	 --------------------------------------------------------------------------------------------
+	 Highest score of all time:         107,844
+	 Highest tile seen across all runs: 8192
 	 --------------------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
