@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Hashtable;
 
 public class Search {
 	
-	public static final int RANDOM_MOVES_TO_PLAY = 3;
+	public static final int RANDOM_MOVES_TO_PLAY = 4;
 	
 	public static final int RANDOM = 0;
 	public static final int SCORE = 1;
@@ -115,17 +114,8 @@ public class Search {
 	private void addBlockerMove(ArrayList<BlockerMove> blockerMoves, Board board, int x, int y, int piece) {
 		
 		BlockerMove blockerMove = new BlockerMove(x, y, piece);
-		
-		Board newBoard;
-		try {
-			newBoard = (Board)board.clone();
-			newBoard.place(x, y, piece);
-			
-			blockerMove.setScore(Math.random());
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		
+		// Slightly favour moves further to the right of the board 
+		blockerMove.setScore(x + (Math.random() * x));
 		blockerMoves.add(blockerMove);	
 	}
 	
@@ -338,7 +328,7 @@ public class Search {
 						return bestScore;
 					}
 					
-					if (count > 3) {
+					if (count > RANDOM_MOVES_TO_PLAY) {
 						break;
 					}
 	

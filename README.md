@@ -13,17 +13,17 @@ Current stats:
 	 --------------------------------------------------------------------------------------------
 	     3     1000
 	     5     1000
-	     7     1000     4.3ms     3806ms   24,874    78,008   4096   |   0     104    589    892
+	     7     1000     4.27ms    5078ms   30,299   127,048   8192       3    190     698     944
 	     9     1000    
 	    11     1000
 	 --------------------------------------------------------------------------------------------
-	 Highest score of all time:         107,844
+	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192
 	 --------------------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
-Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act.
+Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act. Merged cells cannot merge again on the same move.
 
 The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, each time a tile is created from a merger, the value of the new tile is added to the score, so merging two 2s will give earn four points.
 
@@ -209,6 +209,15 @@ Yet more changes, making steady progress:
 	| Depth  | Runs  | Time(ms) | Score   | Score   | Tile    |       |       |       |       |
 	------------------------------------------------------------------------------------------
 	     7     1000      3806     24,874    78,008     4096       0      104     589     892
+	     
+Then, I had the idea of, while still keeping the blocker moves random, adding a slight nudge for those further to the right of the board. At this point I also started to record the average move time as this is more meaningful than the average game time.
+
+	------------------------------------------------------------------------------------------
+	| Search | Total | Average  | Average | Highest | Highest | 8192s | 4096s | 2048s | 1024s |
+	| Depth  | Runs  | Move ms  | Score   | Score   | Tile    |       |       |       |       |
+	------------------------------------------------------------------------------------------
+	     7     1000     4.27      30,299    127,048     8192      3      190     698     944
+	     
 
 ## Example code to show how moves are made in the game of 2048
 
@@ -283,6 +292,10 @@ Yet more changes, making steady progress:
 
 
 	
-	
-	
+4 Random Moves
+Time: 1709, Number of moves: 346, Average move time: 4.94
+Total Time: 4948949, Average time: 4948, Average move time: 4.79, Average score = 25626, Highest score: 76800, Highest tile value: 4096
+8192s: 0(0%), 4096s: 118(11.8%), 2048s: 591(59.1%), 1024s: 905(90.5%)
+
+
 	
