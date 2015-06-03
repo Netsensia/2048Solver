@@ -32,7 +32,9 @@ public class TwentyFortyEight {
 				thisTimeStart = System.currentTimeMillis();
 				board = playGame();
 				thisTime = System.currentTimeMillis() - thisTimeStart;
-				System.out.println(board);
+				if (DEPTH > 7) {
+					System.out.println(board);
+				}
 				int score = board.getScore();
 				if (score > highScore) {
 					highScore = score;
@@ -78,8 +80,10 @@ public class TwentyFortyEight {
 		Board board = new Board();
 		board.setRandomStartPosition();
 		
-		System.out.println("Starting position:");
-		System.out.println(board);
+		if (DEPTH > 7) {
+			System.out.println("Starting position:");
+			System.out.println(board);
+		}
 
 		Search search = new Search();
 		

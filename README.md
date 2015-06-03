@@ -4,22 +4,22 @@ Java code that plays the infuriating and addictive game [2048](http://gabrieleci
 
 Current stats:
 
-	 --------------------------------------------------------------------------------------------
-                                                                     | # games where tile seen   |
-	 --------------------------------------------------------------------------------------------
-	| Search | Total | Average | Average | Average | High  | Highest | 8192 | 4096 | 2048 | 1024 |
-	| Depth  | Runs  | Move    | Game    | Score   | Score | Tile    |      |      |      |      |
-	                   Time    | Time    |         |       |         |      |      |      |      |
-	 --------------------------------------------------------------------------------------------
-	     3     1000
-	     5     1000
-	     7     1000     4.27ms    5078ms   30,299   127,048   8192       3    190     698     944
-	     9     1000    
+	 ----------------------------------------------------------------------------------
+                                                           | # games where tile seen   | 
+	 ----------------------------------------------------------------------------------
+	| Search | Total | Average | Average | Average | High  | 8192 | 4096 | 2048 | 1024 |
+	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
+	                   Time    | Time    |         |       |      |      |      |      |
+	 ----------------------------------------------------------------------------------
+	     3     1000     0.19ms     140ms   16,525    54,388    0      3     282   798
+	     5     1000     0.94ms     933ms   26,240    80,180    0    135     636   919
+	     7     1000     4.01ms    4837ms   30,656   118,524    1    177     743   942
+	     9     1000    17.59ms   21086ms   30,621   119,212    1    201     708   936
 	    11     1000
-	 --------------------------------------------------------------------------------------------
+	 ----------------------------------------------------------------------------------
 	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192
-	 --------------------------------------------------------------------------------------------
+	 ----------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
@@ -29,7 +29,7 @@ The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, ea
 
 Two constants ROWS and COLS define the size of the grid.
 
-This README was written while building the program so roughly documents the process finding better ways to search for a solution. 
+This README was written while building the program so roughly documents the process of finding better ways to search for a solution. 
 
 First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
 
@@ -85,8 +85,6 @@ and this:
 	|     8|     4|    16|     2|
 	----------------------------
 	Score: 9672, Game over: true
-
-The last position is better than anything I have managed with my own wits, although to be fair, I've not got the luxury of being able to play 50,000 games in a few seconds. This is no longer true, my current record is around 14,000 :)
 
 It turns out that allowing two moves in a row is just as effective as allowing any number of moves higher than two. So three, four or five moves, for example, make no difference to the average score. This may allow us to add a sneaky extra ply to the search for minimal cost during a full search.
 
@@ -289,13 +287,5 @@ Then, I had the idea of, while still keeping the blocker moves random, adding a 
     ----------------------------
     |      |      |      |      |
     ----------------------------
-
-
-	
-4 Random Moves
-Time: 1709, Number of moves: 346, Average move time: 4.94
-Total Time: 4948949, Average time: 4948, Average move time: 4.79, Average score = 25626, Highest score: 76800, Highest tile value: 4096
-8192s: 0(0%), 4096s: 118(11.8%), 2048s: 591(59.1%), 1024s: 905(90.5%)
-
 
 	

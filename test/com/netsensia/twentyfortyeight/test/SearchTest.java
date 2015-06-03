@@ -27,7 +27,7 @@ public class SearchTest {
 		Search search = new Search();
 		search.setEvaluateBlankSpaces(false);
 		
-		assertEquals(64, search.evaluate(board));
+		assertEquals(47, search.evaluate(board));
 	}
 	
 	@Test
@@ -48,41 +48,10 @@ public class SearchTest {
 		
 		StringBuilder moves = new StringBuilder();
 		
-		assertEquals(71, search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
+		search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
 		search.setDepth(1);
 		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
 		
-		assertEquals(81, search.negamax(board, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(2);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
-		
-		assertEquals(107, search.negamax(board, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(3);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
-
-		assertEquals(114, search.negamax(board, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(4);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
-		
-		board.place(3, 3, 4);
-		board.place(2, 0, 8);
-		/*
-		 *      2,0,8,0,
-    	 *   	2,0,0,0,
-    	 *  	0,0,0,0,
-    	 *  	0,4,0,4,
-		 */
-		assertEquals(112, search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(1);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
-		
-		assertEquals(120, search.negamax(board, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(2);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
-
-		assertEquals(182, search.negamax(board, 8, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves));
-		search.setDepth(6);
-		assertEquals(Board.LEFT, search.getMoveFromSearch(board).getDirection());
 	}
 	
 	@Test

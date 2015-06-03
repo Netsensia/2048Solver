@@ -187,25 +187,50 @@ public class Search {
 					// Get large numbers to the right-hand side
 					weight = (x+1) * (x+1);
 					
-					double thisWeight = weight;
-					
-					boolean good = true;
+					boolean ordered = true;
 					
 					// Are all pieces below this one of a higher value?
-					for (int i=y+1; good && i<Board.ROWS; i++) {
-						if (piece > board.getSquare(x, i)) {
-							good = false;
+					for (int i=y+1; ordered && i<Board.ROWS; i++) {
+						int neighbourPiece = board.getSquare(x, i);
+						
+						if (piece > neighbourPiece) {
+							ordered = false;
+						}
+						
+					}
+					
+					boolean closeValues = true;
+					
+					if (x < Board.COLS - 1) {
+						int neighbourPiece = board.getSquare(x + 1, y);
+				
+						if (neighbourPiece > 0) {
+							
+							int pieceLog = (int)(Math.log(piece) / Math.log(2));
+							int neighbourLog = (int)(Math.log(neighbourPiece) / Math.log(2));
+	
+							if (Math.abs(pieceLog - neighbourLog) > 1) {
+								closeValues = false;
+							}
 						}
 					}
 					
-					// If so, give this piece a nice bonus, it has no urgent need to move down 
-					if (good) {
-						thisWeight *= 1.5;
+					// If so, give this piece a bonus, it has no need to move down 
+					if (ordered) {
+						weight *= 1.5;
 					}
 					
-					score += (int)(piece * thisWeight);
-				} 
-
+					if (closeValues) {
+						//System.out.println(board);
+						//System.out.println("PIECE " + piece + " on " + x + "," + y + " ^^^^^^^^^^^^^^^^^^^^^^^^^");
+						weight *= 1.5;
+					} else {
+						//System.out.println(board);
+						//System.out.println("PIECE " + piece + " on " + x + "," + y + " ^^^^^^^^^^^^^^^££££££££££££££££££££££^^^^^^^^^^^^^^^^^");
+					}
+					
+					score += (int)(piece * weight);
+				}
 			}
 		}
 		
@@ -244,13 +269,12 @@ public class Search {
 		}
 		
 		// Bonus for having tiles of the same value next to each other
-		score += (Math.max(rowTouchers,  columnTouchers) / 2);
+		score += (Math.max(rowTouchers,  columnTouchers));
 		
 		if (rowTouchers + columnTouchers == 0 && board.countBlankSpaces() == 0) {
 			// Game over
 			score *= 0.8;
 		}
-		
 		
 		return score; 
 	   		
