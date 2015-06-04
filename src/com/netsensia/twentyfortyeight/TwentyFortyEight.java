@@ -4,8 +4,8 @@ import java.text.NumberFormat;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 1000;
-	public static final int DEPTH = 5;
+	public static final int RUNS = 10000;
+	public static final int DEPTH = 3;
 	
 	public static void main(String args[]) {
 		

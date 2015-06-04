@@ -271,6 +271,13 @@ public class Search {
 			score *= 0.8;
 		}
 		
+		ArrayList<SolverMove> legalMoves = getSolverMoves(board);
+		if (legalMoves.size() == 1) {
+			if (legalMoves.get(0).getDirection() == Board.LEFT) {
+				score *= 0.75;
+			}
+		}
+		
 		return score; 
 	   		
 	}

@@ -5,19 +5,20 @@ Java code that plays the infuriating and addictive game [2048](http://gabrieleci
 Current stats:
 
 	 ----------------------------------------------------------------------------------
-                                                           | # games where tile seen   | 
+                                                           | % games where tile seen   | 
 	 ----------------------------------------------------------------------------------
 	| Search | Total | Average | Average | Average | High  | 8192 | 4096 | 2048 | 1024 |
 	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
 	                   Time    | Time    |         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
-	     3     1000     0.20ms     156ms   18,471    54,388    0     23     350   807 
-	     5     1000     0.94ms    1024ms   27,301   108,092    1    128     644   927
-	     7     1000     3.98ms    4703ms   30,094   108,636    2    179     715   951 
-	     9     1000    18.08ms   20084ms   30,160   115,240    3    177     696   949 
+	     3    10000     0.24ms     197ms   18,851    75,880|  0.00|  2.59| 37.05| 82.66 *
+	     5     1000     0.94ms    1024ms   27,301   108,092|  0.10| 12.80| 64.40| 92.70
+	     7     1000     3.98ms    4703ms   30,094   108,636|  0.20| 17.90| 71.50| 95.10
+	     9     1000    18.08ms   20084ms   30,160   115,240|  0.30| 17.70| 69.60| 94.90 
 	 ----------------------------------------------------------------------------------
 	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192
+	 * Run on latest version of code. Other lines were run on previous version.
 	 ----------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
