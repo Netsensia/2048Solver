@@ -217,16 +217,11 @@ public class Search {
 					
 					// If so, give this piece a bonus, it has no need to move down 
 					if (ordered) {
-						weight *= 1.5;
+						weight *= 1.25;
 					}
 					
 					if (closeValues) {
-						//System.out.println(board);
-						//System.out.println("PIECE " + piece + " on " + x + "," + y + " ^^^^^^^^^^^^^^^^^^^^^^^^^");
-						weight *= 1.5;
-					} else {
-						//System.out.println(board);
-						//System.out.println("PIECE " + piece + " on " + x + "," + y + " ^^^^^^^^^^^^^^^££££££££££££££££££££££^^^^^^^^^^^^^^^^^");
+						weight *= 1.25;
 					}
 					
 					score += (int)(piece * weight);
