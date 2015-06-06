@@ -333,9 +333,10 @@ public class Search {
 
 			int count = 0;
 			int totalScore = 0;
+
+			Board newBoard;
 			
 			for (BlockerMove move : legalMoves) {
-				Board newBoard;
 			
 				try {
 					count ++;
@@ -345,17 +346,6 @@ public class Search {
 					int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
 					
 					totalScore += score;
-					
-					if (score > bestScore) {
-						bestScore = score;
-						appendMoveString(moveString, underPath, move, newBoard,	score);
-					}
-					
-					//low = Math.max(low, score);
-					
-					if (low >= high) {
-					//	return bestScore;
-					}
 					
 					if (count > RANDOM_MOVES_TO_PLAY) {
 						break;
@@ -379,13 +369,13 @@ public class Search {
 
 	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, BlockerMove move, Board newBoard, int score) {
 		moveString.replace(0,  moveString.length(), "");
-		moveString.append(System.getProperty("line.separator"));
+		//moveString.append(System.getProperty("line.separator"));
 		moveString.append("Place a " + move.getPiece() + " at " + move.getX() + "," + move.getY() + " for a score of " + score);
-		moveString.append(System.getProperty("line.separator"));
-		moveString.append(newBoard);
-		moveString.append("=================================================");
-		moveString.append(System.getProperty("line.separator"));
-		moveString.append(underPath);
+		//moveString.append(System.getProperty("line.separator"));
+		//moveString.append(newBoard);
+		//moveString.append("=================================================");
+		//moveString.append(System.getProperty("line.separator"));
+		//moveString.append(underPath);
 	}
 
 	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, SolverMove move, Board newBoard, int score) {
@@ -399,11 +389,11 @@ public class Search {
 			default: englishMove = "ERROR!";
 		}
 		moveString.append("Slide " + englishMove + " for a score of " + score);
-		moveString.append(System.getProperty("line.separator"));
-		moveString.append(newBoard);
-		moveString.append("=================================================");
-		moveString.append(System.getProperty("line.separator"));
-		moveString.append(underPath);
+		//moveString.append(System.getProperty("line.separator"));
+		//moveString.append(newBoard);
+		//moveString.append("=================================================");
+		//moveString.append(System.getProperty("line.separator"));
+		//moveString.append(underPath);
 	}
 	
 	public SolverMove getMoveFromSearch(Board board) throws Exception {

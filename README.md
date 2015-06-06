@@ -1,6 +1,6 @@
 # 2048 Solver
 
-Java code that plays the infuriating and addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
+Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
 
 Current stats:
 
@@ -11,8 +11,8 @@ Current stats:
 	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
 	                   Time    | Time    |         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
-	     3     1000     0.70ms     774ms   27,728   115,248|  0.10| 13.40| 66.20| 94.90
-	     5     1000    11.56ms   19920ms   45,314   126,428|  1.70| 45.90| 92.70| 99.30
+	     3     1000     0.28ms     281ms   27,728   115,248|  0.10| 13.40| 66.20| 94.90
+	     5     1000     4.68ms   10987ms   45,314   126,428|  1.70| 45.90| 92.70| 99.30
 	 ----------------------------------------------------------------------------------
 	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192

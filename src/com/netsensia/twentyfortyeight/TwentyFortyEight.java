@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 7;
+	public static final int DEPTH = 3;
 	
 	public static void main(String args[]) {
 		
@@ -74,10 +74,13 @@ public class TwentyFortyEight {
 			int gamesLeft = RUNS - i;
 			double timeLeft = gamesLeft * averageTime;
 			
-			System.out.println("Time: " + thisTime + ", Number of moves: " + board.getMovesMade() + ", Average move time: " + nf.format(averageMoveTime));
-			System.out.println("Total Time: " + totalTime  + ", Average time: " + (int)averageTime + ", Average move time: " + nf.format(totalAverageMoveTime) + ", Average score = " + (totalScore / i));
-			System.out.println("Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("16384s: " + doubleQuadWins + "(" + nf.format(doubleQuadWinPercent) + "%), 4096s: " + "8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			System.out.println("Time: " + thisTime + ", Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
+			System.out.println("Average move time: " + nf.format(averageMoveTime));
+			System.out.println("-----------------------------------------------------------------------------------------------------------");
+			System.out.println("Total Time: " + totalTime  + ", Average time: " + (int)averageTime + ", Average move time: " + nf.format(totalAverageMoveTime));
+			System.out.println("Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			System.out.println("16384s: " + doubleQuadWins + "(" + nf.format(doubleQuadWinPercent) + "%), 8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			System.out.println("-----------------------------------------------------------------------------------------------------------");
 			System.out.println("Estimated time left: " + (int)(timeLeft / 60000) + " minutes");
 			System.out.println("===========================================================================================================");
 		}
