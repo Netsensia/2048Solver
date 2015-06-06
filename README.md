@@ -11,14 +11,11 @@ Current stats:
 	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
 	                   Time    | Time    |         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
-	     3    10000     0.24ms     197ms   18,851    75,880|  0.00|  2.59| 37.05| 82.66 *
-	     5     1000     0.94ms    1024ms   27,301   108,092|  0.10| 12.80| 64.40| 92.70
-	     7     1000     3.98ms    4703ms   30,094   108,636|  0.20| 17.90| 71.50| 95.10
-	     9     1000    18.08ms   20084ms   30,160   115,240|  0.30| 17.70| 69.60| 94.90 
+	     3     1000     0.70ms     774ms   27,728   115,248|  0.10| 13.40| 66.20| 94.90
+	     5     1000    11.56ms   19920ms   45,314   126,428|  1.70| 45.90| 92.70| 99.30
 	 ----------------------------------------------------------------------------------
 	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192
-	 * Run on latest version of code. Other lines were run on previous version.
 	 ----------------------------------------------------------------------------------
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.

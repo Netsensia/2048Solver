@@ -4,8 +4,8 @@ import java.text.NumberFormat;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 10000;
-	public static final int DEPTH = 3;
+	public static final int RUNS = 1000;
+	public static final int DEPTH = 7;
 	
 	public static void main(String args[]) {
 		
@@ -17,6 +17,7 @@ public class TwentyFortyEight {
 		int halfWins = 0;
 		int doubleWins = 0;
 		int quadWins = 0;
+		int doubleQuadWins = 0;
 		
 		long totalTime = 0;
 		long totalMoves = 0;
@@ -46,6 +47,7 @@ public class TwentyFortyEight {
 					highestTileValue = t;
 				}
 				
+				if (t >= 16384) doubleQuadWins ++;
 				if (t >= 8192) quadWins ++;
 				if (t >= 4096) doubleWins ++;
 				if (t >= 2048) wins ++;
@@ -67,13 +69,15 @@ public class TwentyFortyEight {
 			double halfWinPercent = ((double)halfWins / i) * 100.0;
 			double doubleWinPercent = ((double)doubleWins / i) * 100.0;
 			double quadWinPercent = ((double)quadWins / i) * 100.0;
+			double doubleQuadWinPercent = ((double)doubleQuadWins / i) * 100.0;
 			double averageTime = totalTime / i;
 			int gamesLeft = RUNS - i;
 			double timeLeft = gamesLeft * averageTime;
 			
 			System.out.println("Time: " + thisTime + ", Number of moves: " + board.getMovesMade() + ", Average move time: " + nf.format(averageMoveTime));
-			System.out.println("Total Time: " + totalTime  + ", Average time: " + (int)averageTime + ", Average move time: " + nf.format(totalAverageMoveTime) + ", Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			System.out.println("Total Time: " + totalTime  + ", Average time: " + (int)averageTime + ", Average move time: " + nf.format(totalAverageMoveTime) + ", Average score = " + (totalScore / i));
+			System.out.println("Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			System.out.println("16384s: " + doubleQuadWins + "(" + nf.format(doubleQuadWinPercent) + "%), 4096s: " + "8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
 			System.out.println("Estimated time left: " + (int)(timeLeft / 60000) + " minutes");
 			System.out.println("===========================================================================================================");
 		}

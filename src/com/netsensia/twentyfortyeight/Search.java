@@ -332,6 +332,7 @@ public class Search {
 			}
 
 			int count = 0;
+			int totalScore = 0;
 			
 			for (BlockerMove move : legalMoves) {
 				Board newBoard;
@@ -343,15 +344,17 @@ public class Search {
 					
 					int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
 					
+					totalScore += score;
+					
 					if (score > bestScore) {
 						bestScore = score;
 						appendMoveString(moveString, underPath, move, newBoard,	score);
 					}
 					
-					low = Math.max(low, score);
+					//low = Math.max(low, score);
 					
 					if (low >= high) {
-						return bestScore;
+					//	return bestScore;
 					}
 					
 					if (count > RANDOM_MOVES_TO_PLAY) {
@@ -362,6 +365,8 @@ public class Search {
 					e.printStackTrace();
 				}
 			}
+			
+			bestScore = (int)(totalScore / count);
 		}
 		
 		if (bestScore == Integer.MIN_VALUE) {
