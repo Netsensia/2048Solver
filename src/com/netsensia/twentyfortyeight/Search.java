@@ -21,7 +21,22 @@ public class Search {
 
 	int mode = RANDOM;
 	
+	private final int MAX_TILE_VALUE = 16384;
+	
+	private int squareLookup[] = new int[Board.COLS];
+	private int log2Lookup[] = new int[MAX_TILE_VALUE+1];
+	
 	public Search() {
+		for (int x=0; x<Board.COLS; x++) {
+			squareLookup[x] = (x+1) * (x+1);
+		}
+		
+		for (int i=2; i<=MAX_TILE_VALUE; i++) {
+			log2Lookup[i] = (int)(Math.log(i) / Math.log(2));
+		}
+		
+		// log2Lookup[2048] = 11
+		// log2Lookup[4096] = 12
 	}
 	
 	public int getMode() {
@@ -185,7 +200,7 @@ public class Search {
 				if (piece > 0) {
 					
 					// Get large numbers to the right-hand side
-					weight = (x+1) * (x+1);
+					weight = squareLookup[x];
 					
 					boolean ordered = true;
 					
@@ -205,11 +220,8 @@ public class Search {
 						int neighbourPiece = board.getSquare(x + 1, y);
 				
 						if (neighbourPiece > 0) {
-							
-							int pieceLog = (int)(Math.log(piece) / Math.log(2));
-							int neighbourLog = (int)(Math.log(neighbourPiece) / Math.log(2));
 	
-							if (Math.abs(pieceLog - neighbourLog) > 1) {
+							if (Math.abs(log2Lookup[piece] - log2Lookup[neighbourPiece]) > 1) {
 								closeValues = false;
 							}
 						}
@@ -298,8 +310,10 @@ public class Search {
 				return mover * evaluate(board);
 			}
 			
+			Board newBoard;
+			
 			for (SolverMove move : legalMoves) {
-				Board newBoard;
+				
 				try {
 					newBoard = (Board)board.clone();
 					newBoard.makeMove(move.getDirection(), true);
@@ -344,12 +358,10 @@ public class Search {
 					newBoard = (Board)board.clone();
 					newBoard.place(move.getX(), move.getY(), move.getPiece());
 					
-					int score = -negamax(newBoard, depth-1, -high, -low, 1, null);
+					totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 					
-					totalScore += score;
-					
-					if (count > RANDOM_MOVES_TO_PLAY) {
-						return (int)(totalScore / count);
+					if (count == (RANDOM_MOVES_TO_PLAY + 1)) {
+						return (int)(totalScore / (RANDOM_MOVES_TO_PLAY + 1));
 					}
 	
 				} catch (CloneNotSupportedException e) {
@@ -374,7 +386,10 @@ public class Search {
 		
 		if (legalMoves.size() == 0) {
 			throw new Exception("No legal moves for position\n " + board);
-		}
+		} else
+			if (legalMoves.size() == 1) {
+				return legalMoves.get(0);
+			}
 		
 		StringBuilder move = new StringBuilder();
 		

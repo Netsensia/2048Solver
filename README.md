@@ -17,6 +17,8 @@ Current stats:
 	 Highest score of all time:         127,048
 	 Highest tile seen across all runs: 8192
 	 ----------------------------------------------------------------------------------
+	 
+	 16384s: 0(0%), 8192s: 4(0.4%), 4096s: 319(31.9%), 2048s: 831(83.1%), 1024s: 975(97.5%)
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 

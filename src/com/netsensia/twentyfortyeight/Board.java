@@ -165,19 +165,6 @@ public class Board implements Cloneable {
 		this.board = newBoard;
 	}
 	
-	public void rotate180() {
-		int[] newBoard = new int[ROWS*COLS];
-		
-		for (int x=0; x<ROWS; x++) {
-			for (int y=0; y<COLS; y++) {
-				// New Y is inverse of x (ROWS-x-1), new x is the inverse of Y: COLS-y-1
-				newBoard[y*(COLS-y-1)+(ROWS-x-1)] = board[y*COLS+x];
-			}
-		}
-		
-		this.board = newBoard;
-	}
-	
 	public void rotateClockwise(int times) {
 		for (int i=0; i<times; i++) {
 			rotateClockwise();
