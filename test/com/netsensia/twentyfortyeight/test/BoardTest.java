@@ -25,7 +25,7 @@ public class BoardTest {
     	
     	Board board = getOneToSixteenBoard();
     	
-    	board.rotateClockwise(1);
+    	board.rotateClockwise();
     	
     	int[] expected1 = {
     	    	13,9,5,1,
@@ -46,7 +46,14 @@ public class BoardTest {
     	    	4,3,2,1
     	    	};
     	
-    	board.rotateClockwise(1);
+    	int[] expected3 = {
+    	    	4,8,12,16,
+    	    	3,7,11,15,
+    	    	2,6,10,14,
+    	    	1,5,9,13
+    	    	};
+    	
+    	board.rotateClockwise();
     	
     	assertArrayEquals(
     		expected2,
@@ -64,9 +71,27 @@ public class BoardTest {
     	
     	board = getOneToSixteenBoard();
     	
-    	int[] expected3 = board.getBoard();
+    	board.rotateClockwise(3);
+    	
+    	assertArrayEquals(
+    		expected3,
+	    	board.getBoard()
+    	);
+    	
+    	board = getOneToSixteenBoard();
+    	
+    	int[] expected4 = board.getBoard();
     	
     	board.rotateClockwise(4);
+    	
+    	assertArrayEquals(
+    		expected4,
+	    	board.getBoard()
+    	);
+    	
+    	board = getOneToSixteenBoard();
+    	
+    	board.rotateAntiClockwise();
     	
     	assertArrayEquals(
     		expected3,

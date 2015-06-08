@@ -152,13 +152,39 @@ public class Board implements Cloneable {
 		this.board = newBoard;
 	}
 	
+	public void rotateAntiClockwise() {
+		int[] newBoard = new int[ROWS*COLS];
+		
+		for (int x=0; x<ROWS; x++) {
+			for (int y=0; y<COLS; y++) {
+				// New X is current y, new y is the inverse of X: ROWS-x-1
+				newBoard[(ROWS-x-1)*COLS+y] = board[y*COLS+x];
+			}
+		}
+		
+		this.board = newBoard;
+	}
+	
+	public void rotate180() {
+		int[] newBoard = new int[ROWS*COLS];
+		
+		for (int x=0; x<ROWS; x++) {
+			for (int y=0; y<COLS; y++) {
+				// New Y is inverse of x (ROWS-x-1), new x is the inverse of Y: COLS-y-1
+				newBoard[y*(COLS-y-1)+(ROWS-x-1)] = board[y*COLS+x];
+			}
+		}
+		
+		this.board = newBoard;
+	}
+	
 	public void rotateClockwise(int times) {
 		for (int i=0; i<times; i++) {
 			rotateClockwise();
 		}
 	}
 	
-	public int[] compactColumn(int[] column) {
+	public int[] compactColumn(final int[] column) {
 		
 		int newColumn[] = new int[column.length];
 		
@@ -174,7 +200,7 @@ public class Board implements Cloneable {
 		return newColumn;
 	}
 	
-	public int[] slideColumn(int[] column, boolean calcScore) {
+	public int[] slideColumn(int[] column, final boolean calcScore) {
 		
 		column = compactColumn(column);
 		
@@ -221,14 +247,14 @@ public class Board implements Cloneable {
 				rotateClockwise(2);
 				break;
 			case LEFT: 
-				rotateClockwise(1);
+				rotateClockwise();
 				slideUp(calcScore);
-				rotateClockwise(3);
+				rotateAntiClockwise();
 				break;
 			case RIGHT:
-				rotateClockwise(3);
+				rotateAntiClockwise();
 				slideUp(calcScore);
-				rotateClockwise(1);
+				rotateClockwise();
 				break;
 		}
 		

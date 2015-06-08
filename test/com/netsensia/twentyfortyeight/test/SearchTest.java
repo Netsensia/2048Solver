@@ -27,7 +27,7 @@ public class SearchTest {
 		Search search = new Search();
 		search.setEvaluateBlankSpaces(false);
 		
-		assertEquals(47, search.evaluate(board));
+		assertEquals(51, search.evaluate(board));
 	}
 	
 	@Test

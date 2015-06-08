@@ -284,8 +284,6 @@ public class Search {
 	
 	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder moveString) throws Exception {
 		
-		StringBuilder underPath = new StringBuilder();
-		
 		if (depth == 0) {
 			return mover * evaluate(board);
 		}
@@ -306,11 +304,14 @@ public class Search {
 					newBoard = (Board)board.clone();
 					newBoard.makeMove(move.getDirection(), true);
 					
-					int score = -negamax(newBoard, depth-1, -high, -low, -1, underPath);
+					int score = -negamax(newBoard, depth-1, -high, -low, -1, null);
 					
 					if (score > bestScore) {
 						bestScore = score;
-						appendMoveString(moveString, underPath, move, newBoard,	score);
+						if (moveString != null) {
+							moveString.setLength(0);
+							moveString.append(move);
+						}
 					}
 					
 					low = Math.max(low, score);
@@ -343,12 +344,12 @@ public class Search {
 					newBoard = (Board)board.clone();
 					newBoard.place(move.getX(), move.getY(), move.getPiece());
 					
-					int score = -negamax(newBoard, depth-1, -high, -low, 1, underPath);
+					int score = -negamax(newBoard, depth-1, -high, -low, 1, null);
 					
 					totalScore += score;
 					
 					if (count > RANDOM_MOVES_TO_PLAY) {
-						break;
+						return (int)(totalScore / count);
 					}
 	
 				} catch (CloneNotSupportedException e) {
@@ -356,7 +357,7 @@ public class Search {
 				}
 			}
 			
-			bestScore = (int)(totalScore / count);
+			return (int)(totalScore / count);
 		}
 		
 		if (bestScore == Integer.MIN_VALUE) {
@@ -365,35 +366,6 @@ public class Search {
 		
 		return bestScore;
 		
-	}
-
-	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, BlockerMove move, Board newBoard, int score) {
-		moveString.replace(0,  moveString.length(), "");
-		//moveString.append(System.getProperty("line.separator"));
-		moveString.append("Place a " + move.getPiece() + " at " + move.getX() + "," + move.getY() + " for a score of " + score);
-		//moveString.append(System.getProperty("line.separator"));
-		//moveString.append(newBoard);
-		//moveString.append("=================================================");
-		//moveString.append(System.getProperty("line.separator"));
-		//moveString.append(underPath);
-	}
-
-	private void appendMoveString(StringBuilder moveString,	StringBuilder underPath, SolverMove move, Board newBoard, int score) {
-		moveString.replace(0,  moveString.length(), "");
-		String englishMove;
-		switch (move.getDirection()) {
-			case Board.UP: englishMove = "Up"; break;
-			case Board.DOWN: englishMove = "Down"; break;
-			case Board.LEFT: englishMove = "Left"; break;
-			case Board.RIGHT: englishMove = "Right"; break;
-			default: englishMove = "ERROR!";
-		}
-		moveString.append("Slide " + englishMove + " for a score of " + score);
-		//moveString.append(System.getProperty("line.separator"));
-		//moveString.append(newBoard);
-		//moveString.append("=================================================");
-		//moveString.append(System.getProperty("line.separator"));
-		//moveString.append(underPath);
 	}
 	
 	public SolverMove getMoveFromSearch(Board board) throws Exception {
@@ -404,17 +376,17 @@ public class Search {
 			throw new Exception("No legal moves for position\n " + board);
 		}
 		
-		StringBuilder moves = new StringBuilder();
+		StringBuilder move = new StringBuilder();
 		
-		negamax(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
+		negamax(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, move);
 		
-		switch (moves.charAt(6)) {
+		switch (move.charAt(1)) {
 		case 'U' : return new SolverMove(Board.UP);
 		case 'D' : return new SolverMove(Board.DOWN);
 		case 'L' : return new SolverMove(Board.LEFT);
 		case 'R' : return new SolverMove(Board.RIGHT);
 		default:
-			throw new Exception("Unknown move in " + moves);
+			throw new Exception("Unknown move in " + move);
 		}
 		
 	}
