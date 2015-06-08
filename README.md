@@ -12,13 +12,8 @@ Current stats:
 	                   Time    | Time    |         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
 	     3     1000     0.28ms     281ms   27,728   115,248|  0.10| 13.40| 66.20| 94.90
-	     5     1000     4.68ms   10987ms   45,314   126,428|  1.70| 45.90| 92.70| 99.30
+	     5     1000     3.36ms    5642ms   45,356   146,484|  3.00| 45.50| 90.40| 98.50
 	 ----------------------------------------------------------------------------------
-	 Highest score of all time:         127,048
-	 Highest tile seen across all runs: 8192
-	 ----------------------------------------------------------------------------------
-	 
-	 16384s: 0(0%), 8192s: 4(0.4%), 4096s: 319(31.9%), 2048s: 831(83.1%), 1024s: 975(97.5%)
 	     
 The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
 
