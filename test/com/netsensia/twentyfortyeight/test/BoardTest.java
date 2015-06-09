@@ -62,7 +62,7 @@ public class BoardTest {
     	
     	board = getOneToSixteenBoard();
     	
-    	board.rotateClockwise(2);
+    	board.rotate180();
     	
     	assertArrayEquals(
     		expected2,
@@ -71,7 +71,7 @@ public class BoardTest {
     	
     	board = getOneToSixteenBoard();
     	
-    	board.rotateClockwise(3);
+    	board.rotateAntiClockwise();
     	
     	assertArrayEquals(
     		expected3,
@@ -82,7 +82,8 @@ public class BoardTest {
     	
     	int[] expected4 = board.getBoard();
     	
-    	board.rotateClockwise(4);
+    	board.rotate180();
+    	board.rotate180();
     	
     	assertArrayEquals(
     		expected4,
@@ -145,22 +146,6 @@ public class BoardTest {
     	board.setBoard(full);
     	
     	assertFalse(board.placeRandomPiece());
-    	
-    }
-    
-    @Test
-    public void testCountBlankSpaces() {
-    	int[] position = {
-    	    	0,2,0,2,
-    	    	2,2,4,4,
-    	    	2,8,2,0,
-    	    	0,8,4,4,
-    	    	};
-    	
-    	Board board = new Board();
-    	board.setBoard(position);
-    	
-    	assertEquals(4, board.countBlankSpaces());
     	
     }
     

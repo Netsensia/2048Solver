@@ -1,8 +1,20 @@
 # 2048 Solver
 
-Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/). 2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
+Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/).
 
-Current stats:
+2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
+
+All the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
+
+Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act. Merged cells cannot merge again on the same move.
+
+The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, each time a tile is created from a merger, the value of the new tile is added to the score, so merging two 2s will give earn four points.
+
+The examples in this README will allow you to figure out exactly what happens.
+
+## Current program performance
+
+The table below shows the performance of the program running on a Mac Pro (late 2013).
 
 	 ----------------------------------------------------------------------------------
                                                            | % games where tile seen   | 
@@ -11,19 +23,17 @@ Current stats:
 	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
 	                   Time    | Time    |         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
-	     3     1000     0.28ms     281ms   27,728   115,248|  0.10| 13.40| 66.20| 94.90
-	     5     1000     3.36ms    5642ms   45,356   146,484|  3.00| 45.50| 90.40| 98.50
+	     3     5000     0.10ms     104ms   27,632   105,444|  0.04| 14.08| 67.02| 93.32
+	     4     1000     0.37ms     478ms   34,798   115,856|  0.20| 26.80| 79.80| 96.20
+	     5     1000     1.57ms    2608ms   44,482   125,280|  1.30| 46.10| 90.20| 98.70
+	     6      500     6.18ms   10981ms   49,336   141,932|  1.80| 55.80| 92.40| 99.60
 	 ----------------------------------------------------------------------------------
+	 
+The best score I've seen so far across all runs with the current version of the program is 146,484 on a depth 5 search.
 	     
-The examples below will allow you to figure out exactly what happens, but, in a nutshell, all the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
+## Program development
 
-Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act. Merged cells cannot merge again on the same move.
-
-The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, each time a tile is created from a merger, the value of the new tile is added to the score, so merging two 2s will give earn four points.
-
-Two constants ROWS and COLS define the size of the grid.
-
-This README was written while building the program so roughly documents the process of finding better ways to search for a solution. 
+The rest of this README was written while building the program so roughly documents the process of finding better ways to search for a solution. It's a bit of a hodge-podge, but shows some of the results obtained early on.
 
 First, random moves, resulting in an average score after 50,000 runs of 889 and resulting in positions such as:
 

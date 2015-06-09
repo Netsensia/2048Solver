@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 5;
+	public static final int DEPTH = 7;
 	
 	public static void main(String args[]) {
 		
@@ -102,9 +102,7 @@ public class TwentyFortyEight {
 			
 			search.setMode(Search.SEARCH);
 			
-			int searchDepth = DEPTH;
-			
-			search.setDepth(searchDepth);
+			search.setDepth(DEPTH);
 			
 			SolverMove solverMove = search.getBestMove(board);
 			
@@ -122,51 +120,4 @@ public class TwentyFortyEight {
 
 		return board;
 	}
-	
-	public static Board getTestBoard() {
-		Board board = new Board();
-		
-		int[] testBoard = {
-				2,4,4,8,
-				0,2,8,8,
-				2,2,2,8,
-				0,8,8,4,
-		};
-		
-		board.setBoard(testBoard);
-		
-		return board;
-	}
-	
-	public static void test() {
-		
-		Board board = getTestBoard();
-		System.out.println("Start");
-		System.out.println(board);
-		
-		board.makeMove(Board.DOWN, true);
-		System.out.println("Slid down");
-		System.out.println(board);
-		
-		board.makeMove(Board.LEFT, true);
-		System.out.println("Slid left");
-		System.out.println(board);
-		
-		board.makeMove(Board.RIGHT, true);
-		System.out.println("Slid right");
-		System.out.println(board);
-		
-		board.makeMove(Board.UP, true);
-		System.out.println("Slid up");
-		System.out.println(board);
-		
-		System.out.println("Valid moves:");
-		if (board.isValidMove(Board.UP)) System.out.println("Up");
-		if (board.isValidMove(Board.DOWN)) System.out.println("Down");
-		if (board.isValidMove(Board.LEFT)) System.out.println("Left");
-		if (board.isValidMove(Board.RIGHT)) System.out.println("Right");
-		
-		System.exit(0);
-	}
-	
 }

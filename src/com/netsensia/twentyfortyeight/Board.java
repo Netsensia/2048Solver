@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 import java.util.Random;
 import java.util.Arrays;
 
-public class Board implements Cloneable {
+public class Board {
 	
 	public static final int ROWS = 4;
 	public static final int COLS = 4;
@@ -12,8 +12,8 @@ public class Board implements Cloneable {
 	
 	public static final int UP = 0;
 	public static final int DOWN = 1;
-	public static final int LEFT = 2;
-	public static final int RIGHT = 3;
+	public static final int RIGHT = 2;
+	public static final int LEFT = 3;
 	
 	public static final int MAX_TILE_POWER = 16; // 64k
 	
@@ -23,6 +23,11 @@ public class Board implements Cloneable {
 	private int score = 0;
 	private int movesMade = 0;
 	
+	private static int lookupRotateClockwise[] = new int[ROWS*COLS];
+	private static int lookupRotateAntiClockwise[] = new int[ROWS*COLS];
+	private static int lookupRotate180[] = new int[ROWS*COLS];
+	private static boolean staticItemsInitialised = false;
+
 	public int getMovesMade() {
 		return movesMade;
 	}
@@ -33,12 +38,42 @@ public class Board implements Cloneable {
 
 	private int board[] = new int[ROWS*COLS];
 	
-	Random r = new Random();
+	private static Random r;
 	
 	public Board() {
-		for (int i=0; i<ROWS*COLS; i++) {
-			board[i] = 0;
+		if (!staticItemsInitialised) {
+			initStaticItems();
 		}
+	}
+	
+	public Board(int[] board, int score) {
+		System.arraycopy( board, 0, this.board, 0, board.length );
+		this.score = score;
+	}
+	
+	private void initStaticItems() {
+		for (int x=0; x<ROWS; x++) {
+			for (int y=0; y<COLS; y++) {
+				// New Y is current x, new x is the inverse of Y: COLS-y-1
+				lookupRotateClockwise[y*COLS+x] = x*COLS+(COLS-y-1);
+				lookupRotateAntiClockwise[y*COLS+x] = (ROWS-x-1)*COLS+y;
+				
+				// Now for the 180
+				int newY = x;
+				int newX = COLS-y-1;
+				
+				// And rotate it again
+				int newNewY = newX;
+				int newNewX = COLS-newY-1;
+				
+				lookupRotate180[y*COLS+x] = newNewY * COLS + newNewX;
+				
+			}
+		}
+		
+		 r = new Random();
+		 
+		staticItemsInitialised = true;
 	}
 	
 	public void setRandomStartPosition() {
@@ -66,7 +101,7 @@ public class Board implements Cloneable {
 	
 	public boolean placeRandomPiece() {
 		
-		if (countBlankSpaces() == 0) {
+		if (isFull()) {
 			return false;
 		}
 		
@@ -82,14 +117,15 @@ public class Board implements Cloneable {
 		return true;
 	}
 	
-	public int countBlankSpaces() {
-		int blankSpaces = 0;
+	public boolean isFull()	{
+		
 		for (int i=0; i<ROWS*COLS; i++) {
 			if (board[i] == 0) {
-				blankSpaces++;
+				return false;
 			}
 		}
-		return blankSpaces;
+		
+		return true;
 	}
 	
 	public boolean isGameOver() {
@@ -97,35 +133,27 @@ public class Board implements Cloneable {
 		boolean isGameOver = true;
 		
 		Board newBoard;
-		try {
-			newBoard = (Board)this.clone();
-		
-			for (int i=Board.UP; i<=Board.RIGHT; i++) {
-				newBoard.makeMove(i, false);
-				if (!Arrays.equals(newBoard.getBoard(), board)) {
-					isGameOver = false;
-					break;
-				}
+		newBoard = new Board(this.board, this.score);
+	
+		for (int i=Board.UP; i<=Board.LEFT; i++) {
+			newBoard.makeMove(i, false);
+			if (!Arrays.equals(newBoard.getBoard(), board)) {
+				isGameOver = false;
+				break;
 			}
-		
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
 		}
+
 		return isGameOver;
 	}
 	
 	public boolean isValidMove(int direction) {
 		
-		try {
-			Board newBoard = (Board)this.clone();
-			newBoard.makeMove(direction, false);
-			
-			if (Arrays.equals(board, newBoard.getBoard())) {
-				return false;
-			}
+		Board newBoard = new Board(this.board, this.score);
 
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+		newBoard.makeMove(direction, false);
+		
+		if (Arrays.equals(board, newBoard.getBoard())) {
+			return false;
 		}
 		
 		return true;
@@ -142,11 +170,8 @@ public class Board implements Cloneable {
 	public void rotateClockwise() {
 		int[] newBoard = new int[ROWS*COLS];
 		
-		for (int x=0; x<ROWS; x++) {
-			for (int y=0; y<COLS; y++) {
-				// New Y is current x, new x is the inverse of Y: COLS-y-1
-				newBoard[x*COLS+(COLS-y-1)] = board[y*COLS+x];
-			}
+		for (int i=0; i<newBoard.length; i++) {
+			newBoard[lookupRotateClockwise[i]] = board[i];
 		}
 		
 		this.board = newBoard;
@@ -155,20 +180,21 @@ public class Board implements Cloneable {
 	public void rotateAntiClockwise() {
 		int[] newBoard = new int[ROWS*COLS];
 		
-		for (int x=0; x<ROWS; x++) {
-			for (int y=0; y<COLS; y++) {
-				// New X is current y, new y is the inverse of X: ROWS-x-1
-				newBoard[(ROWS-x-1)*COLS+y] = board[y*COLS+x];
-			}
+		for (int i=0; i<newBoard.length; i++) {
+			newBoard[lookupRotateAntiClockwise[i]] = board[i];
 		}
 		
 		this.board = newBoard;
 	}
 	
-	public void rotateClockwise(int times) {
-		for (int i=0; i<times; i++) {
-			rotateClockwise();
+	public void rotate180() {
+		int[] newBoard = new int[ROWS*COLS];
+		
+		for (int i=0; i<newBoard.length; i++) {
+			newBoard[lookupRotate180[i]] = board[i];
 		}
+		
+		this.board = newBoard;
 	}
 	
 	public int[] compactColumn(final int[] column) {
@@ -191,17 +217,23 @@ public class Board implements Cloneable {
 		
 		column = compactColumn(column);
 		
+		boolean needsRecompacting = false;
+		
 		for (int i=0; i<column.length-1; i++) {
 			if (column[i] == column[i+1]) {
 				column[i] *= 2;
 				column[i+1] = 0;
+				needsRecompacting = true;
 				if (calcScore) {
 					score += column[i];
 				}
 			}
 		}
 		
-		return compactColumn(column);
+		if (needsRecompacting) {
+			column = compactColumn(column);
+		}
+		return column;
 	}
 	
 	private void slideUp(boolean calcScore) {
@@ -229,9 +261,9 @@ public class Board implements Cloneable {
 				slideUp(calcScore);
 				break;
 			case DOWN:
-				rotateClockwise(2);
+				rotate180();
 				slideUp(calcScore);
-				rotateClockwise(2);
+				rotate180();
 				break;
 			case LEFT: 
 				rotateClockwise();
@@ -298,16 +330,5 @@ public class Board implements Cloneable {
 		
 		return s;
 	}
-	
-	protected Object clone() throws CloneNotSupportedException {
-		Board clone = new Board();
-		int[] cloneBoard = new int[ROWS*COLS];
-		
-		System.arraycopy( board, 0, cloneBoard, 0, board.length );
-		
-		clone.setBoard(cloneBoard);
-		clone.setScore(score);
-		
-        return clone;
-    }
+
 }
