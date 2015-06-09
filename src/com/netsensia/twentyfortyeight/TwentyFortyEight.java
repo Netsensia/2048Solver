@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 7;
+	public static final int DEPTH = 6;
 	
 	public static void main(String args[]) {
 		
@@ -106,7 +106,7 @@ public class TwentyFortyEight {
 			
 			SolverMove solverMove = search.getBestMove(board);
 			
-			if (board.isValidMove(solverMove.getDirection())) {
+			if (board.isValidMoveFast(solverMove.getDirection())) {
 				board.makeMove(solverMove.getDirection(), true);				
 				board.placeRandomPiece();
 				

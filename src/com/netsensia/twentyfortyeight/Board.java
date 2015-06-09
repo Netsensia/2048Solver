@@ -28,18 +28,11 @@ public class Board {
 	private static int lookupRotate180[] = new int[ROWS*COLS];
 	private static boolean staticItemsInitialised = false;
 
-	public int getMovesMade() {
-		return movesMade;
-	}
-
-	public void setMovesMade(int movesMade) {
-		this.movesMade = movesMade;
-	}
-
 	private int board[] = new int[ROWS*COLS];
+	private static Board testBoard;
 	
 	private static Random r;
-	
+
 	public Board() {
 		if (!staticItemsInitialised) {
 			initStaticItems();
@@ -47,11 +40,27 @@ public class Board {
 	}
 	
 	public Board(int[] board, int score) {
+		replaceState(board, score);
+	}
+	
+	public void replaceState(int[] board, int score) {
 		System.arraycopy( board, 0, this.board, 0, board.length );
 		this.score = score;
 	}
 	
+	public int getMovesMade() {
+		return movesMade;
+	}
+
+	public void setMovesMade(int movesMade) {
+		this.movesMade = movesMade;
+	}
+	
 	private void initStaticItems() {
+		
+		// Must be done before creating testBoard to avoid stack overflow
+		staticItemsInitialised = true;
+		
 		for (int x=0; x<ROWS; x++) {
 			for (int y=0; y<COLS; y++) {
 				// New Y is current x, new x is the inverse of Y: COLS-y-1
@@ -71,9 +80,8 @@ public class Board {
 			}
 		}
 		
-		 r = new Random();
-		 
-		staticItemsInitialised = true;
+		r = new Random();
+		testBoard = new Board();
 	}
 	
 	public void setRandomStartPosition() {
@@ -132,12 +140,11 @@ public class Board {
 		
 		boolean isGameOver = true;
 		
-		Board newBoard;
-		newBoard = new Board(this.board, this.score);
-	
+		testBoard.replaceState(this.board, this.score);
+		
 		for (int i=Board.UP; i<=Board.LEFT; i++) {
-			newBoard.makeMove(i, false);
-			if (!Arrays.equals(newBoard.getBoard(), board)) {
+			testBoard.makeMove(i, false);
+			if (!Arrays.equals(testBoard.getBoard(), board)) {
 				isGameOver = false;
 				break;
 			}
@@ -147,16 +154,84 @@ public class Board {
 	}
 	
 	public boolean isValidMove(int direction) {
-		
-		Board newBoard = new Board(this.board, this.score);
 
-		newBoard.makeMove(direction, false);
+		testBoard.replaceState(this.board, this.score);
 		
-		if (Arrays.equals(board, newBoard.getBoard())) {
-			return false;
+		testBoard.makeMove(direction, false);
+		
+		return !Arrays.equals(board, testBoard.board);
+	}
+	
+	public boolean isValidMoveFast(int direction) {
+
+		switch (direction) {
+		case Board.RIGHT:
+			for (int y=0; y<ROWS; y++) {
+				boolean firstTileFound = false;
+				for (int x=0; x<COLS; x++) {
+					int piece = board[y*COLS+x];
+					if (firstTileFound) {
+						if (piece == 0) return true;
+						if (piece == board[y*COLS+x-1]) return true;
+					} else {
+						if (piece != 0) {
+							firstTileFound = true;
+						}
+					}
+				}
+			}
+			break;
+		case Board.LEFT:
+			for (int y=0; y<ROWS; y++) {
+				boolean firstTileFound = false;
+				for (int x=COLS-1; x>=0; x--) {
+					int piece = board[y*COLS+x];
+					if (firstTileFound) {
+						if (piece == 0) return true;
+						if (piece == board[y*COLS+x+1]) return true;
+					} else {
+						if (piece != 0) {
+							firstTileFound = true;
+						}
+					}
+				}
+			}
+			break;
+		case Board.UP:
+			for (int x=0; x<COLS; x++) {
+				boolean firstTileFound = false;
+				for (int y=ROWS-1; y>=0; y--) {
+					int piece = board[y*COLS+x];
+					if (firstTileFound) {
+						if (piece == 0) return true;
+						if (piece == board[(y+1)*COLS+x]) return true;
+					} else {
+						if (piece != 0) {
+							firstTileFound = true;
+						}
+					}
+				}
+			}
+			break;
+		case Board.DOWN:
+			for (int x=0; x<COLS; x++) {
+				boolean firstTileFound = false;
+				for (int y=0; y<ROWS; y++) {
+					int piece = board[y*COLS+x];
+					if (firstTileFound) {
+						if (piece == 0) return true;
+						if (piece == board[(y-1)*COLS+x]) return true;
+					} else {
+						if (piece != 0) {
+							firstTileFound = true;
+						}
+					}
+				}
+			}
+			break;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public void place(int x, int y, int number) {

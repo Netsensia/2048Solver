@@ -83,7 +83,7 @@ public class Search {
 		ArrayList<SolverMove> legalMoves = new ArrayList<SolverMove>();
 		
 		for (int i=Board.UP; i<=Board.LEFT; i++) {
-			if (board.isValidMove(i)) {
+			if (board.isValidMoveFast(i)) {
 					
 				SolverMove solverMove = new SolverMove(i);
 				legalMoves.add(solverMove);
@@ -272,36 +272,39 @@ public class Search {
 		int bestScore = Integer.MIN_VALUE;
 		
 		if (mover == 1) {
-			
-			ArrayList<SolverMove> legalMoves = getSolverMoves(board);
-			
-			if (legalMoves.size() == 0) {
-				return mover * evaluate(board);
-			}
-			
+
 			Board newBoard;
 			
-			for (SolverMove move : legalMoves) {
+			int count = 0;
+
+			for (int i=Board.UP; i<=Board.LEFT; i++) {
 				
-				newBoard = new Board(board.getBoard(), board.getScore());
-				newBoard.makeMove(move.getDirection(), true);
-				
-				int score = -negamax(newBoard, depth-1, -high, -low, -1, null);
-				
-				if (score > bestScore) {
-					bestScore = score;
-					if (moveString != null) {
-						moveString.setLength(0);
-						moveString.append(move);
+				if (board.isValidMoveFast(i)) {
+					count ++;
+					
+					newBoard = new Board(board.getBoard(), board.getScore());
+					newBoard.makeMove(i, true);
+					
+					int score = -negamax(newBoard, depth-1, -high, -low, -1, null);
+					
+					if (score > bestScore) {
+						bestScore = score;
+						if (moveString != null) {
+							SolverMove move = new SolverMove(i);
+							moveString.setLength(0);
+							moveString.append(move);
+						}
+					}
+					
+					low = Math.max(low, score);
+					
+					if (low >= high) {
+						return bestScore;
 					}
 				}
-				
-				low = Math.max(low, score);
-				
-				if (low >= high) {
-					return bestScore;
-				}
-					
+			}
+			if (count == 0) {
+				return mover * evaluate(board);
 			}
 		} else {
 			
@@ -330,10 +333,6 @@ public class Search {
 			}
 			
 			return (int)(totalScore / count);
-		}
-		
-		if (bestScore == Integer.MIN_VALUE) {
-			throw new Exception("Best score is not set for " + (mover == 1 ? "Solver" : "Blocker") + "\n" + board);
 		}
 		
 		return bestScore;
