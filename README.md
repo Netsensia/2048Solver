@@ -21,16 +21,15 @@ The table below shows the performance of the program running on a Mac Pro (late 
 	 ----------------------------------------------------------------------------------
 	| Search | Total | Average | Average | Average | High  | 8192 | 4096 | 2048 | 1024 |
 	| Depth  | Runs  | Move    | Game    | Score   | Score |      |      |      |      |
-	                   Time    | Time    |         |       |      |      |      |      |
+	                   Time(ms)| Time(ms)|         |       |      |      |      |      |
 	 ----------------------------------------------------------------------------------
-	     3     5000     0.04ms      41ms   27,524   105,084|  0.08| 13.98| 65.68| 93.90
-	     4     1000     0.15ms     201ms   33,697   125,492|  0.30| 24.70| 77.90| 97.00
-	     5     1000     0.59ms     952ms   44,482   125,280|  1.30| 46.10| 90.20| 98.70
-	     6     1000     2.27ms    4278ms   49,336   141,932|  1.80| 55.80| 92.40| 99.60
+	     3     5000      0.04       41      27,524  105,084|  0.08| 13.98| 65.68| 93.90
+	     4     1000      0.15      201      33,697  125,492|  0.30| 24.70| 77.90| 97.00 
+	     5     1000      0.59      952      44,482  125,280|  1.30| 46.10| 90.20| 98.70
+	     6     1000      2.27     4278      49,336  141,932|  1.80| 55.80| 92.40| 99.60
+	     7     1000      9.27    19636      59,140  164,272|  9.06| 67.55| 95.28| 98.49
 	 ----------------------------------------------------------------------------------
 	 	 	 
-The best score I've seen so far across all runs with the current version of the program is 146,484 on a depth 5 search.
-	     
 ## Program development
 
 The rest of this README was written while building the program so roughly documents the process of finding better ways to search for a solution. It's a bit of a hodge-podge, but shows some of the results obtained early on.
