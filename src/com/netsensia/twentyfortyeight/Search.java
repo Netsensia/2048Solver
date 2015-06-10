@@ -97,8 +97,9 @@ public class Search {
 	private void addBlockerMove(ArrayList<BlockerMove> blockerMoves, Board board, int x, int y, int piece) {
 		
 		BlockerMove blockerMove = new BlockerMove(x, y, piece);
-		// Slightly favour moves further to the right of the board 
-		blockerMove.setScore(x + (Math.random() * x));
+		
+		// Slightly prefer moves further to the right of the board 
+		blockerMove.score = (x + (Math.random() * x));
 		blockerMoves.add(blockerMove);	
 	}
 	
@@ -115,7 +116,7 @@ public class Search {
 			}
 		}
 		
-		Comparator<BlockerMove> moveComp = (BlockerMove m1, BlockerMove m2) -> (int)(m1.getScore() > m2.getScore() ? -1 : 1);
+		Comparator<BlockerMove> moveComp = (BlockerMove m1, BlockerMove m2) -> (int)(m1.score > m2.score ? -1 : 1);
 		Collections.sort(blockerMoves, moveComp);
 
 		return blockerMoves;
@@ -134,7 +135,7 @@ public class Search {
 		ArrayList<SolverMove> legalMoves = getSolverMoves(board);
 		
 		for (SolverMove move : legalMoves) {
-			int score = score(board, move.getDirection());
+			int score = score(board, move.direction);
 			if (score > bestScore) {
 				bestScore = score;
 				bestMove = move;
@@ -254,7 +255,7 @@ public class Search {
 		
 		ArrayList<SolverMove> legalMoves = getSolverMoves(board);
 		if (legalMoves.size() == 1) {
-			if (legalMoves.get(0).getDirection() == Board.LEFT) {
+			if (legalMoves.get(0).direction == Board.LEFT) {
 				score *= 0.75;
 			}
 		}
@@ -323,7 +324,7 @@ public class Search {
 			
 				count ++;
 				newBoard = new Board(board.getBoard(), board.getScore());
-				newBoard.place(move.getX(), move.getY(), move.getPiece());
+				newBoard.place(move.x, move.y, move.piece);
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
