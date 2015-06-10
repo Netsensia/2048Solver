@@ -269,29 +269,6 @@ public class Search {
 			}
 		}
 		
-		/*
-		 * Use this when wanting to test random moves
- 		   moves[0] = moves[r.nextInt(count)];
-		   moves[1] = -1;
-		 */		 
-		
-		/*
-		 * Use this when wanting to use the highest-scoring move method
-			 
-			int bestScore = -1;
-			int bestMove = -1;
-			for (int i=0; i<count; i++) {
-				Board newBoard = new Board(board.getBoard(), board.getScore());
-				newBoard.makeMove(moves[i], true);
-				if (newBoard.getScore() > bestScore) {
-					bestScore = newBoard.getScore();
-					bestMove = moves[i];
-				}
-			}
-			moves[0] = bestMove;
-			moves[1] = -1;
-		*/
-		
 		return moves;
 	}
 	
