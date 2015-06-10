@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class TwentyFortyEight {
 
 	public static final int RUNS = 1000;
-	public static final int DEPTH = 5;
+	public static final int DEPTH = 7;
 	
 	public static void main(String args[]) {
 		
@@ -104,14 +104,14 @@ public class TwentyFortyEight {
 			
 			search.setDepth(DEPTH);
 			
-			SolverMove solverMove = search.getBestMove(board);
+			int solverMove = search.getMoveFromSearch(board);
 			
-			if (board.isValidMoveFast(solverMove.direction)) {
-				board.makeMove(solverMove.direction, true);				
+			if (board.isValidMoveFast(solverMove)) {
+				board.makeMove(solverMove, true);				
 				board.placeRandomPiece();
 				
 			} else {
-				System.out.println("Illegal move: " + solverMove.direction);
+				System.out.println("Illegal move: " + solverMove);
 				System.out.println(board);
 				System.exit(1);
 			}
