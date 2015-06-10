@@ -9,17 +9,9 @@ public class Search {
 	
 	public static final int RANDOM_MOVES_TO_PLAY = 4;
 	
-	public static final int RANDOM = 0;
-	public static final int SCORE = 1;
-	public static final int SEARCH = 2;
-	
-	private boolean evaluateBlankSpaces = true;
-	
 	Random r = new Random();
 	
 	int depth = 1;
-
-	int mode = RANDOM;
 	
 	private final int MAX_TILE_VALUE = 16384;
 	
@@ -41,28 +33,12 @@ public class Search {
 		 **************************/
 	}
 	
-	public int getMode() {
-		return mode;
-	}
-
-	public void setMode(int mode) {
-		this.mode = mode;
-	}
-
 	public int getDepth() {
 		return depth;
 	}
 	
 	public void setDepth(int depth) {
 		this.depth = depth;
-	}
-	
-	public boolean isEvaluateBlankSpaces() {
-		return evaluateBlankSpaces;
-	}
-
-	public void setEvaluateBlankSpaces(boolean evaluateBlankSpaces) {
-		this.evaluateBlankSpaces = evaluateBlankSpaces;
 	}
 
 	public int score(Board board, int move) {
@@ -292,6 +268,29 @@ public class Search {
 				moves[count++] = i;
 			}
 		}
+		
+		/*
+		 * Use this when wanting to test random moves
+ 		   moves[0] = moves[r.nextInt(count)];
+		   moves[1] = -1;
+		 */		 
+		
+		/*
+		 * Use this when wanting to use the highest-scoring move method
+			 
+			int bestScore = -1;
+			int bestMove = -1;
+			for (int i=0; i<count; i++) {
+				Board newBoard = new Board(board.getBoard(), board.getScore());
+				newBoard.makeMove(moves[i], true);
+				if (newBoard.getScore() > bestScore) {
+					bestScore = newBoard.getScore();
+					bestMove = moves[i];
+				}
+			}
+			moves[0] = bestMove;
+			moves[1] = -1;
+		*/
 		
 		return moves;
 	}

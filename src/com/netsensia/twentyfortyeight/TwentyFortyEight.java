@@ -4,8 +4,9 @@ import java.text.NumberFormat;
 
 public class TwentyFortyEight {
 
-	public static final int RUNS = 1000;
-	public static final int DEPTH = 7;
+	public static final int RUNS = 100000;
+	public static final int DEPTH = 5;
+    public static final int POWER_MAX = 32;
 	
 	public static void main(String args[]) {
 		
@@ -13,11 +14,7 @@ public class TwentyFortyEight {
 		int totalScore = 0;
 		int highScore = 0;
 		int highestTileValue = 0;
-		int wins = 0;
-		int halfWins = 0;
-		int doubleWins = 0;
-		int quadWins = 0;
-		int doubleQuadWins = 0;
+		int wins[] = new int[POWER_MAX];
 		
 		long totalTime = 0;
 		long totalMoves = 0;
@@ -31,11 +28,12 @@ public class TwentyFortyEight {
 			
 			try {
 				thisTimeStart = System.currentTimeMillis();
+				
 				board = playGame();
+				// Final board position available via board.toString()
+
 				thisTime = System.currentTimeMillis() - thisTimeStart;
-				if (DEPTH > 7) {
-					System.out.println(board);
-				}
+
 				int score = board.getScore();
 				if (score > highScore) {
 					highScore = score;
@@ -47,40 +45,59 @@ public class TwentyFortyEight {
 					highestTileValue = t;
 				}
 				
-				if (t >= 16384) doubleQuadWins ++;
-				if (t >= 8192) quadWins ++;
-				if (t >= 4096) doubleWins ++;
-				if (t >= 2048) wins ++;
-				if (t >= 1024) halfWins ++;
-				
+				/**
+				 *  wins[3] = number of games with an 8 tile
+				 *  wins[11] = number of games with a 2048 tile
+				 */
+				for (int j=POWER_MAX-1; j>=3; j--) {
+					int tileValue = (int)Math.pow(2, j);
+					if (t >= tileValue) {
+						wins[j] ++;
+					}
+				}
+
 			} catch (Exception e) {
 				System.out.println(e);
 				System.exit(1);
 			}
 			
 			NumberFormat nf = NumberFormat.getInstance();
-			nf.setMaximumFractionDigits(2);
+			nf.setMaximumFractionDigits(4);
 			totalTime += thisTime;
 			totalMoves += board.getMovesMade();
 			double averageMoveTime = (double)thisTime / board.getMovesMade();
 			double totalAverageMoveTime = (double)totalTime / totalMoves;
 			
-			double winPercent = ((double)wins / i) * 100.0;
-			double halfWinPercent = ((double)halfWins / i) * 100.0;
-			double doubleWinPercent = ((double)doubleWins / i) * 100.0;
-			double quadWinPercent = ((double)quadWins / i) * 100.0;
-			double doubleQuadWinPercent = ((double)doubleQuadWins / i) * 100.0;
-			double averageTime = totalTime / i;
+			double averageTime = (double)totalTime / i;
 			int gamesLeft = RUNS - i;
 			double timeLeft = gamesLeft * averageTime;
 			
 			System.out.println("Time: " + thisTime + ", Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
 			System.out.println("Average move time: " + nf.format(averageMoveTime));
 			System.out.println("-----------------------------------------------------------------------------------------------------------");
-			System.out.println("Total Time: " + totalTime  + ", Average time: " + (int)averageTime + ", Average move time: " + nf.format(totalAverageMoveTime));
+			System.out.println("Total Time: " + totalTime  + ", Average time: " + nf.format(averageTime) + ", Average move time: " + nf.format(totalAverageMoveTime));
 			System.out.println("Average score = " + (totalScore / i) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-			System.out.println("16384s: " + doubleQuadWins + "(" + nf.format(doubleQuadWinPercent) + "%), 8192s: " + quadWins + "(" + nf.format(quadWinPercent) + "%), 4096s: " + doubleWins + "(" + nf.format(doubleWinPercent) + "%), 2048s: " + wins + "(" + nf.format(winPercent) + "%), 1024s: " + halfWins + "(" + nf.format(halfWinPercent) + "%)");
+			
+			StringBuilder sb = new StringBuilder();
+			for (int j=14; j>=8; j--) {
+				int tileValue = (int)Math.pow(2, j);
+				int winCount = wins[j];
+				sb.append(tileValue + "s: ");
+				
+				double winPercent = ((double)winCount / i) * 100.0;
+				
+				sb.append(nf.format(winPercent) + "%");
+				
+				if (j != 8) {
+					sb.append(" | ");
+				}
+				
+			}
 			System.out.println("-----------------------------------------------------------------------------------------------------------");
+			System.out.println(sb);
+			System.out.println("-----------------------------------------------------------------------------------------------------------");
+
+			
 			System.out.println("Estimated time left: " + (int)(timeLeft / 60000) + " minutes");
 			System.out.println("===========================================================================================================");
 		}
@@ -90,17 +107,10 @@ public class TwentyFortyEight {
 	public static Board playGame() throws Exception {
 		Board board = new Board();
 		board.setRandomStartPosition();
-		
-		if (DEPTH > 7) {
-			System.out.println("Starting position:");
-			System.out.println(board);
-		}
 
 		Search search = new Search();
 		
 		while (!board.isGameOver()) {
-			
-			search.setMode(Search.SEARCH);
 			
 			search.setDepth(DEPTH);
 			
