@@ -4,37 +4,14 @@ Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/
 
 ## Current program performance
 
-The table below shows the performance of the program running on a Mac Pro (late 2013).
+The table below shows the performance of the program running on a Mac Pro (late 2013) with six CPU cores.
 
-	 --------------------------------------------------------------------------------------------------------
-    |                                                  | % games where tile seen                             | 
-	|--------------------------------------------------------------------------------------------------------|
-	|Selection|Games |Average |Average |Average| High  | 8192   | 4096   | 2048   | 1024   |  512   |  256   | 
-	|Method   |Played|Move    |Game    |Score  | Score |        |        |        |        |        |        |
-	|         |      |Time(ms)|Time(ms)|       |       |        |        |        |        |        |        | 
-	|--------------------------------------------------------------------------------------------------------|
-	|Random   |100000| 0.006 *|     0.5|    890|  4,866|  0.00  |  0.00  |  0.00  |  0.00  | 0.011  |   5.132|
-	|HS       |100000| 0.004 *|     0.8|  2,728| 14,744|  0.00  |  0.00  |  0.00  |  0.33  |13.241  |  58.612|
-	|--------------------------------------------------------------------------------------------------------|
-	|Tree     |      |        |        |       |       |        |        |        |        |        |        | 
-	|Search   |      |        |        |       |       |        |        |        |        |        |        |
-	|Depth    |      |        |        |       |       |        |        |        |        |        |        |
-	|--------------------------------------------------------------------------------------------------------|
-	|    3    | 11000|  0.03 *|    31.5| 26,141|109,642|  0.0454| 11.8957| 62.2864| 91.9756| 98.8368| 99.9364|
-	|    4    |  1000|  0.15  |   201  | 33,697|125,492|  0.30  | 24.70  | 77.90  | 97.00  |        |        | 
-	|    5    |  1000|  0.59  |   952  | 44,482|125,280|  1.30  | 46.10  | 90.20  | 98.70  |        |        |
-	|    6    |  1000|  2.27  |  4278  | 49,336|141,932|  1.80  | 55.80  | 92.40  | 99.60  |        |        |
-	|    7    |  1000|  9.29  | 19406  | 58,121|164,272|  7.80  | 65.90  | 96.40  | 99.00  |        |        |
-	|    8    |   100| 27.38  | 59143  | 60,043|161,552|  4.00  | 71.00  | 99.00  |100.00  |        |        |
-	|    9    |   158|115.56  |289269  | 71,429|161,171| 15.557 | 82.9114| 98.1013| 99.3671|100.0000|100.0000|
-	|--------------------------------------------------------------------------------------------------------|
-	|Random: Each move is selected at random from the available moves.                                       |
-	|HS:     The move that scores the highest immediate number of points is always selected.                 |
-	|                                                                                                        |
-	|* Why is depth 3 search and a HS move selection faster than a random move?                              |
-	|  I've not looked into it yet.                                                                          |
-	 --------------------------------------------------------------------------------------------------------
-	 	 	 
+The six cores allow for six game threads to run concurrently. Each game thread runs approximately 1.5x slower than a single-threaded
+version of the program, but this is easily offset by running six in parallel, resulting in a 4-fold speed increase when
+gathering the figures in the table below.  
+
+https://docs.google.com/a/netsensia.com/spreadsheets/d/1a27_USetrVYMVeQkm9dlwSDNcRb3VnaPEN0MDuCi2Ls/edit?usp=sharing
+
 ## Next steps
 
 I want to get several games running in parallel on different CPU cores so I can ramp up the number of samples taken for each

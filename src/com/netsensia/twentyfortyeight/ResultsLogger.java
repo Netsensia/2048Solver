@@ -5,12 +5,14 @@ import java.text.NumberFormat;
 public class ResultsLogger {
 
 	public static final int POWER_MAX = 32;
+	
+	public static final int POWER_MIN = 3;
     
-	private int totalScore = 0;
+	private long totalScore = 0;
 	private int highScore = 0;
 	private int highestTileValue = 0;
 	private int wins[] = new int[POWER_MAX];
-	private long totalTime = 0;
+	private long totalGameTime = 0;
 	private long totalMoves = 0;
 	private int gameNumber = 0;
 	private int runs;
@@ -41,7 +43,7 @@ public class ResultsLogger {
 		 *  wins[3] = number of games with an 8 tile
 		 *  wins[11] = number of games with a 2048 tile
 		 */
-		for (int j=POWER_MAX-1; j>=3; j--) {
+		for (int j=POWER_MAX-1; j>=POWER_MIN; j--) {
 			int tileValue = (int)Math.pow(2, j);
 			if (t >= tileValue) {
 				wins[j] ++;
@@ -52,26 +54,24 @@ public class ResultsLogger {
 		long realTime = System.currentTimeMillis() - this.startTime;
 		
 		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumFractionDigits(2);
-		totalTime += gameTime;
+		nf.setMaximumFractionDigits(4);
+		totalGameTime += gameTime;
 		totalMoves += board.getMovesMade();
 		double averageMoveTime = (double)gameTime / board.getMovesMade();
-		double totalAverageMoveTime = (double)totalTime / totalMoves;
 		
-		double averageTime = (double)totalTime / gameNumber;
+		double averageTime = (double)realTime / gameNumber;
 		int gamesLeft = runs - gameNumber;
 		double timeLeft = gamesLeft * averageTime;
 		
 		System.out.println("Time: " + gameTime + ", Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
-		System.out.println("Average move time: " + nf.format(averageMoveTime));
+		System.out.println("Game average move time: " + nf.format(averageMoveTime));
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println("Total real time: " + realTime);
-		System.out.println("Total game Time: " + totalTime  + ", Average game time: " + nf.format(averageTime) + ", Average move time: " + nf.format(totalAverageMoveTime));
+		System.out.println("Total real time: " + realTime + ", Total game time: " + totalGameTime  + ", Total game moves: " + nf.format(totalMoves));
+		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
 		System.out.println("Average score = " + (totalScore / gameNumber) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
 	
-		nf.setMaximumFractionDigits(4);
 		StringBuilder sb = new StringBuilder();
-		for (int j=14; j>=8; j--) {
+		for (int j=14; j>=POWER_MIN; j--) {
 			int tileValue = (int)Math.pow(2, j);
 			int winCount = wins[j];
 			sb.append(tileValue + "s: ");
@@ -80,7 +80,7 @@ public class ResultsLogger {
 			
 			sb.append(nf.format(winPercent) + "%");
 			
-			if (j != 8) {
+			if (j != POWER_MIN) {
 				sb.append(" | ");
 			}
 			
