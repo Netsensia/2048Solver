@@ -25,7 +25,6 @@ public class SearchTest {
 		board.setBoard(position);
 		
 		Search search = new Search();
-		search.setEvaluateBlankSpaces(false);
 		
 		assertEquals(51, search.evaluate(board));
 	}
