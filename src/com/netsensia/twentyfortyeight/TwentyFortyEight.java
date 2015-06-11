@@ -2,7 +2,7 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int DEPTH = 4;
+	public static final int DEPTH = 5;
 	
 	// Set this to the number of CPU cores
 	// Any higher than that and no additional benefit is likely
