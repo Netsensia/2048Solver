@@ -29,10 +29,21 @@ public class Board {
 	private static boolean staticItemsInitialised = false;
 
 	private int board[] = new int[ROWS*COLS];
-	private static Board testBoard;
+	
+	private Board testBoard;
 	
 	private static Random r;
+	
+	private long gameStartMillis;
 
+	public long getGameStartMillis() {
+		return gameStartMillis;
+	}
+
+	public void setGameStartMillis(long gameStartMillis) {
+		this.gameStartMillis = gameStartMillis;
+	}
+	
 	public Board() {
 		if (!staticItemsInitialised) {
 			initStaticItems();
@@ -40,6 +51,9 @@ public class Board {
 	}
 	
 	public Board(int[] board, int score) {
+		if (!staticItemsInitialised) {
+			initStaticItems();
+		}
 		replaceState(board, score);
 	}
 	
@@ -56,7 +70,7 @@ public class Board {
 		this.movesMade = movesMade;
 	}
 	
-	private void initStaticItems() {
+	public static void initStaticItems() {
 		
 		// Must be done before creating testBoard to avoid stack overflow
 		staticItemsInitialised = true;
@@ -81,7 +95,6 @@ public class Board {
 		}
 		
 		r = new Random();
-		testBoard = new Board();
 	}
 	
 	public void setRandomStartPosition() {
@@ -140,7 +153,11 @@ public class Board {
 		
 		boolean isGameOver = true;
 		
-		testBoard.replaceState(this.board, this.score);
+		if (testBoard == null) {
+			testBoard = new Board(this.board, this.score);
+		} else {
+			testBoard.replaceState(this.board, this.score);
+		}
 		
 		for (int i=Board.UP; i<=Board.LEFT; i++) {
 			testBoard.makeMove(i, false);
@@ -155,7 +172,11 @@ public class Board {
 	
 	public boolean isValidMove(int direction) {
 
-		testBoard.replaceState(this.board, this.score);
+		if (testBoard == null) {
+			testBoard = new Board(this.board, this.score);
+		} else {
+			testBoard.replaceState(this.board, this.score);
+		}
 		
 		testBoard.makeMove(direction, false);
 		

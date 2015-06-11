@@ -215,7 +215,9 @@ public class Search {
 						}
 					}
 					
-					low = Math.max(low, score);
+					if (score > low) {
+						low = score;
+					}
 					
 					if (low >= high) {
 						return bestScore;
