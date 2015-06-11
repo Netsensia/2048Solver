@@ -2,49 +2,43 @@
 
 Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/).
 
-2s and 4s are placed randomly on the board and after each placement it is the player's turn to move. Available moves are left, down, up or right. 
-
-All the tiles slide in the direction chosen and identical numbers merge to become a number twice as large.
-
-Numbers at the far end of the direction of swipe are merged first, so, for example, a left swipe in a row of 2,2,2,0 will result in the row becoming 4,2,0,0 - once the 4 is made, the other 2 doesn't get in on the act. Merged cells cannot merge again on the same move.
-
-The aim is to merge two 1024 tiles into a 2048 tile. Point scoring is simple, each time a tile is created from a merger, the value of the new tile is added to the score, so merging two 2s will give earn four points.
-
-The examples in this README will allow you to figure out exactly what happens.
-
 ## Current program performance
 
 The table below shows the performance of the program running on a Mac Pro (late 2013).
 
-	 ----------------------------------------------------------------------------------------------------------------
-    |                                                         | % games where tile seen                              | 
-	|----------------------------------------------------------------------------------------------------------------|
-	| Selection| Total | Average | Average | Average  | High  | 8192   | 4096   | 2048   | 1024   |  512   |  256    | 
-	| Method   | Runs  | Move    | Game    | Score    | Score |        |        |        |        |        |         |
-	|          |       | Time(ms)| Time(ms)|          |       |        |        |        |        |        |         | 
-	|----------------------------------------------------------------------------------------------------------------|
-	|Random    |100000 |  0.006 *|      0.51|      890|  4,866|  0.00  |  0.00  |  0.00  |  0.00  | 0.011  |   5.132 |
-	|HS        |100000 |  0.004 *|      0.77|    2,728| 14,744|  0.00  |  0.00  |  0.00  |  0.33  |13.241  |  58.612 |
-	|----------------------------------------------------------------------------------------------------------------|
-	|Tree      |       |         |          |         |       |        |        |        |        |        |         | 
-	|Search    |       |         |          |         |       |        |        |        |        |        |         |
-	|Depth     |       |         |          |         |       |        |        |        |        |        |         |
-	|----------------------------------------------------------------------------------------------------------------|
-	|    3       11000 |   0.03 *|     31.50|   26,141|109,642|  0.0454| 11.8957| 62.2864 | 91.9756| 98.8368| 99.9364|
-	|    4        1000 |   0.15  |    201   |   33,697|125,492|  0.30  | 24.70  | 77.90   | 97.00  |        |        | 
-	|    5        1000 |   0.59  |    952   |   44,482|125,280|  1.30  | 46.10  | 90.20   | 98.70  |        |        |
-	|    6        1000 |   2.27  |   4278   |   49,336|141,932|  1.80  | 55.80  | 92.40   | 99.60  |        |        |
-	|    7        1000 |   9.29  |  19406   |   58,121|164,272|  7.80  | 65.90  | 96.40   | 99.00  |        |        |
-	|    8         100 |  27.38  |  59143   |   60,043|161,552|  4.00  | 71.00  | 99.00   |100.00  |        |        |
-	|----------------------------------------------------------------------------------------------------------------|
-	|Random: Each move is selected at random from the available moves.                                               |
-	|HS:     The move that scores the highest immediate number of points is always selected.                         |
-	|                                                                                                                |
-	|* Why is depth 3 search and a HS move selection faster than a random move?                                      |
-	|  I've not looked into it yet.                                                                                  |
-	 ----------------------------------------------------------------------------------------------------------------
+	 ---------------------------------------------------------------------------------------------------------------
+    |                                                         | % games where tile seen                             | 
+	|---------------------------------------------------------------------------------------------------------------|
+	| Selection| Total | Average | Average | Average  | High  | 8192   | 4096   | 2048   | 1024   |  512   |  256   | 
+	| Method   | Runs  | Move    | Game    | Score    | Score |        |        |        |        |        |        |
+	|          |       | Time(ms)| Time(ms)|          |       |        |        |        |        |        |        | 
+	|---------------------------------------------------------------------------------------------------------------|
+	|Random    |100000 |  0.006 *|      0.51|      890|  4,866|  0.00  |  0.00  |  0.00  |  0.00  | 0.011  |   5.132|
+	|HS        |100000 |  0.004 *|      0.77|    2,728| 14,744|  0.00  |  0.00  |  0.00  |  0.33  |13.241  |  58.612|
+	|---------------------------------------------------------------------------------------------------------------|
+	|Tree      |       |         |          |         |       |        |        |        |        |        |        | 
+	|Search    |       |         |          |         |       |        |        |        |        |        |        |
+	|Depth     |       |         |          |         |       |        |        |        |        |        |        |
+	|---------------------------------------------------------------------------------------------------------------|
+	|    3     | 11000 |   0.03 *|     31.50|   26,141|109,642|  0.0454| 11.8957| 62.2864| 91.9756| 98.8368| 99.9364|
+	|    4     |  1000 |   0.15  |    201   |   33,697|125,492|  0.30  | 24.70  | 77.90  | 97.00  |        |        | 
+	|    5     |  1000 |   0.59  |    952   |   44,482|125,280|  1.30  | 46.10  | 90.20  | 98.70  |        |        |
+	|    6     |  1000 |   2.27  |   4278   |   49,336|141,932|  1.80  | 55.80  | 92.40  | 99.60  |        |        |
+	|    7     |  1000 |   9.29  |  19406   |   58,121|164,272|  7.80  | 65.90  | 96.40  | 99.00  |        |        |
+	|    8     |   100 |  27.38  |  59143   |   60,043|161,552|  4.00  | 71.00  | 99.00  |100.00  |        |        |
+	|    9     |   158 | 115.56  | 289269   |   71,429|161,171| 15.557 | 82.9114| 98.1013| 99.3671|100.0000|100.0000|
+	|---------------------------------------------------------------------------------------------------------------|
+	|Random: Each move is selected at random from the available moves.                                              |
+	|HS:     The move that scores the highest immediate number of points is always selected.                        |
+	|                                                                                                               |
+	|* Why is depth 3 search and a HS move selection faster than a random move?                                     |
+	|  I've not looked into it yet.                                                                                 |
+	 ---------------------------------------------------------------------------------------------------------------
 	 	 	 
+## Next steps
 
+I want to get several games running in parallel on different CPU cores so I can ramp up the number of samples taken for each
+search depth.
 	 	 	 
 ## Program development
 
