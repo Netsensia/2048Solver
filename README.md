@@ -11,7 +11,7 @@ version of the program, but this is easily offset by running six in parallel, re
 gathering the figures in the table below.  
 
 ![Program Results]
-(https://www.dropbox.com/s/659nof4fxqygg0r/Screenshot%202015-06-11%2022.32.05.png?dl=0)
+(https://www.dropbox.com/s/659nof4fxqygg0r/Screenshot%202015-06-11%2022.32.05.png?dl=1)
 
 https://docs.google.com/a/netsensia.com/spreadsheets/d/1a27_USetrVYMVeQkm9dlwSDNcRb3VnaPEN0MDuCi2Ls/edit?usp=sharing
 
