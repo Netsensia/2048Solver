@@ -67,6 +67,7 @@ public class ResultsLogger {
 		System.out.println("Game average move time: " + nf.format(averageMoveTime));
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
 		System.out.println("Total real time: " + realTime + ", Total game time: " + totalGameTime  + ", Total game moves: " + nf.format(totalMoves));
+		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));
 		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
 		System.out.println("Average score = " + (totalScore / gameNumber) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
 	
