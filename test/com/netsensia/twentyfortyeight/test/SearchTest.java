@@ -43,13 +43,12 @@ public class SearchTest {
 		board.setBoard(position);
 		
 		Search search = new Search();
-		search.setEvaluateBlankSpaces(false);
 		
 		StringBuilder moves = new StringBuilder();
 		
 		search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
 		search.setDepth(1);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board).getDirection());
+		assertEquals(Board.RIGHT, search.getMoveFromSearch(board));
 		
 	}
 	

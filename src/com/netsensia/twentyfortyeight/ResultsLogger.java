@@ -63,8 +63,8 @@ public class ResultsLogger {
 		int gamesLeft = runs - gameNumber;
 		double timeLeft = gamesLeft * averageTime;
 		
-		System.out.println("Time: " + gameTime + ", Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
-		System.out.println("Game average move time: " + nf.format(averageMoveTime));
+		System.out.println("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
+		System.out.println("Game time: " + gameTime + ", average move time: " + nf.format(averageMoveTime));
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
 		System.out.println("Total real time: " + realTime + ", Total game time: " + totalGameTime  + ", Total game moves: " + nf.format(totalMoves));
 		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));

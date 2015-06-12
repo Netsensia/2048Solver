@@ -183,7 +183,7 @@ public class Search {
 	   		
 	}
 	
-	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuffer returnMove) throws Exception {
+	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder returnMove) throws Exception {
 		
 		if (depth == 0) {
 			return mover * evaluate(board);
@@ -285,7 +285,7 @@ public class Search {
 				return legalMoves[0];
 			}
 		
-		StringBuffer move = new StringBuffer();
+		StringBuilder move = new StringBuilder();
 		
 		negamax(board, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, move);
 		
