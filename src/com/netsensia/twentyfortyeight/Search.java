@@ -1,8 +1,7 @@
 package com.netsensia.twentyfortyeight;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 public class Search {
@@ -55,34 +54,33 @@ public class Search {
 		return bestScore;
 	}
 	
-	private void addBlockerMove(ArrayList<BlockerMove> blockerMoves, Board board, int x, int y, int piece) {
+	public int[] getOrderedBlockerMoves(Board board) {
 		
-		BlockerMove blockerMove = new BlockerMove(x, y, piece);
-		
-		// Slightly prefer moves further to the right of the board 
-		blockerMove.score = (x + (Math.random() * x));
-		blockerMoves.add(blockerMove);	
-	}
-	
-	public ArrayList<BlockerMove> getOrderedBlockerMoves(Board board) {
-		
-		ArrayList<BlockerMove> blockerMoves = new ArrayList<BlockerMove>();
+		int moves[] = new int[board.countEmptySquares() * 2];
+
+		int count = 0;
+		int maxBonus = (Board.COLS * 2) - 2;
 		
 		for (int x=0; x<Board.COLS; x++) {
+			
+			int bonus = maxBonus - (int)(x + (Math.random() * x));
+			
 			for (int y=0; y<Board.ROWS; y++) {
 				if (board.getSquare(x, y) == 0) {
-					addBlockerMove(blockerMoves, board, x, y, 2);
-					addBlockerMove(blockerMoves, board, x, y, 4);
+					
+					moves[count++] = y * Board.COLS + x + 2000 + (bonus * 10000);
+					moves[count++] = y * Board.COLS + x + 4000 + (bonus * 10000);
+					
 				}
 			}
 		}
+
+		Arrays.sort(moves);
 		
-		Comparator<BlockerMove> moveComp = (BlockerMove m1, BlockerMove m2) -> (int)(m1.score > m2.score ? -1 : 1);
-		Collections.sort(blockerMoves, moveComp);
-
-		return blockerMoves;
+		return moves;
+		
 	}
-
+	
 	public int evaluate(Board board) {
 		int score = board.getScore();
 		double weight = 0.0;
@@ -229,9 +227,9 @@ public class Search {
 			}
 		} else {
 			
-			ArrayList<BlockerMove> legalMoves = getOrderedBlockerMoves(board);
+			int[] legalMoves = getOrderedBlockerMoves(board);
 			
-			if (legalMoves.size() == 0) {
+			if (legalMoves.length == 0) {
 				return mover * evaluate(board);
 			}
 
@@ -240,11 +238,11 @@ public class Search {
 
 			Board newBoard;
 			
-			for (BlockerMove move : legalMoves) {
+			for (int move : legalMoves) {
 			
 				count ++;
 				newBoard = new Board(board.getBoard(), board.getScore());
-				newBoard.place(move.x, move.y, move.piece);
+				newBoard.place(move % 1000, move % 10000 / 1000);
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				

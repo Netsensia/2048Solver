@@ -51,23 +51,4 @@ public class SearchTest {
 		assertEquals(Board.RIGHT, search.getMoveFromSearch(board));
 		
 	}
-	
-	@Test
-	public void testGetOrderedBlockerMoves() throws Exception {
-		int[] position = {
-    	    	 2, 0, 4, 4,
-    	    	 2, 8, 8,16,
-    	    	 4, 0, 8, 2,
-    	    	 0, 4,32,64,
-    	    	};
-		
-		Board board = new Board();
-		board.setBoard(position);
-		
-		Search search = new Search();
-		
-		ArrayList<BlockerMove> moves = search.getOrderedBlockerMoves(board);
-
-	}
-	
 }

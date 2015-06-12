@@ -57,6 +57,16 @@ public class Board {
 		replaceState(board, score);
 	}
 	
+	public int countEmptySquares() {
+		int count = 0;
+		for (int i=0; i<ROWS*COLS; i++) {
+			if (board[i] == 0) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
 	public void replaceState(int[] board, int score) {
 		System.arraycopy( board, 0, this.board, 0, board.length );
 		this.score = score;
@@ -257,6 +267,10 @@ public class Board {
 	
 	public void place(int x, int y, int number) {
 		this.board[y*ROWS+x] = number;
+	}
+	
+	public void place(int index, int number) {
+		this.board[index] = number;
 	}
 	
 	public int getSquare(int x, int y) {

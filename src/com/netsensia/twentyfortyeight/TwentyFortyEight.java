@@ -2,12 +2,10 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int DEPTH = 4;
+	public static final int DEPTH = 5;
 	
-	// Two threads appears to be optimal. Even on a true 6 core
-	// machine, the code can end up being slower with more than
-	// two threads.
-	public static final int NUM_THREADS = 2;
+	// A good value for this would be the number of CPU cores
+	public static final int NUM_THREADS = 12;
 	
 	public static final int RUNS = 1000;
     public static final int POWER_MAX = 32;
