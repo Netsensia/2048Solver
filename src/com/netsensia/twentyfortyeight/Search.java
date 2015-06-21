@@ -60,12 +60,13 @@ public class Search {
 
 		int count = 0;
 		int maxBonus = (Board.COLS * 2) - 2;
+		int bonus, y;
 		
 		for (int x=0; x<Board.COLS; x++) {
 			
-			int bonus = maxBonus - (int)(x + (Math.random() * x));
+			bonus = maxBonus - (int)(x + (Math.random() * x));
 			
-			for (int y=0; y<Board.ROWS; y++) {
+			for (y=0; y<Board.ROWS; y++) {
 				if (board.getSquare(x, y) == 0) {
 					
 					moves[count++] = y * Board.COLS + x + 2000 + (bonus * 10000);
@@ -114,11 +115,8 @@ public class Search {
 					if (x < Board.COLS - 1) {
 						int neighbourPiece = board.getSquare(x + 1, y);
 				
-						if (neighbourPiece > 0) {
-	
-							if (Math.abs(log2Lookup[piece] - log2Lookup[neighbourPiece]) > 1) {
-								closeValues = false;
-							}
+						if (neighbourPiece != 0 && neighbourPiece != piece) {
+							closeValues = false;
 						}
 					}
 					
@@ -135,8 +133,44 @@ public class Search {
 			}
 		}
 		
+		int rowTouchers = getRowTouchers(board);
+		int columnTouchers = getColumnTouchers(board);
+		
+		// Bonus for having tiles of the same value next to each other
+		score += (Math.max(rowTouchers, columnTouchers));
+		
+		if (rowTouchers + columnTouchers == 0 && board.isFull()) {
+			// Game over
+			score *= 0.8;
+		}
+		
+		return score; 
+	   		
+	}
+	
+	private int getRowTouchers(Board board) {
 		int lastPiece;
 		int rowTouchers = 0;
+		
+		for (int y=0; y<Board.ROWS; y++) {
+			lastPiece = 0;
+			for (int x=0; x<Board.COLS; x++) {
+				int piece = board.getSquare(x,y);
+				if (piece > 0) {
+					if (piece == lastPiece) {
+						rowTouchers += piece;
+						lastPiece = 0;
+					} else {
+						lastPiece = piece;
+					}
+				}
+			}
+		}
+		return rowTouchers;
+	}
+	
+	private int getColumnTouchers(Board board) {
+		int lastPiece;
 		int columnTouchers = 0;
 		
 		for (int x=0; x<Board.COLS; x++) {
@@ -154,31 +188,7 @@ public class Search {
 			}
 		}
 		
-		for (int y=0; y<Board.ROWS; y++) {
-			lastPiece = 0;
-			for (int x=0; x<Board.COLS; x++) {
-				int piece = board.getSquare(x,y);
-				if (piece > 0) {
-					if (piece == lastPiece) {
-						rowTouchers += piece;
-						lastPiece = 0;
-					} else {
-						lastPiece = piece;
-					}
-				}
-			}
-		}
-		
-		// Bonus for having tiles of the same value next to each other
-		score += (Math.max(rowTouchers,  columnTouchers));
-		
-		if (rowTouchers + columnTouchers == 0 && board.isFull()) {
-			// Game over
-			score *= 0.8;
-		}
-		
-		return score; 
-	   		
+		return columnTouchers;
 	}
 	
 	public int negamax(Board board, final int depth, int low, int high, int mover, StringBuilder returnMove) throws Exception {

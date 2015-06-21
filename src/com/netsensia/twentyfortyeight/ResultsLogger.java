@@ -63,31 +63,39 @@ public class ResultsLogger {
 		int gamesLeft = runs - gameNumber;
 		double timeLeft = gamesLeft * averageTime;
 		
+		int averageScore = (int)(totalScore / gameNumber);
+		
 		System.out.println("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
 		System.out.println("Game time: " + gameTime + ", average move time: " + nf.format(averageMoveTime));
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println("Total real time: " + realTime + ", Total game time: " + totalGameTime  + ", Total game moves: " + nf.format(totalMoves));
+		System.out.println("Total real time: " + nf.format(realTime) + ", Total game time: " + nf.format(totalGameTime)  + ", Total game moves: " + nf.format(totalMoves));
 		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));
 		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
-		System.out.println("Average score = " + (totalScore / gameNumber) + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-	
-		StringBuilder sb = new StringBuilder();
+		System.out.println("Average score = " + averageScore + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+		
+		StringBuilder human = new StringBuilder();
+		StringBuilder csv = new StringBuilder();
 		for (int j=14; j>=POWER_MIN; j--) {
 			int tileValue = (int)Math.pow(2, j);
 			int winCount = wins[j];
-			sb.append(tileValue + "s: ");
+			human.append(tileValue + "s: ");
 			
 			double winPercent = ((double)winCount / gameNumber) * 100.0;
 			
-			sb.append(nf.format(winPercent) + "%");
+			human.append(nf.format(winPercent) + "%");
+			csv.append(nf.format(winPercent) + "%,");
 			
 			if (j != POWER_MIN) {
-				sb.append(" | ");
+				human.append(" | ");
 			}
-			
 		}
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println(sb);
+		System.out.println(human);
+		System.out.println("-----------------------------------------------------------------------------------------------------------");
+		System.out.println("CSV");
+		System.out.println("---");
+		System.out.println(gameNumber + "," + realTime + "," + totalGameTime + "," + totalMoves + "," + averageScore + "," + highScore);
+		System.out.println(csv);
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
 		
 		System.out.println("Estimated time left: " + nf.format(timeLeft / 60000) + " minutes");

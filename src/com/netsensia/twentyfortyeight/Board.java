@@ -276,6 +276,10 @@ public class Board {
 	public int getSquare(int x, int y) {
 		return board[y*COLS+x];
 	}
+
+	public int getSquare(int square) {
+		return board[square];
+	}
 	
 	public void rotateClockwise() {
 		int[] newBoard = new int[ROWS*COLS];
