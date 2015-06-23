@@ -2,9 +2,9 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int DEPTH = 10;
+	public static final int DEPTH = 5;
 	
-	public static final int RUNS = 1000;
+	public static final int RUNS = 50000;
     public static final int POWER_MAX = 32;
 	
 	public static void main(String args[]) {

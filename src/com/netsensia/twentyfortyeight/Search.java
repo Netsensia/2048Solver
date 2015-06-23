@@ -82,56 +82,10 @@ public class Search {
 		
 	}
 	
-	public int evaluate(Board board) {
+	public final int evaluate(Board board) {
 		int score = board.getScore();
-		double weight = 0.0;
-
-		for (int x=0; x<Board.COLS; x++) {
-			
-			for (int y=0; y<Board.ROWS; y++) {
-				
-				int piece = board.getSquare(x, y);
-				
-				if (piece > 0) {
-					
-					// Get large numbers to the right-hand side
-					weight = squareLookup[x];
-					
-					boolean ordered = true;
-					
-					// Are all pieces below this one of a higher value?
-					for (int i=y+1; i<Board.ROWS; i++) {
-						int neighbourPiece = board.getSquare(x, i);
-						
-						if (piece > neighbourPiece) {
-							ordered = false;
-							break;
-						}
-						
-					}
-					
-					boolean closeValues = true;
-					
-					if (x < Board.COLS - 1) {
-						int neighbourPiece = board.getSquare(x + 1, y);
-				
-						if (neighbourPiece != 0 && neighbourPiece != piece) {
-							closeValues = false;
-						}
-					}
-					
-					if (ordered) {
-						weight *= 1.25;
-					}
-					
-					if (closeValues) {
-						weight *= 1.25;
-					}
-					
-					score += (int)(piece * weight);
-				}
-			}
-		}
+		
+		score = getRightness(board, score);
 		
 		int rowTouchers = getRowTouchers(board);
 		int columnTouchers = getColumnTouchers(board);
@@ -147,8 +101,65 @@ public class Search {
 		return score; 
 	   		
 	}
+
+	private final int getRightness(Board board, int score) {
+
+		for (int x=0; x<Board.COLS; x++) {
+			
+			for (int y=0; y<Board.ROWS; y++) {
+				
+				score = scoreBonus(board, score, x, y);
+			}
+		}
+		return score;
+	}
+
+	private final int scoreBonus(Board board, int score, int x, int y) {
+		double weight;
+		int piece = board.getSquare(x, y);
+		
+		if (piece > 0) {
+			
+			// Get large numbers to the right-hand side
+			weight = squareLookup[x];
+			
+			boolean ordered = true;
+			
+			// Are all pieces below this one of a higher value?
+			for (int i=y+1; i<Board.ROWS; i++) {
+				int neighbourPiece = board.getSquare(x, i);
+				
+				if (piece > neighbourPiece) {
+					ordered = false;
+					break;
+				}
+				
+			}
+			
+			boolean closeValues = true;
+			
+			if (x < Board.COLS - 1) {
+				int neighbourPiece = board.getSquare(x + 1, y);
+		
+				if (neighbourPiece != 0 && neighbourPiece != piece) {
+					closeValues = false;
+				}
+			}
+			
+			if (ordered) {
+				weight *= 1.25;
+			}
+			
+			if (closeValues) {
+				weight *= 1.25;
+			}
+			
+			score += (int)(piece * weight);
+		}
+		return score;
+	}
 	
-	private int getRowTouchers(Board board) {
+	private final int getRowTouchers(Board board) {
 		int lastPiece;
 		int rowTouchers = 0;
 		
@@ -169,7 +180,7 @@ public class Search {
 		return rowTouchers;
 	}
 	
-	private int getColumnTouchers(Board board) {
+	private final int getColumnTouchers(Board board) {
 		int lastPiece;
 		int columnTouchers = 0;
 		

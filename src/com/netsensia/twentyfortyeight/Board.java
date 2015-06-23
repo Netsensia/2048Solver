@@ -273,7 +273,7 @@ public class Board {
 		this.board[index] = number;
 	}
 	
-	public int getSquare(int x, int y) {
+	public final int getSquare(int x, int y) {
 		return board[y*COLS+x];
 	}
 
