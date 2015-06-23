@@ -40,9 +40,8 @@ public class GameRunner implements Runnable {
 			try {
 				int solverMove = search.getMoveFromSearch(board);
 				if (board.isValidMoveFast(solverMove)) {
-					board.makeMove(solverMove, true);				
+					board.makeMove(solverMove, true);
 					board.placeRandomPiece();
-					
 				} else {
 					System.out.println("Illegal move: " + solverMove);
 					System.out.println(board);
