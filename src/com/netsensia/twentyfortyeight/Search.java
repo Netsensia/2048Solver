@@ -141,7 +141,7 @@ public class Search {
 			if (x < Board.COLS - 1) {
 				int neighbourPiece = board.getSquare(x + 1, y);
 		
-				if (neighbourPiece != 0 && neighbourPiece != piece) {
+				if (neighbourPiece != 0 && Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece]) > 1) {
 					closeValues = false;
 				}
 			}
