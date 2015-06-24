@@ -4,7 +4,7 @@ public class GameRunner implements Runnable {
 
 	private ResultsLogger resultsLogger;
 	
-	private int depth = 3;
+	private int depth;
 	
     public int getDepth() {
 		return depth;

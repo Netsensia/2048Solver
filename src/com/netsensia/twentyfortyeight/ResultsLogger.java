@@ -4,6 +4,16 @@ import java.text.NumberFormat;
 
 public class ResultsLogger {
 
+	private boolean isEveryGamePrinted = true;
+	
+	public boolean isEveryGamePrinted() {
+		return isEveryGamePrinted;
+	}
+
+	public void setIsEveryGamePrinted(boolean isSingleRun) {
+		this.isEveryGamePrinted = isSingleRun;
+	}
+
 	public static final int POWER_MAX = 32;
 	
 	public static final int POWER_MIN = 3;
@@ -65,14 +75,6 @@ public class ResultsLogger {
 		
 		int averageScore = (int)(totalScore / gameNumber);
 		
-		System.out.println("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
-		System.out.println("Game time: " + gameTime + ", average move time: " + nf.format(averageMoveTime));
-		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println("Total real time: " + nf.format(realTime) + ", Total game time: " + nf.format(totalGameTime)  + ", Total game moves: " + nf.format(totalMoves));
-		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));
-		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
-		System.out.println("Average score = " + averageScore + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
-		
 		StringBuilder human = new StringBuilder();
 		StringBuilder csv = new StringBuilder();
 		for (int j=14; j>=POWER_MIN; j--) {
@@ -89,6 +91,35 @@ public class ResultsLogger {
 				human.append(" | ");
 			}
 		}
+		
+		if (isEveryGamePrinted) {
+			printResults(board, gameTime, realTime, nf, averageMoveTime,
+					timeLeft, averageScore, human, csv);
+		}
+			
+		if (gameNumber == runs) {
+			if (isEveryGamePrinted) {
+				System.exit(0);
+			} else {
+				printResults(board, gameTime, realTime, nf, averageMoveTime,
+						timeLeft, averageScore, human, csv);
+			}
+		}
+		
+	}
+
+	private void printResults(Board board, long gameTime, long realTime,
+			NumberFormat nf, double averageMoveTime, double timeLeft,
+		    int averageScore, StringBuilder human, StringBuilder csv) {
+		
+		System.out.println("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
+		System.out.println("Game time: " + gameTime + ", average move time: " + nf.format(averageMoveTime));
+		System.out.println("-----------------------------------------------------------------------------------------------------------");
+		System.out.println("Total real time: " + nf.format(realTime) + ", Total game time: " + nf.format(totalGameTime)  + ", Total game moves: " + nf.format(totalMoves));
+		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));
+		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
+		System.out.println("Average score = " + averageScore + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+		
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
 		System.out.println(human);
 		System.out.println("-----------------------------------------------------------------------------------------------------------");
@@ -100,11 +131,6 @@ public class ResultsLogger {
 		
 		System.out.println("Estimated time left: " + nf.format(timeLeft / 60000) + " minutes");
 		System.out.println("===========================================================================================================");
-		
-		if (gameNumber == runs) {
-			System.exit(0);
-		}
-		
 	}
 	
 }

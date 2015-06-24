@@ -6,7 +6,15 @@ import java.util.Random;
 
 public class Search {
 	
-	public static final int RANDOM_MOVES_TO_PLAY = 4;
+	public static final int RANDOM_MOVES_TO_PLAY = 7;
+
+	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
+
+	public static final int EVALUATION_CLOSE_THRESHOLD = 1;
+
+	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
+
+	public static final double EVALUATION_WEIGHT_CLOSEVALUES = 1.25;
 	
 	Random r = new Random();
 	
@@ -95,7 +103,7 @@ public class Search {
 		
 		if (rowTouchers + columnTouchers == 0 && board.isFull()) {
 			// Game over
-			score *= 0.8;
+			score *= EVALUATION_LOST_GAME_MULT;
 		}
 		
 		return score; 
@@ -141,17 +149,17 @@ public class Search {
 			if (x < Board.COLS - 1) {
 				int neighbourPiece = board.getSquare(x + 1, y);
 		
-				if (neighbourPiece != 0 && Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece]) > 1) {
+				if (neighbourPiece != 0 && Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece]) > EVALUATION_CLOSE_THRESHOLD) {
 					closeValues = false;
 				}
 			}
 			
 			if (ordered) {
-				weight *= 1.25;
+				weight *= EVALUATION_WEIGHT_ORDERED;
 			}
 			
 			if (closeValues) {
-				weight *= 1.25;
+				weight *= EVALUATION_WEIGHT_CLOSEVALUES;
 			}
 			
 			score += (int)(piece * weight);
