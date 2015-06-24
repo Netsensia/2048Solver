@@ -2,11 +2,25 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MAX_DEPTH = 8;
+	public static final int MAX_DEPTH = 11;
 	
-	public static final int RUNS = 100;
+	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
 	
+    public static final int[] DEPTH_RUNS = {
+    	100000,
+    	25000,
+    	10000,
+    	5000,
+    	2500,
+    	1000,
+    	500,
+    	250,
+    	100,
+    	50,
+    	12,
+    };
+    
 	public static void main(String args[]) {
 
 		// We don't want to leave it to the Board class
@@ -20,12 +34,13 @@ public class TwentyFortyEight {
 		System.out.println("Number of available cores: " + numCores);
 		
 		int numThreads = numCores;
-		int mod = RUNS % numThreads;
-		int adjustedRuns = RUNS - mod;
-
 		int gamesPerThread = (int)(RUNS / numThreads);
 		
 		for (int depth=1; depth<=MAX_DEPTH; depth++) {
+		
+			int mod = DEPTH_RUNS[depth] % numThreads;
+			int adjustedRuns = Math.max(numThreads, DEPTH_RUNS[depth] - mod);
+			
 			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth, numThreads);
 			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
 			resultsLogger.setIsCsvOnly(true);
