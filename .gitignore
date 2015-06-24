@@ -4,3 +4,4 @@ bin/
 .classpath
 *.class
 .DS_Store
+~$results.xlsx
