@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class ResultsLogger {
 	
 	public static final String PROCESSOR = "3.5 GHz 6-Core Intel Xeon E5";
-	public static final String VERSION = "2.3.4";
+	public static final String VERSION = "2.3.5";
 
 	public static String newLine = System.getProperty("line.separator");
 	
