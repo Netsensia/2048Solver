@@ -28,9 +28,22 @@ public class TwentyFortyEight {
 			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
 			resultsLogger.setIsCsvOnly(true);
 			
+			Thread[] threadGroup = new Thread[numThreads];
+			
 			for (int threadNum=0; threadNum<numThreads; threadNum++) {
 				GameRunner gameRunner = new GameRunner(resultsLogger, depth, gamesPerThread);
-				new Thread(gameRunner).start();
+				threadGroup[threadNum] = new Thread(gameRunner);
+				threadGroup[threadNum].start();
+			}
+			
+			// wait for these threads to finish before starting next depth
+			for (int threadNum=0; threadNum<numThreads; threadNum++) {
+				try {
+					threadGroup[threadNum].join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
