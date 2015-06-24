@@ -7,10 +7,17 @@ public class ResultsLogger {
 	public static final String PROCESSOR = "2.6 GHz Intel Core i7";
 	public static final String VERSION = "2.3";
 
+	public static String newLine = System.getProperty("line.separator");
+	
 	public static final int POWER_MAX = 32;
 	
 	public static final int POWER_MIN = 3;
     
+	private boolean isCsvOnly = false;
+	private int numThreads;
+	private int printSummaryAfterNGames = 1;
+	private String lastResultsString;
+	private int gamesLogged = 0;
 	private int depth;
 	private long totalScore = 0;
 	private int highScore = 0;
@@ -22,16 +29,16 @@ public class ResultsLogger {
 	private int runs;
 	private long startTime;
 	
-    public ResultsLogger(int runs, int depth) {
+    public ResultsLogger(int runs, int depth, int numThreads) {
     	this.runs = runs;
     	this.depth = depth;
+    	this.numThreads = numThreads;
     	this.startTime = System.currentTimeMillis();
     }
 	
 	public synchronized void log(Board board) {
 
 		gameNumber ++;
-		System.out.println("Game: " + gameNumber);
 			
 		int score = board.getScore();
 		if (score > highScore) {
@@ -70,14 +77,17 @@ public class ResultsLogger {
 		
 		int averageScore = (int)(totalScore / gameNumber);
 		
-		printResults(board, gameTime, realTime, nf, averageMoveTime, timeLeft, averageScore);
+		lastResultsString = getResultsString(gameNumber, board, gameTime, realTime, nf, averageMoveTime, timeLeft, averageScore);
 		
-		if (gameNumber == runs) {
-			System.exit(0);
+		gamesLogged = gameNumber;
+		
+		if (gamesLogged % printSummaryAfterNGames == 0) {
+			System.out.println(lastResultsString);
 		}
+
 	}
 
-	private void printResults(Board board, long gameTime, long realTime,
+	public synchronized String getResultsString(int gameNumber, Board board, long gameTime, long realTime,
 			NumberFormat nf, double averageMoveTime, double timeLeft,
 		    int averageScore) {
 		
@@ -105,26 +115,88 @@ public class ResultsLogger {
 		
 		csv.append(PROCESSOR + "," + Runtime.getRuntime().availableProcessors() + "," + VERSION);
 		
-		System.out.println("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
-		System.out.println("Game time: " + gameTime + ", Average move time: " + nf.format(averageMoveTime));
-		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println("Total real time: " + nf.format(realTime) + ", Total game time: " + nf.format(totalGameTime)  + ", Total game moves: " + nf.format(totalMoves));
-		System.out.println("Real average move time: " + nf.format((double)realTime / totalMoves));
-		System.out.println("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
-		System.out.println("Average score = " + averageScore + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+		StringBuilder results = new StringBuilder();
 		
-		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println(human);
-		System.out.println("-----------------------------------------------------------------------------------------------------------");
-		System.out.println("CSV");
-		System.out.println("---");
-		System.out.print(depth + "," + gameNumber + "," + realTime + "," + totalGameTime + "," + totalMoves + "," + averageScore + "," + highScore);
-		System.out.print(",,,,,,");
-		System.out.println(csv);
-		System.out.println("-----------------------------------------------------------------------------------------------------------");
+		if (!isCsvOnly) {
+			results.append("Game: " + gameNumber);
+			results.append(newLine);
+			results.append("Number of moves: " + board.getMovesMade() + ", Score: " + board.getScore());
+			results.append(newLine);
+			results.append("Game time: " + gameTime + ", Average move time: " + nf.format(averageMoveTime));
+			results.append(newLine);
+			results.append("-----------------------------------------------------------------------------------------------------------");
+			results.append(newLine);
+			results.append("Total real time: " + nf.format(realTime) + ", Total game time: " + nf.format(totalGameTime)  + ", Total game moves: " + nf.format(totalMoves));
+			results.append(newLine);
+			results.append("Real average move time: " + nf.format((double)realTime / totalMoves));
+			results.append(newLine);
+			results.append("Overall average move time: " + nf.format((double)totalGameTime / totalMoves));
+			results.append(newLine);
+			results.append("Average score = " + averageScore + ", Highest score: " + highScore + ", Highest tile value: " + highestTileValue);
+			results.append(newLine);
+			
+			results.append("-----------------------------------------------------------------------------------------------------------");
+			results.append(newLine);
+			results.append(human);
+			results.append(newLine);
+			results.append("-----------------------------------------------------------------------------------------------------------");
+			results.append(newLine);
+			results.append("CSV");
+			results.append(newLine);
+			results.append("---");
+			results.append(newLine);
+		}
 		
-		System.out.println("Estimated time left: " + nf.format(timeLeft / 60000) + " minutes");
-		System.out.println("===========================================================================================================");
+		results.append(depth + "," + gameNumber + "," + realTime + "," + totalGameTime + "," + totalMoves + "," + averageScore + "," + highScore);
+		results.append(",,,,,,");
+		results.append(csv);
+		
+		if (!isCsvOnly) {
+			results.append(newLine);
+
+			results.append("-----------------------------------------------------------------------------------------------------------");
+			results.append(newLine);
+			
+			results.append("Estimated time left: " + nf.format(timeLeft / 60000) + " minutes");
+			results.append(newLine);
+			results.append("===========================================================================================================");
+			results.append(newLine);
+		}
+		
+		return results.toString();
+		
+	}
+
+	public String getLastResultsString() {
+		return lastResultsString;
+	}
+
+	public void setLastResultsString(String lastResultsString) {
+		this.lastResultsString = lastResultsString;
+	}
+
+	public int getPrintSummaryAfterNGames() {
+		return printSummaryAfterNGames;
+	}
+
+	public void setPrintSummaryAfterNGames(int printSummaryAfterNGames) {
+		this.printSummaryAfterNGames = printSummaryAfterNGames;
+	}
+
+	public int getNumThreads() {
+		return numThreads;
+	}
+
+	public void setNumThreads(int numThreads) {
+		this.numThreads = numThreads;
+	}
+
+	public boolean getIsCsvOnly() {
+		return isCsvOnly;
+	}
+
+	public void setIsCsvOnly(boolean isCsvOnly) {
+		this.isCsvOnly = isCsvOnly;
 	}
 	
 }

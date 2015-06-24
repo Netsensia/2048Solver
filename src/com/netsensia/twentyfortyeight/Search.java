@@ -275,15 +275,8 @@ public class Search {
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
-				int averageScore = (totalScore / count);
-				if (count > RANDOM_MOVES_TO_PLAY / 2) {
-					if (averageScore > high) {
-						return averageScore;
-					}
-				}
-				
 				if (count == RANDOM_MOVES_TO_PLAY) {
-					return averageScore;
+					return (int)(totalScore / RANDOM_MOVES_TO_PLAY);
 				}
 			}
 			

@@ -5,6 +5,7 @@ public class GameRunner implements Runnable {
 	private ResultsLogger resultsLogger;
 	
 	private int depth;
+	private int numGamesToPlay;
 	
     public int getDepth() {
 		return depth;
@@ -14,13 +15,14 @@ public class GameRunner implements Runnable {
 		this.depth = depth;
 	}
 
-	public GameRunner(ResultsLogger resultsLogger, int depth) {
+	public GameRunner(ResultsLogger resultsLogger, int depth, int numGamesToPlay) {
     	this.resultsLogger = resultsLogger;
+    	this.numGamesToPlay = numGamesToPlay;
     	this.depth = depth;
     }
 	
 	public void run() {
-		while (true) {
+		for (int i=0; i<numGamesToPlay; i++) {
 			resultsLogger.log(playGame());
 		}
 	}
@@ -55,5 +57,13 @@ public class GameRunner implements Runnable {
 		}
 
 		return board;
+	}
+
+	public int getNumGamesToPlay() {
+		return numGamesToPlay;
+	}
+
+	public void setNumGamesToPlay(int numGamesToPlay) {
+		this.numGamesToPlay = numGamesToPlay;
 	}
 }
