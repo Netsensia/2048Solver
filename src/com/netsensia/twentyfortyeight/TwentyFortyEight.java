@@ -2,9 +2,9 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int DEPTH = 1;
+	public static final int MAX_DEPTH = 8;
 	
-	public static final int RUNS = 100;
+	public static final int RUNS = 10;
     public static final int POWER_MAX = 32;
 	
 	public static void main(String args[]) {
@@ -13,6 +13,8 @@ public class TwentyFortyEight {
 		// to create the static items on first use
 		// as it would not be thread safe.
 		Board.initStaticItems();
+		
+		long start = System.currentTimeMillis();
 		
 		int numCores = Runtime.getRuntime().availableProcessors();
 		System.out.println("Number of available cores: " + numCores);
@@ -23,7 +25,7 @@ public class TwentyFortyEight {
 
 		int gamesPerThread = (int)(RUNS / numThreads);
 		
-		for (int depth=1; depth<=6; depth++) {
+		for (int depth=1; depth<=MAX_DEPTH; depth++) {
 			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth, numThreads);
 			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
 			resultsLogger.setIsCsvOnly(true);
@@ -46,6 +48,12 @@ public class TwentyFortyEight {
 				}
 			}
 		}
+		
+		long millis = System.currentTimeMillis() - start;
+		int minutes = (int)millis / 60000;
+		int seconds = (int)millis % 60000 / 1000;
+		
+		System.out.println("Time taken: " + minutes + " minutes, " + seconds + " seconds");
 		
 	}
 }
