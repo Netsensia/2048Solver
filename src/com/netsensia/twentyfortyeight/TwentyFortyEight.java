@@ -4,7 +4,7 @@ public class TwentyFortyEight {
 
 	public static final int MAX_DEPTH = 8;
 	
-	public static final int RUNS = 10;
+	public static final int RUNS = 100;
     public static final int POWER_MAX = 32;
 	
 	public static void main(String args[]) {
