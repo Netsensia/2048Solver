@@ -65,8 +65,6 @@ public class ResultsLogger {
 		long gameTime = System.currentTimeMillis() - board.getGameStartMillis();
 		long realTime = System.currentTimeMillis() - this.startTime;
 		
-		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumFractionDigits(4);
 		totalGameTime += gameTime;
 		totalMoves += board.getMovesMade();
 		double averageMoveTime = (double)gameTime / board.getMovesMade();
@@ -77,7 +75,7 @@ public class ResultsLogger {
 		
 		int averageScore = (int)(totalScore / gameNumber);
 		
-		lastResultsString = getResultsString(gameNumber, board, gameTime, realTime, nf, averageMoveTime, timeLeft, averageScore);
+		lastResultsString = getResultsString(gameNumber, board, gameTime, realTime, averageMoveTime, timeLeft, averageScore);
 		
 		gamesLogged = gameNumber;
 		
@@ -88,8 +86,10 @@ public class ResultsLogger {
 	}
 
 	public synchronized String getResultsString(int gameNumber, Board board, long gameTime, long realTime,
-			NumberFormat nf, double averageMoveTime, double timeLeft,
-		    int averageScore) {
+			double averageMoveTime, double timeLeft, int averageScore) {
+		
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(4);
 		
 		StringBuilder human = new StringBuilder();
 		StringBuilder csv = new StringBuilder();
@@ -152,8 +152,6 @@ public class ResultsLogger {
 		results.append(csv);
 		
 		if (!isCsvOnly) {
-			results.append(newLine);
-
 			results.append("-----------------------------------------------------------------------------------------------------------");
 			results.append(newLine);
 			
