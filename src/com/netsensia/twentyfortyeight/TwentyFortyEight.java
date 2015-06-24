@@ -8,6 +8,7 @@ public class TwentyFortyEight {
     public static final int POWER_MAX = 32;
 	
     public static final int[] DEPTH_RUNS = {
+    	0,
     	100000,
     	25000,
     	10000,
@@ -34,10 +35,10 @@ public class TwentyFortyEight {
 		System.out.println("Number of available cores: " + numCores);
 		
 		int numThreads = numCores;
-		int gamesPerThread = (int)(RUNS / numThreads);
 		
 		for (int depth=1; depth<=MAX_DEPTH; depth++) {
 		
+			int gamesPerThread = (int)(DEPTH_RUNS[depth] / numThreads);
 			int mod = DEPTH_RUNS[depth] % numThreads;
 			int adjustedRuns = Math.max(numThreads, DEPTH_RUNS[depth] - mod);
 			
