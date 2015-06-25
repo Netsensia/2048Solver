@@ -38,7 +38,7 @@ public class TwentyFortyEight {
 		
 		for (int depth=1; depth<=MAX_DEPTH; depth++) {
 		
-			int runs = DEPTH_RUNS[depth] / 250;
+			int runs = DEPTH_RUNS[depth];
 
 			int gamesPerThread = (int)(runs / numThreads);
 			
