@@ -1,7 +1,6 @@
 package com.netsensia.twentyfortyeight;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 public class Search {
@@ -9,12 +8,10 @@ public class Search {
 	public static final int RANDOM_MOVES_TO_PLAY = 7;
 
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
-
 	public static final int EVALUATION_CLOSE_THRESHOLD = 1;
-
 	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
-
 	public static final double EVALUATION_WEIGHT_CLOSEVALUES = 1.25;
+	public static final double EVALUATION_TOUCHER_WEIGHT = 4.5;
 	
 	Random r = new Random();
 	
@@ -91,15 +88,14 @@ public class Search {
 	}
 	
 	public final int evaluate(Board board) {
-		int score = board.getScore();
 		
-		score = getRightness(board, score);
+		int score = board.getScore() + pieceBonuses(board);
 		
 		int rowTouchers = getRowTouchers(board);
 		int columnTouchers = getColumnTouchers(board);
 		
 		// Bonus for having tiles of the same value next to each other
-		score += (Math.max(rowTouchers, columnTouchers));
+		score += (Math.max(rowTouchers, columnTouchers)) * EVALUATION_TOUCHER_WEIGHT;
 		
 		if (rowTouchers + columnTouchers == 0 && board.isFull()) {
 			// Game over
@@ -110,61 +106,64 @@ public class Search {
 	   		
 	}
 
-	private final int getRightness(Board board, int score) {
+	private final int pieceBonuses(Board board) {
 
+		int bonus = 0;
+		
 		for (int x=0; x<Board.COLS; x++) {
 			
 			for (int y=0; y<Board.ROWS; y++) {
 				
-				score = scoreBonus(board, score, x, y);
+				bonus += pieceBonus(board, x, y);
 			}
 		}
-		return score;
+		
+		return bonus;
 	}
 
-	private final int scoreBonus(Board board, int score, int x, int y) {
-		double weight;
+	private final int pieceBonus(Board board, int x, int y) {
+		
 		int piece = board.getSquare(x, y);
 		
-		if (piece > 0) {
-			
-			// Get large numbers to the right-hand side
-			weight = squareLookup[x];
-			
-			boolean ordered = true;
-			
-			// Are all pieces below this one of a higher value?
-			for (int i=y+1; i<Board.ROWS; i++) {
-				int neighbourPiece = board.getSquare(x, i);
-				
-				if (piece > neighbourPiece) {
-					ordered = false;
-					break;
-				}
-				
-			}
-			
-			boolean closeValues = true;
-			
-			if (x < Board.COLS - 1) {
-				int neighbourPiece = board.getSquare(x + 1, y);
-		
-				if (neighbourPiece != 0 && Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece]) > EVALUATION_CLOSE_THRESHOLD) {
-					closeValues = false;
-				}
-			}
-			
-			if (ordered) {
-				weight *= EVALUATION_WEIGHT_ORDERED;
-			}
-			
-			if (closeValues) {
-				weight *= EVALUATION_WEIGHT_CLOSEVALUES;
-			}
-			
-			score += (int)(piece * weight);
+		if (piece == 0) {
+			return 0;
 		}
-		return score;
+		
+		// Get large numbers to the right-hand side
+		double weight = squareLookup[x];
+		
+		boolean ordered = true;
+		
+		// Are all pieces below this one of a higher value?
+		for (int i=y+1; i<Board.ROWS; i++) {
+			int neighbourPiece = board.getSquare(x, i);
+			
+			if (piece > neighbourPiece) {
+				ordered = false;
+				break;
+			}
+			
+		}
+		
+		boolean closeValues = true;
+		
+		if (x < Board.COLS - 1) {
+			int neighbourPiece = board.getSquare(x + 1, y);
+	
+			if (neighbourPiece != 0 && Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece]) > EVALUATION_CLOSE_THRESHOLD) {
+				closeValues = false;
+			}
+		}
+		
+		if (ordered) {
+			weight *= EVALUATION_WEIGHT_ORDERED;
+		}
+		
+		if (closeValues) {
+			weight *= EVALUATION_WEIGHT_CLOSEVALUES;
+		}
+		
+		return (int)(piece * weight);
 	}
 	
 	private final int getRowTouchers(Board board) {
@@ -172,9 +171,13 @@ public class Search {
 		int rowTouchers = 0;
 		
 		for (int y=0; y<Board.ROWS; y++) {
-			lastPiece = 0;
-			for (int x=0; x<Board.COLS; x++) {
+			
+			lastPiece = board.getSquare(0,y);
+			
+			for (int x=1; x<Board.COLS; x++) {
+				
 				int piece = board.getSquare(x,y);
+				
 				if (piece > 0) {
 					if (piece == lastPiece) {
 						rowTouchers += piece;
@@ -193,9 +196,13 @@ public class Search {
 		int columnTouchers = 0;
 		
 		for (int x=0; x<Board.COLS; x++) {
-			lastPiece = 0;
-			for (int y=0; y<Board.ROWS; y++) {
+			
+			lastPiece = board.getSquare(x,0);
+			
+			for (int y=1; y<Board.ROWS; y++) {
+				
 				int piece = board.getSquare(x,y);
+				
 				if (piece > 0) {
 					if (piece == lastPiece) {
 						columnTouchers += piece;
@@ -224,7 +231,7 @@ public class Search {
 			
 			int count = 0;
 
-			for (int i=Board.UP; i<=Board.LEFT; i++) {
+			for (int i=0; i<4; i++) {
 				
 				if (board.isValidMoveFast(i)) {
 					count ++;
@@ -276,7 +283,7 @@ public class Search {
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
 				if (count == RANDOM_MOVES_TO_PLAY) {
-					return (int)(totalScore / RANDOM_MOVES_TO_PLAY);
+					break;
 				}
 			}
 			
@@ -292,7 +299,7 @@ public class Search {
 		int[] moves = {-1,-1,-1,-1};
 		int count = 0;
 		
-		for (int i=Board.UP; i<=Board.LEFT; i++) {
+		for (int i=0; i<4; i++) {
 			if (board.isValidMove(i)) {
 				moves[count++] = i;
 			}

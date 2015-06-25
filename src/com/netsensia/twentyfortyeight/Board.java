@@ -169,7 +169,7 @@ public class Board {
 			testBoard.replaceState(this.board, this.score);
 		}
 		
-		for (int i=Board.UP; i<=Board.LEFT; i++) {
+		for (int i=0; i<4; i++) {
 			testBoard.makeMove(i, false);
 			if (!Arrays.equals(testBoard.getBoard(), board)) {
 				isGameOver = false;

@@ -2,7 +2,7 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MAX_DEPTH = 11;
+	public static final int MAX_DEPTH = 4;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -13,13 +13,13 @@ public class TwentyFortyEight {
     	100000,    // 2
     	50000,     // 3
     	15000,      // 4
-    	15000,       // 5
+    	5000,       // 5
     	1000,       // 6
-    	1000,      // 7
+    	750,      // 7
     	250,      // 8
-    	250,      // 9
-    	24,       // 10
-    	12,       // 11
+    	175,      // 9
+    	125,       // 10
+    	100,       // 11
     };
     
 	public static void main(String args[]) {
@@ -38,10 +38,17 @@ public class TwentyFortyEight {
 		
 		for (int depth=1; depth<=MAX_DEPTH; depth++) {
 		
-			int gamesPerThread = (int)(DEPTH_RUNS[depth] / numThreads);
-			int mod = DEPTH_RUNS[depth] % numThreads;
-			int adjustedRuns = Math.max(numThreads, DEPTH_RUNS[depth] - mod);
+			int runs = DEPTH_RUNS[depth];
+			runs = 1000;
+
+			int gamesPerThread = (int)(runs / numThreads);
 			
+			if (gamesPerThread == 0) {
+				gamesPerThread = 1;
+			}
+			
+			int adjustedRuns = gamesPerThread * numThreads;
+
 			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth, numThreads);
 			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
 			resultsLogger.setIsCsvOnly(true);
