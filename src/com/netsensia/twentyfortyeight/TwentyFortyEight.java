@@ -9,17 +9,17 @@ public class TwentyFortyEight {
 	
     public static final int[] DEPTH_RUNS = {
     	0,
-    	100000,
-    	25000,
-    	10000,
-    	5000,
-    	2500,
-    	1000,
-    	500,
-    	250,
-    	100,
-    	50,
-    	12,
+    	250000,   // 1
+    	100000,    // 2
+    	50000,     // 3
+    	15000,      // 4
+    	15000,       // 5
+    	1000,       // 6
+    	1000,      // 7
+    	250,      // 8
+    	250,      // 9
+    	24,       // 10
+    	12,       // 11
     };
     
 	public static void main(String args[]) {

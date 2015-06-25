@@ -4,8 +4,8 @@ import java.text.NumberFormat;
 
 public class ResultsLogger {
 	
-	public static final String PROCESSOR = "3.5 GHz 6-Core Intel Xeon E5";
-	public static final String VERSION = "2.3.5";
+	public static final String PROCESSOR = "EC2 c4.8xlarge";
+	public static final String VERSION = "2.3.6";
 
 	public static String newLine = System.getProperty("line.separator");
 	
