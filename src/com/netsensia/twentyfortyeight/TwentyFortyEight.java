@@ -48,7 +48,7 @@ public class TwentyFortyEight {
 			
 			int adjustedRuns = gamesPerThread * numThreads;
 
-			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth, numThreads);
+			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth);
 			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
 			resultsLogger.setIsCsvOnly(true);
 			

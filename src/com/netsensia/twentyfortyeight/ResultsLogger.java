@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class ResultsLogger {
 	
 	public static final String PROCESSOR = System.getenv("PROCESSOR");
-	public static final String VERSION = "2.3.7";
+	public static final String VERSION = "2.3.8";
 
 	public static String newLine = System.getProperty("line.separator");
 	
@@ -14,7 +14,6 @@ public class ResultsLogger {
 	public static final int POWER_MIN = 3;
     
 	private boolean isCsvOnly = false;
-	private int numThreads;
 	private int printSummaryAfterNGames = 1;
 	private String lastResultsString;
 	private int gamesLogged = 0;
@@ -29,10 +28,9 @@ public class ResultsLogger {
 	private int runs;
 	private long startTime;
 	
-    public ResultsLogger(int runs, int depth, int numThreads) {
+    public ResultsLogger(int runs, int depth) {
     	this.runs = runs;
     	this.depth = depth;
-    	this.numThreads = numThreads;
     	this.startTime = System.currentTimeMillis();
     }
 	
@@ -179,14 +177,6 @@ public class ResultsLogger {
 
 	public void setPrintSummaryAfterNGames(int printSummaryAfterNGames) {
 		this.printSummaryAfterNGames = printSummaryAfterNGames;
-	}
-
-	public int getNumThreads() {
-		return numThreads;
-	}
-
-	public void setNumThreads(int numThreads) {
-		this.numThreads = numThreads;
 	}
 
 	public boolean getIsCsvOnly() {
