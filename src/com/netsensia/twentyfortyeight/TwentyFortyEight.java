@@ -2,7 +2,7 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MAX_DEPTH = 4;
+	public static final int MAX_DEPTH = 8;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -39,7 +39,6 @@ public class TwentyFortyEight {
 		for (int depth=1; depth<=MAX_DEPTH; depth++) {
 		
 			int runs = DEPTH_RUNS[depth];
-			runs = 1000;
 
 			int gamesPerThread = (int)(runs / numThreads);
 			
