@@ -14,7 +14,7 @@ public class Search {
 	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
 		1.35, 
 		1.15, 
-		1, 
+		1.05, 
 		1, 
 		1, 
 		1, 
