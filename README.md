@@ -4,10 +4,7 @@ Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/
 
 ## Current program performance
 
-The table below shows the performance of the program running on a Mac Pro (late 2013) with six CPU cores.
-
-The six cores allow for six game threads to run concurrently. Each game thread runs approximately 1.5x slower than a single-threaded
-version of the program, but this is easily offset by running six in parallel, resulting in a 4-fold speed increase.  
+The table below shows the performance of the program running on an Amazon EC2 c4.8xlarge instance.
 
 ![Program Results]
 (https://www.dropbox.com/s/lhn72wgbsmbqye8/Screenshot%202015-06-26%2002.11.43.png?dl=1)
