@@ -1,6 +1,6 @@
 # 2048 Solver
 
-Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/).
+Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/). The only way to get over the addiction to this game is to write a program that plays it for you.
 
 ## Current program performance
 
