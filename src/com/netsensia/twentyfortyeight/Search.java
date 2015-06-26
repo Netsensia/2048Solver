@@ -12,9 +12,9 @@ public class Search {
 	public static final double EVALUATION_WEIGHT_CLOSEVALUES = 1.25;
 	public static final double EVALUATION_TOUCHER_WEIGHT = 4.5;
 	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
-		1.35, 
-		1.15, 
-		1.05, 
+		1.3, 
+		1.2, 
+		1, 
 		1, 
 		1, 
 		1, 

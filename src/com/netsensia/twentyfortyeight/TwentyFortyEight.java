@@ -3,7 +3,7 @@ package com.netsensia.twentyfortyeight;
 public class TwentyFortyEight {
 
 	public static final int MIN_DEPTH = 1;
-	public static final int MAX_DEPTH = 6;
+	public static final int MAX_DEPTH = 8;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
