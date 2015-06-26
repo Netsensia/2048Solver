@@ -2,6 +2,7 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
+	public static final int MIN_DEPTH = 8;
 	public static final int MAX_DEPTH = 8;
 	
 	public static final int RUNS = 12;
@@ -36,7 +37,7 @@ public class TwentyFortyEight {
 		
 		int numThreads = numCores;
 		
-		for (int depth=1; depth<=MAX_DEPTH; depth++) {
+		for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
 		
 			int runs = DEPTH_RUNS[depth];
 
