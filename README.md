@@ -11,11 +11,6 @@ The table below shows the performance of the program running on an Amazon EC2 c4
 ![Program Results]
 (https://www.dropbox.com/s/lhn72wgbsmbqye8/Screenshot%202015-06-26%2002.11.43.png?dl=1)
 
-## Next steps
-
-I want to get several games running in parallel on different CPU cores so I can ramp up the number of samples taken for each
-search depth.
-	 	 	 
 ## Program development
 
 The rest of this README was written while building the program so roughly documents the process of finding better ways to search for a solution. It's a bit of a hodge-podge, but shows some of the results obtained early on.
