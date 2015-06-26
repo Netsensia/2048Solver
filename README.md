@@ -2,7 +2,9 @@
 
 Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/). The only way to get over the addiction to this game is to write a program that plays it for you.
 
-Currently with a move time of one or two milliseconds on a fast machine, the program will win the game (get a 2048 tile) about 98 percent of the time.
+With a move time of around 5 milliseconds, running single-threaded on a fast machine, the program will win the game (get a 2048 tile) about 98 percent of the time.
+
+The tests results shown here are run in using multiple threads running in parallel. This results in slower average move times per thread (thread duration / thread moves) but faster overall move times when considering all threads (program duration / moves across all threads). 
 
 ## Current program performance
 
