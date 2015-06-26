@@ -10,9 +10,7 @@ The six cores allow for six game threads to run concurrently. Each game thread r
 version of the program, but this is easily offset by running six in parallel, resulting in a 4-fold speed increase.  
 
 ![Program Results]
-(https://www.dropbox.com/s/rroribkvp7yykh9/Screenshot%202015-06-13%2002.17.38.png?dl=1)
-
-https://docs.google.com/a/netsensia.com/spreadsheets/d/1a27_USetrVYMVeQkm9dlwSDNcRb3VnaPEN0MDuCi2Ls/edit?usp=sharing
+(https://www.dropbox.com/s/97z76nbxr21n3ab/Screenshot%202015-06-26%2002.09.49.png?dl=1)
 
 ## Next steps
 
