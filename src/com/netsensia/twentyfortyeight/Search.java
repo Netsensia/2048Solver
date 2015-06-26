@@ -5,8 +5,7 @@ import java.util.Random;
 
 public class Search {
 	
-	public static final int RANDOM_MOVES_TO_PLAY = 7;
-
+	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 4;
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
 	public static final int EVALUATION_CLOSE_THRESHOLD = 1;
 	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
@@ -282,7 +281,7 @@ public class Search {
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
-				if (count == RANDOM_MOVES_TO_PLAY) {
+				if (count == SEARCH_RANDOM_MOVES_TO_PLAY) {
 					break;
 				}
 			}
