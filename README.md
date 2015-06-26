@@ -2,6 +2,8 @@
 
 Java code that plays the addictive game [2048](http://gabrielecirulli.github.io/2048/). The only way to get over the addiction to this game is to write a program that plays it for you.
 
+Current with a move time of one or two milliseconds on a fast machine, the program will win the game (get a 2048 tile) about 98 percent of the time.
+
 ## Current program performance
 
 The table below shows the performance of the program running on an Amazon EC2 c4.8xlarge instance.
