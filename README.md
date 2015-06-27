@@ -6,7 +6,7 @@ With a move time of around 5 milliseconds, running single-threaded on a fast mac
 
 The highest score the program has achieved so far was 252,016 on a depth 7 search. 
 
-The tests results shown here are run in using multiple threads running in parallel. This results in slower average move times per thread (thread duration / thread moves) but faster overall move times when considering all threads (program duration / moves across all threads). 
+The test results shown here are run using multiple parallel threads. This results in slower average move times per thread (thread duration / thread moves) but faster overall move times when considering all threads (program duration / moves across all threads). 
 
 ## Current program performance
 
