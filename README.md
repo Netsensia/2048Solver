@@ -13,7 +13,7 @@ The tests results shown here are run in using multiple threads running in parall
 The table below shows the performance of the program running on an Amazon EC2 c4.8xlarge instance.
 
 ![Program Results]
-(https://www.dropbox.com/s/lhn72wgbsmbqye8/Screenshot%202015-06-26%2002.11.43.png?dl=1)
+(https://www.dropbox.com/s/u1wpfavjz9zul85/Screenshot%202015-06-27%2010.48.51.png?dl=1)
 
 ## Program development
 
