@@ -10,8 +10,6 @@ The test results shown here are run using multiple parallel threads. This result
 
 ## Current program performance
 
-The table below shows the performance of the program running on an Amazon EC2 c4.8xlarge instance.
-
 ![Program Results]
 (https://www.dropbox.com/s/u1wpfavjz9zul85/Screenshot%202015-06-27%2010.48.51.png?dl=1)
 
