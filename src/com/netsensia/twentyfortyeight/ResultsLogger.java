@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 public class ResultsLogger {
 	
 	public static final String PROCESSOR = System.getenv("PROCESSOR");
-	public static final String VERSION = "2.4.4";
+	public static final String VERSION = "2.4.5";
 
 	public static String newLine = System.getProperty("line.separator");
 	
