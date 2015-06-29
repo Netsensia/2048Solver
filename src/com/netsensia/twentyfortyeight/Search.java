@@ -10,7 +10,6 @@ public class Search {
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
 	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
 	public static final double EVALUATION_TOUCHER_WEIGHT = 4.5;
-	public static final double EVALUATION_EMPTY_SQUARE_WEIGHT = 0.0001;
 
 	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
 		1.35, 
@@ -281,6 +280,12 @@ public class Search {
 				newBoard.place(move % 1000, move % 10000 / 1000);
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
+				
+				if (count == 3) {
+					if (totalScore / 3 < low || totalScore / 3 > high) {
+						break;
+					}
+				}
 				
 				if (count == SEARCH_RANDOM_MOVES_TO_PLAY) {
 					break;
