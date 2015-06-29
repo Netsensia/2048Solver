@@ -10,9 +10,9 @@ public class TwentyFortyEight {
 	
     public static final int[] DEPTH_RUNS = {
     	0,
-    	250000,   // 1
-    	100000,    // 2
-    	1000,     // 3
+    	100000,   // 1
+    	50000,    // 2
+    	25000,     // 3
     	15000,      // 4
     	5000,       // 5
     	1000,       // 6
