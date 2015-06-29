@@ -282,15 +282,15 @@ public class Search {
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
-				if (count == EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF) {
-					int avg = (int)(totalScore / EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF);
+				if (count >= EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF) {
+					int avg = (int)(totalScore / count);
 					
 					if (avg > low) {
 						low = avg;
 					}
 					
 					if (low >= high) {
-						return bestScore;
+						return avg;
 					}
 
 				}
