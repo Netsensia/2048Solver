@@ -6,7 +6,8 @@ import java.util.Random;
 public class Search {
 	
 	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 7;
-	
+
+	public static final double EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF = 3;
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
 	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
 	public static final double EVALUATION_TOUCHER_WEIGHT = 4.5;
@@ -281,10 +282,17 @@ public class Search {
 				
 				totalScore += -negamax(newBoard, depth-1, -high, -low, 1, null);
 				
-				if (count == 3) {
-					if (totalScore / 3 < low || totalScore / 3 > high) {
-						break;
+				if (count == EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF) {
+					int avg = (int)(totalScore / EVALUATION_BLOCK_MOVES_BEFORE_CUTOFF);
+					
+					if (avg > low) {
+						low = avg;
 					}
+					
+					if (low >= high) {
+						return bestScore;
+					}
+
 				}
 				
 				if (count == SEARCH_RANDOM_MOVES_TO_PLAY) {
