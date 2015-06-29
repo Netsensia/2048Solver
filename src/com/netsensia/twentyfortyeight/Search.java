@@ -5,10 +5,13 @@ import java.util.Random;
 
 public class Search {
 	
-	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 6;
+	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 7;
+	
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
 	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
 	public static final double EVALUATION_TOUCHER_WEIGHT = 4.5;
+	public static final double EVALUATION_EMPTY_SQUARE_WEIGHT = 0.0001;
+
 	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
 		1.35, 
 		1.15, 
@@ -23,14 +26,14 @@ public class Search {
 	
 	int depth = 1;
 	
-	private final int MAX_TILE_VALUE = 16384;
+	private final int MAX_TILE_VALUE = 32768;
 	
-	private int squareLookup[] = new int[Board.COLS];
+	private int pushRightBonusLookup[] = new int[Board.COLS];
 	private int log2Lookup[] = new int[MAX_TILE_VALUE+1];
 	
 	public Search() {
 		for (int x=0; x<Board.COLS; x++) {
-			squareLookup[x] = (x+1) * (x+1);
+			pushRightBonusLookup[x] = (x+1) * (x+1);
 		}
 		
 		for (int i=2; i<=MAX_TILE_VALUE; i++) {
@@ -56,7 +59,7 @@ public class Search {
 		
 		Board newBoard = new Board(board.getBoard(), board.getScore());
 		
-		newBoard.makeMove(move, true);
+		newBoard.makeMove(move);
 		int score = newBoard.getScore();
 		if (score > bestScore) {
 			bestScore = score;
@@ -107,7 +110,7 @@ public class Search {
 			// Game over
 			score *= EVALUATION_LOST_GAME_MULT;
 		}
-		
+
 		return score; 
 	   		
 	}
@@ -136,19 +139,20 @@ public class Search {
 		}
 		
 		// Get large numbers to the right-hand side
-		double weight = squareLookup[x];
+		double weight = pushRightBonusLookup[x];
 		
 		boolean ordered = true;
 		
 		// Are all pieces below this one of a higher value?
 		for (int i=y+1; i<Board.ROWS; i++) {
-			int neighbourPiece = board.getSquare(x, i);
-			
-			if (piece > neighbourPiece) {
+			if (piece > board.getSquare(x, i)) {
 				ordered = false;
 				break;
 			}
-			
+		}
+
+		if (ordered) {
+			weight *= EVALUATION_WEIGHT_ORDERED;
 		}
 		
 		if (x < Board.COLS - 1) {
@@ -157,10 +161,6 @@ public class Search {
 			if (neighbourPiece != 0) {
 				weight *= EVALUATION_CLOSE_WEIGHTS[Math.abs(log2Lookup[neighbourPiece] - log2Lookup[piece])];
 			}
-		}
-		
-		if (ordered) {
-			weight *= EVALUATION_WEIGHT_ORDERED;
 		}
 		
 		return (int)(piece * weight);
@@ -233,11 +233,11 @@ public class Search {
 
 			for (int i=0; i<4; i++) {
 				
-				if (board.isValidMoveFast(i)) {
+				if (board.isValidMove(i)) {
 					count ++;
 					
 					newBoard = new Board(board.getBoard(), board.getScore());
-					newBoard.makeMove(i, true);
+					newBoard.makeMove(i);
 					
 					int score = -negamax(newBoard, depth-1, -high, -low, -1, null);
 					
@@ -308,7 +308,7 @@ public class Search {
 		return moves;
 	}
 	
-	public int getMoveFromSearch(Board board) throws Exception {
+	public int searchForMove(Board board) throws Exception {
 
 		int[] legalMoves = getSolverMoves(board);
 		

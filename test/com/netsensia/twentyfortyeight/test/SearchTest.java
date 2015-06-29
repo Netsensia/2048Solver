@@ -48,7 +48,7 @@ public class SearchTest {
 		
 		search.negamax(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, moves);
 		search.setDepth(1);
-		assertEquals(Board.RIGHT, search.getMoveFromSearch(board));
+		assertEquals(Board.RIGHT, search.searchForMove(board));
 		
 	}
 }

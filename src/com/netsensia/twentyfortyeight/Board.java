@@ -180,7 +180,7 @@ public class Board {
 		return isGameOver;
 	}
 	
-	public boolean isValidMove(int direction) {
+	private boolean isValidMoveSlowButTidy(int direction) {
 
 		if (testBoard == null) {
 			testBoard = new Board(this.board, this.score);
@@ -193,7 +193,7 @@ public class Board {
 		return !Arrays.equals(board, testBoard.board);
 	}
 	
-	public boolean isValidMoveFast(int direction) {
+	public boolean isValidMove(int direction) {
 
 		switch (direction) {
 		case Board.RIGHT:
@@ -368,7 +368,11 @@ public class Board {
 		}
 	}
 	
-	public void makeMove(int direction, boolean calcScore) {
+	public void makeMove(int direction) {
+		makeMove(direction, true);
+	}
+	
+	private void makeMove(int direction, boolean calcScore) {
 		
 		switch (direction) {
 			case UP:

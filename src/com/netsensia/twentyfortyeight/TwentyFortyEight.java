@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MIN_DEPTH = 1;
-	public static final int MAX_DEPTH = 8;
+	public static final int MIN_DEPTH = 3;
+	public static final int MAX_DEPTH = 3;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -12,7 +12,7 @@ public class TwentyFortyEight {
     	0,
     	250000,   // 1
     	100000,    // 2
-    	50000,     // 3
+    	1000,     // 3
     	15000,      // 4
     	5000,       // 5
     	1000,       // 6
