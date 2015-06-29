@@ -205,7 +205,7 @@ public class BoardTest {
     	Board board = new Board();
     	board.setBoard(start);
     	
-    	board.makeMove(Board.LEFT, false);
+    	board.makeMove(Board.LEFT);
     	
     	assertArrayEquals(
     		slideLeft,
@@ -214,7 +214,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.RIGHT, false);
+    	board.makeMove(Board.RIGHT);
     	
     	assertArrayEquals(
     		slideRight,
@@ -223,7 +223,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.UP, false);
+    	board.makeMove(Board.UP);
     	
     	assertArrayEquals(
     		slideUp,
@@ -232,7 +232,7 @@ public class BoardTest {
     	
     	board.setBoard(start);
     	
-    	board.makeMove(Board.DOWN, false);
+    	board.makeMove(Board.DOWN);
     	
     	assertArrayEquals(
     		slideDown,

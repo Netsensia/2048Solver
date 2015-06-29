@@ -55,6 +55,7 @@ public class GameRunner implements Runnable {
 			}
 			
 		}
+		System.out.println(board.getScore());
 
 		return board;
 	}

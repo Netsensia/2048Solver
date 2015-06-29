@@ -314,10 +314,11 @@ public class Search {
 		
 		if (legalMoves[0] == -1) {
 			throw new Exception("No legal moves for position\n " + board);
-		} else
+		} else {
 			if (legalMoves[1] == -1) {
 				return legalMoves[0];
 			}
+		}
 		
 		StringBuilder move = new StringBuilder();
 		

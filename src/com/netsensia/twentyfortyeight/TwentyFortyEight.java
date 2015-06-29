@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MIN_DEPTH = 3;
-	public static final int MAX_DEPTH = 3;
+	public static final int MIN_DEPTH = 1;
+	public static final int MAX_DEPTH = 8;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -66,7 +66,6 @@ public class TwentyFortyEight {
 				try {
 					threadGroup[threadNum].join();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
