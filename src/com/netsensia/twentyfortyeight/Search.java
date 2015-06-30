@@ -8,7 +8,7 @@ public class Search {
 	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 7;
 
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
-	public static final double EVALUATION_WEIGHT_ORDERED = 1.25;
+	public static final double EVALUATION_WEIGHT_ORDERED = 1.15;
 	public static final double EVALUATION_TOUCHER_WEIGHT = 5.5;
 
 	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
