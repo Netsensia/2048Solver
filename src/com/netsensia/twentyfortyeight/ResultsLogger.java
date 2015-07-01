@@ -12,6 +12,8 @@ public class ResultsLogger {
 	public static final int POWER_MAX = 32;
 	
 	public static final int POWER_MIN = 3;
+	
+	private int lastAverageScore;
     
 	private boolean isCsvOnly = false;
 	private int printSummaryAfterNGames = 1;
@@ -74,6 +76,7 @@ public class ResultsLogger {
 		int averageScore = (int)(totalScore / gameNumber);
 		
 		lastResultsString = getResultsString(gameNumber, board, gameTime, realTime, averageMoveTime, timeLeft, averageScore);
+		lastAverageScore = averageScore;
 		
 		gamesLogged = gameNumber;
 		
@@ -185,6 +188,14 @@ public class ResultsLogger {
 
 	public void setIsCsvOnly(boolean isCsvOnly) {
 		this.isCsvOnly = isCsvOnly;
+	}
+
+	public int getLastAverageScore() {
+		return lastAverageScore;
+	}
+
+	public void setLastAverageScore(int lastAverageScore) {
+		this.lastAverageScore = lastAverageScore;
 	}
 	
 }

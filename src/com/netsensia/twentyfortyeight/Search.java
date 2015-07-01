@@ -5,14 +5,15 @@ import java.util.Random;
 
 public class Search {
 	
-	public static final int SEARCH_RANDOM_MOVES_TO_PLAY = 7;
+	public static int SEARCH_RANDOM_MOVES_TO_PLAY = 8;
 
 	public static final double EVALUATION_LOST_GAME_MULT = 0.2;
-	public static final double EVALUATION_WEIGHT_ORDERED = 1.15;
-	public static final double EVALUATION_TOUCHER_WEIGHT = 5.5;
+	
+	public static final double EVALUATION_WEIGHT_ORDERED = 1.27;
+	public static final double EVALUATION_TOUCHER_WEIGHT = 6.2;
 
-	public static final double EVALUATION_CLOSE_WEIGHTS[] = {
-		1.35, 
+	public static double EVALUATION_CLOSE_WEIGHTS[] = {
+		1.22, 
 		1.15, 
 		1.05, 
 		1, 

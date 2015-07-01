@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MIN_DEPTH = 1;
-	public static final int MAX_DEPTH = 8;
+	public static final int MIN_DEPTH = 3;
+	public static final int MAX_DEPTH = 3;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -11,9 +11,9 @@ public class TwentyFortyEight {
     public static final int[] DEPTH_RUNS = {
     	0,
     	100000,   // 1
-    	50000,    // 2
-    	25000,     // 3
-    	15000,      // 4
+    	25000,    // 2
+    	10000,     // 3
+    	5000,      // 4
     	5000,       // 5
     	1000,       // 6
     	750,      // 7
@@ -37,37 +37,54 @@ public class TwentyFortyEight {
 		
 		int numThreads = numCores;
 		
-		for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
+		StringBuilder sb = new StringBuilder();
+		StringBuilder headers = new StringBuilder();
 		
-			int runs = DEPTH_RUNS[depth];
-
-			int gamesPerThread = (int)(runs / numThreads);
+		for (int q=0; q<100; q++) {
 			
-			if (gamesPerThread == 0) {
-				gamesPerThread = 1;
+			for (int qq=0; qq<25; qq++) {
+				Search.EVALUATION_CLOSE_WEIGHTS[qq] = 1;
 			}
+		
+			Search.EVALUATION_CLOSE_WEIGHTS[1] = 1 + (double)q / 100.0;
+					
+			System.out.println("Search.EVALUATION_CLOSE_WEIGHTS[1] = " + Search.EVALUATION_CLOSE_WEIGHTS[1]);
 			
-			int adjustedRuns = gamesPerThread * numThreads;
-
-			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth);
-			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
-			resultsLogger.setIsCsvOnly(true);
+			for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
 			
-			Thread[] threadGroup = new Thread[numThreads];
-			
-			for (int threadNum=0; threadNum<numThreads; threadNum++) {
-				GameRunner gameRunner = new GameRunner(resultsLogger, depth, gamesPerThread);
-				threadGroup[threadNum] = new Thread(gameRunner);
-				threadGroup[threadNum].start();
-			}
-			
-			// wait for these threads to finish before starting next depth
-			for (int threadNum=0; threadNum<numThreads; threadNum++) {
-				try {
-					threadGroup[threadNum].join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				int runs = DEPTH_RUNS[depth];
+	
+				int gamesPerThread = (int)(runs / numThreads);
+				
+				if (gamesPerThread == 0) {
+					gamesPerThread = 1;
 				}
+				
+				int adjustedRuns = gamesPerThread * numThreads;
+	
+				ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth);
+				resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
+				resultsLogger.setIsCsvOnly(true);
+				
+				Thread[] threadGroup = new Thread[numThreads];
+				
+				for (int threadNum=0; threadNum<numThreads; threadNum++) {
+					GameRunner gameRunner = new GameRunner(resultsLogger, depth, gamesPerThread);
+					threadGroup[threadNum] = new Thread(gameRunner);
+					threadGroup[threadNum].start();
+				}
+				
+				// wait for these threads to finish before starting next depth
+				for (int threadNum=0; threadNum<numThreads; threadNum++) {
+					try {
+						threadGroup[threadNum].join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				headers.append(Search.EVALUATION_CLOSE_WEIGHTS[1] + ",");
+				sb.append(resultsLogger.getLastAverageScore() + ",");
 			}
 		}
 		
@@ -76,6 +93,11 @@ public class TwentyFortyEight {
 		int seconds = (int)millis % 60000 / 1000;
 		
 		System.out.println("Time taken: " + minutes + " minutes, " + seconds + " seconds");
+		
+		
+		System.out.println("Average Scores");
+		System.out.println(headers);
+		System.out.println(sb);
 		
 	}
 }
