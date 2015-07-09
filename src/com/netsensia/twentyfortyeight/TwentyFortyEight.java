@@ -2,8 +2,8 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MIN_DEPTH = 3;
-	public static final int MAX_DEPTH = 3;
+	public static final int MIN_DEPTH = 2;
+	public static final int MAX_DEPTH = 2;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
@@ -12,8 +12,8 @@ public class TwentyFortyEight {
     	0,
     	100000,   // 1
     	25000,    // 2
-    	10000,     // 3
-    	5000,      // 4
+    	25000,     // 3
+    	25000,      // 4
     	5000,       // 5
     	1000,       // 6
     	750,      // 7
@@ -40,15 +40,17 @@ public class TwentyFortyEight {
 		StringBuilder sb = new StringBuilder();
 		StringBuilder headers = new StringBuilder();
 		
-		for (int q=0; q<100; q++) {
+		int closeWeightIndex = 2;
+		
+		for (int q=0; q<=100; q++) {
 			
-			for (int qq=0; qq<25; qq++) {
+			for (int qq=closeWeightIndex+1; qq<Search.EVALUATION_CLOSE_WEIGHTS.length; qq++) {
 				Search.EVALUATION_CLOSE_WEIGHTS[qq] = 1;
 			}
 		
-			Search.EVALUATION_CLOSE_WEIGHTS[1] = 1 + (double)q / 100.0;
+			Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex] = 1 + (double)q / 100.0;
 					
-			System.out.println("Search.EVALUATION_CLOSE_WEIGHTS[1] = " + Search.EVALUATION_CLOSE_WEIGHTS[1]);
+			System.out.println("Search.EVALUATION_CLOSE_WEIGHTS[" + closeWeightIndex + "] = " + Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex]);
 			
 			for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
 			
@@ -83,7 +85,7 @@ public class TwentyFortyEight {
 					}
 				}
 				
-				headers.append(Search.EVALUATION_CLOSE_WEIGHTS[1] + ",");
+				headers.append(Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex] + ",");
 				sb.append(resultsLogger.getLastAverageScore() + ",");
 			}
 		}
