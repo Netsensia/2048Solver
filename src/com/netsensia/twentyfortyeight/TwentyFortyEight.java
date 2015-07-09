@@ -37,57 +37,40 @@ public class TwentyFortyEight {
 		
 		int numThreads = numCores;
 		
-		StringBuilder sb = new StringBuilder();
-		StringBuilder headers = new StringBuilder();
-		
-		int closeWeightIndex = 2;
-		
-		for (int q=0; q<=100; q++) {
-			
-			for (int qq=closeWeightIndex+1; qq<Search.EVALUATION_CLOSE_WEIGHTS.length; qq++) {
-				Search.EVALUATION_CLOSE_WEIGHTS[qq] = 1;
-			}
-		
-			Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex] = 1 + (double)q / 100.0;
-					
-			System.out.println("Search.EVALUATION_CLOSE_WEIGHTS[" + closeWeightIndex + "] = " + Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex]);
-			
-			for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
-			
-				int runs = DEPTH_RUNS[depth];
 	
-				int gamesPerThread = (int)(runs / numThreads);
-				
-				if (gamesPerThread == 0) {
-					gamesPerThread = 1;
-				}
-				
-				int adjustedRuns = gamesPerThread * numThreads;
-	
-				ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth);
-				resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
-				resultsLogger.setIsCsvOnly(true);
-				
-				Thread[] threadGroup = new Thread[numThreads];
-				
-				for (int threadNum=0; threadNum<numThreads; threadNum++) {
-					GameRunner gameRunner = new GameRunner(resultsLogger, depth, gamesPerThread);
-					threadGroup[threadNum] = new Thread(gameRunner);
-					threadGroup[threadNum].start();
-				}
-				
-				// wait for these threads to finish before starting next depth
-				for (int threadNum=0; threadNum<numThreads; threadNum++) {
-					try {
-						threadGroup[threadNum].join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				
-				headers.append(Search.EVALUATION_CLOSE_WEIGHTS[closeWeightIndex] + ",");
-				sb.append(resultsLogger.getLastAverageScore() + ",");
+		for (int depth=MIN_DEPTH; depth<=MAX_DEPTH; depth++) {
+		
+			int runs = DEPTH_RUNS[depth];
+
+			int gamesPerThread = (int)(runs / numThreads);
+			
+			if (gamesPerThread == 0) {
+				gamesPerThread = 1;
 			}
+			
+			int adjustedRuns = gamesPerThread * numThreads;
+
+			ResultsLogger resultsLogger = new ResultsLogger(adjustedRuns, depth);
+			resultsLogger.setPrintSummaryAfterNGames(adjustedRuns);
+			resultsLogger.setIsCsvOnly(true);
+			
+			Thread[] threadGroup = new Thread[numThreads];
+			
+			for (int threadNum=0; threadNum<numThreads; threadNum++) {
+				GameRunner gameRunner = new GameRunner(resultsLogger, depth, gamesPerThread);
+				threadGroup[threadNum] = new Thread(gameRunner);
+				threadGroup[threadNum].start();
+			}
+			
+			// wait for these threads to finish before starting next depth
+			for (int threadNum=0; threadNum<numThreads; threadNum++) {
+				try {
+					threadGroup[threadNum].join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 		
 		long millis = System.currentTimeMillis() - start;
@@ -95,11 +78,6 @@ public class TwentyFortyEight {
 		int seconds = (int)millis % 60000 / 1000;
 		
 		System.out.println("Time taken: " + minutes + " minutes, " + seconds + " seconds");
-		
-		
-		System.out.println("Average Scores");
-		System.out.println(headers);
-		System.out.println(sb);
 		
 	}
 }
