@@ -2,25 +2,25 @@ package com.netsensia.twentyfortyeight;
 
 public class TwentyFortyEight {
 
-	public static final int MIN_DEPTH = 2;
-	public static final int MAX_DEPTH = 2;
+	public static final int MIN_DEPTH = 1;
+	public static final int MAX_DEPTH = 8;
 	
 	public static final int RUNS = 12;
     public static final int POWER_MAX = 32;
 	
     public static final int[] DEPTH_RUNS = {
     	0,
-    	100000,   // 1
-    	25000,    // 2
-    	25000,     // 3
-    	25000,      // 4
+    	250000,   // 1
+    	100000,    // 2
+    	50000,     // 3
+    	15000,      // 4
     	5000,       // 5
     	1000,       // 6
     	750,      // 7
     	250,      // 8
-    	175,      // 9
-    	125,       // 10
-    	100,       // 11
+    	100,      // 9
+    	50,       // 10
+    	25,       // 11
     };
     
 	public static void main(String args[]) {
