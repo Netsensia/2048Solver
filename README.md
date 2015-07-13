@@ -11,7 +11,7 @@ The test results shown here are run using multiple parallel threads. This result
 ## Current program performance
 
 ![Program Results]
-(https://www.dropbox.com/s/adnojl85nsvtp15/Screenshot%202015-07-10%2009.27.53.png?dl=1)
+(https://www.dropbox.com/s/ltxyc61ye6y3h2e/Screenshot%202015-07-13%2019.19.26.png?dl=1)
 
 ## Using the classes
 
